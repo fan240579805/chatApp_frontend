@@ -18,7 +18,10 @@ export function fetchReducer(
         ...state,
         isError: false,
         isFetching: false,
-        data: action.playload,
+        data: {
+          ...state.data,
+          ...action.playload,
+        },
       };
     case fetchStatus.ERROR:
       return {

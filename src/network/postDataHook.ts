@@ -5,11 +5,13 @@ import {fetchStatus} from '../const';
 import {API_DATA_TYPE, RESP_TYPE} from '../type/api_types';
 import {postData} from './postData';
 import {ToastAndroid} from 'react-native';
+import {fetchActionType} from '../type/actions_type';
 
 export type PostdataType = [
   (value: any) => void,
   (value: string) => void,
   API_DATA_TYPE,
+  (value: fetchActionType) => void,
 ];
 
 interface optionsType {
@@ -60,7 +62,7 @@ export default function usePostData(
           }
         } catch (error) {
           // 网络异常catch
-          console.log(error)
+          console.log(error);
           if (failedCbFunc) {
             failedCbFunc && failedCbFunc();
           } else {
@@ -71,7 +73,7 @@ export default function usePostData(
       post();
     }
   }, [reqData]);
-  return [setReqData, setURL, state];
+  return [setReqData, setURL, state, dispatchData];
 }
 
 const showTips = (msg: string) => {

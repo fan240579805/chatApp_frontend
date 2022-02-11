@@ -1,4 +1,4 @@
-import { ctxActionType } from './actions_type';
+import {ctxActionType} from './actions_type';
 
 export interface userInfoType {
   token: string;
@@ -23,4 +23,12 @@ export interface msgType {
   time: string;
   isSender: boolean;
   avatarUrl: string;
+}
+
+export interface userProfileType {
+  UserID: string;
+  Username: string;
+  Avatar: string;
+  Email: string;
+  NickName: string;
 }

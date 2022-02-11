@@ -5,9 +5,9 @@ export const toastStyle = StyleSheet.create({
     position: 'absolute',
     top: '50%',
     left: '50%',
-    width: 100,
+    width: 110,
     marginTop: -50,
-    marginLeft: -50,
+    marginLeft: -55,
   },
   Wrap: {
     padding: 12,
