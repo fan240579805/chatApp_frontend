@@ -3,26 +3,26 @@ import React from 'react';
 import {Text, View, Image, TouchableOpacity} from 'react-native';
 import {itemStyle} from './ItemStyle';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {userProfileType} from '../../../type/state_type';
 
-interface itemProps {
-  showTitle: string;
-  avatarUrl: string;
-  status?: number;
-}
+interface itemProps extends userProfileType {}
 
-const FriendListItem: React.FC<itemProps> = ({showTitle, avatarUrl,status}) => {
+const FriendListItem: React.FC<itemProps> = ({
+  NickName,
+  Avatar,
+  UserID,
+  Username,
+}) => {
   return (
     <View style={itemStyle.container}>
       <View>
-        <Image source={{uri: avatarUrl}} style={itemStyle.imgStyle} />
+        <Image source={{uri: Avatar}} style={itemStyle.imgStyle} />
       </View>
       <View style={itemStyle.contentWrap}>
-        <Text style={{fontSize: 18}}>{showTitle}</Text>
+        <Text style={{fontSize: 18}}>{NickName}</Text>
       </View>
       <View style={{height: 40, justifyContent: 'center'}}>
         <TouchableOpacity style={itemStyle.acceptBtn}>
-          {status && <Text style={{color: '#fff'}}>同意</Text>}
-          {!status && <Text style={{color: '#fff'}}>已发送</Text>}
         </TouchableOpacity>
       </View>
     </View>

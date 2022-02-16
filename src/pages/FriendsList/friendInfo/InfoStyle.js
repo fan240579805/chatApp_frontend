@@ -14,6 +14,7 @@ export const InfoStyle = StyleSheet.create({
   ImgStyle: {
     width: 60,
     height: 60,
+    borderRadius: 6,
   },
   nameText: {
     fontSize: 22,

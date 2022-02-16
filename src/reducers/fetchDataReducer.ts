@@ -14,6 +14,14 @@ export function fetchReducer(
         isFetching: true,
       };
     case fetchStatus.SUCCESS:
+      if (Array.isArray(action.playload)) {
+        return {
+          ...state,
+          isError: false,
+          isFetching: false,
+          data: action.playload,
+        };
+      }
       return {
         ...state,
         isError: false,

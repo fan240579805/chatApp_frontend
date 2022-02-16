@@ -27,6 +27,8 @@ export enum API_PATH {
   AUTH_TOKEN = 'api/AuthToken',
 
   GET_USERINFO = 'api/userInfo',
+  GET_FRIENDLIST = 'api/getFriendList',
+
   UPDATE_USERINFO = 'api/updateUserInfo',
   MODIFY_PWD = 'api/modifypwd',
   MODIFY_USRNAME = 'api/modifyusrname',

@@ -14,6 +14,7 @@ export const itemStyle = StyleSheet.create({
     width: 40,
     height: 40,
     marginLeft: 5,
+    borderRadius: 5,
   },
   contentWrap: {
     flex: 5,
@@ -24,14 +25,14 @@ export const itemStyle = StyleSheet.create({
     borderBottomWidth: 1,
     paddingBottom: 11,
   },
-  acceptBtn:{
-    height:30,
-    alignItems:'center',
+  acceptBtn: {
+    height: 30,
+    alignItems: 'center',
     justifyContent: 'center',
-    marginRight:5,
-    borderRadius:5,
-    paddingLeft:10,
-    paddingRight:10,
-    backgroundColor:"grey"
+    marginRight: 5,
+    borderRadius: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    backgroundColor: 'grey',
   },
 });

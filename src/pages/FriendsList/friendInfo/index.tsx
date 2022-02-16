@@ -12,19 +12,19 @@ interface infoProps {
 const FriendInofo: React.FC<infoProps> = ({route, navigation}) => {
   // 接收路由跳转携带过来的user数据
   // 后续补上添加日期,userid
-  const {userName, avatarUrl} = route.params;
+  const {UserID, Username, Avatar, Email, NickName, addtime} = route.params;
 
   const [isBlacked, setBlack] = useState(false);
 
   return (
     <View style={InfoStyle.container}>
       <View style={InfoStyle.userWrap}>
-        <Image source={{uri: avatarUrl}} style={InfoStyle.ImgStyle} />
+        <Image source={{uri: Avatar}} style={InfoStyle.ImgStyle} />
         <View style={InfoStyle.TextWrap}>
-          <Text style={InfoStyle.nameText}>{userName}</Text>
-          <Text style={InfoStyle.otherText}>账号:{userName}</Text>
-          <Text style={InfoStyle.otherText}>添加日期:{userName}</Text>
-          <Text style={InfoStyle.otherText}>账号:{userName}</Text>
+          <Text style={InfoStyle.nameText}>{NickName}</Text>
+          <Text style={InfoStyle.otherText}>账号:{Username}</Text>
+          <Text style={InfoStyle.otherText}>添加日期:{addtime}</Text>
+          <Text style={InfoStyle.otherText}>邮箱:{Email}</Text>
         </View>
       </View>
       <LongBtn
@@ -37,7 +37,7 @@ const FriendInofo: React.FC<infoProps> = ({route, navigation}) => {
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('ChatRoomPage', {
-              showTitle: userName,
+              showTitle: NickName,
               isChangeTitle: true,
             });
           }}>

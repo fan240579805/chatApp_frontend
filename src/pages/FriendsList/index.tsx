@@ -1,36 +1,56 @@
-import React from 'react';
-import {TouchableOpacity, FlatList} from 'react-native';
+import React, {useContext} from 'react';
+import {TouchableOpacity, FlatList, View} from 'react-native';
+import {API_PATH, BASE_URL} from '../../const';
+import {useGetData} from '../../network/getDataHook';
+import {Context} from '../../state/stateContext';
+import {ctxPassThroughType, userProfileType} from '../../type/state_type';
 
 import FriendListItem from './listItem';
 interface Props {
   navigation: any;
 }
-
-const render = (navigation, item) => {
+interface friendItemType {
+  FriendProfile: userProfileType;
+  Status: number;
+  AddTime: string;
+}
+const render = (navigation: any, item: friendItemType) => {
+  const {FriendProfile} = item;
   return (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate('FriendInfo', {
-          userName: String(item),
-          isChangeTitle: true,
-          avatarUrl:
-            'https://img0.baidu.com/it/u=2991084227,3927319913&fm=26&fmt=auto',
-        });
-      }}>
-      <FriendListItem
-        showTitle={item}
-        avatarUrl="https://img0.baidu.com/it/u=2991084227,3927319913&fm=26&fmt=auto"
-      />
-    </TouchableOpacity>
+    <>
+      {FriendProfile.UserID && (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('FriendInfo', {
+              isChangeTitle: true,
+              ...FriendProfile,
+              addtime: item.AddTime,
+            });
+          }}>
+          <FriendListItem {...FriendProfile} />
+        </TouchableOpacity>
+      )}
+    </>
   );
 };
 
 const FriendList: React.FC<Props> = ({navigation}) => {
+  const {dispatch, state}: ctxPassThroughType = useContext(Context);
+  // data为请求到的数据 dispatchNewData更新数据函数
+  const [setURL, dispatchNewData, {isError, isFetching, data}] = useGetData({
+    initUrl: `${BASE_URL}${API_PATH.GET_FRIENDLIST}`,
+    initData: {},
+    fetchOptions: {
+      headers: {
+        Authorization: `Bearer ${state.userInfo.token}`,
+      },
+    },
+  });
   return (
     <FlatList
-      data={[123, 13, 14, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 99, 22]}
+      data={data}
       renderItem={({item}) => render(navigation, item)}
-      keyExtractor={item => String(item)}
+      keyExtractor={item => item.FriendProfile.UserID}
     />
   );
 };
