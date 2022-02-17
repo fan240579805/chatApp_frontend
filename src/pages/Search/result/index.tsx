@@ -53,7 +53,12 @@ const Result: React.FC<Props> = ({
             addFriend();
           }}
           disabled={Status !== 0}>
-          {Status === -1 && <Text style={{color: '#fff'}}>已发送</Text>}
+          {Status === -1 && UserID === state.userInfo.userID && (
+            <Text style={{color: '#fff'}}>已发送</Text>
+          )}
+          {Status === -1 && UserID !== state.userInfo.userID && (
+            <Text style={{color: '#fff'}}>待处理</Text>
+          )}
           {Status !== -1 && Status !== 0 && (
             <Ionicons name="checkmark-outline" size={20} color="#fff" />
           )}

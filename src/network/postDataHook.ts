@@ -38,7 +38,7 @@ export default function usePostData(
     isError: false,
   });
   useEffect(() => {
-    if (reqData) {
+    if (reqData && URL) {
       dispatchData({type: fetchStatus.INIT});
       const post = async () => {
         try {
@@ -72,7 +72,7 @@ export default function usePostData(
       };
       post();
     }
-  }, [reqData]);
+  }, [reqData, URL]);
   return [setReqData, setURL, state, dispatchData];
 }
 

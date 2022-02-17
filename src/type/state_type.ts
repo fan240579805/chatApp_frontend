@@ -27,8 +27,8 @@ export interface msgType {
 
 export interface userProfileType {
   UserID: string;
-  Username: string;
-  Avatar: string;
-  Email: string;
-  NickName: string;
+  Username: string | undefined;
+  Avatar: string | undefined;
+  Email: string | undefined;
+  NickName: string | undefined;
 }

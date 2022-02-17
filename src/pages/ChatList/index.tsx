@@ -31,9 +31,9 @@ const render = (navigation, item) => {
 const ChatList: React.FC<Props> = ({navigation}) => {
   const [isRefresh, setRefresh] = useState(false);
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
-  // const WS = new WebSocketClient();
-  // console.log(state);
-  // WS.initWebSocket(state.userInfo.userID);
+  const WS = new WebSocketClient();
+  console.log(state);
+  WS.initWebSocket(state.userInfo.userID);
 
   return (
     <FlatList
