@@ -32,3 +32,11 @@ export interface userProfileType {
   Email: string | undefined;
   NickName: string | undefined;
 }
+
+
+export interface friendItemType {
+  FriendProfile: userProfileType | null;
+  Status: number;
+  AddTime: string;
+  IsMaster: boolean;
+}

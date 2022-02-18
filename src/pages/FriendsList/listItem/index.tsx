@@ -8,9 +8,11 @@ import usePostData, {PostdataType} from '../../../network/postDataHook';
 import {API_PATH, BASE_URL, fetchStatus} from '../../../const';
 import {Context} from '../../../state/stateContext';
 import {fetchActionType} from '../../../type/actions_type';
+import {formatList} from '../../../utils';
 
 interface itemProps extends userProfileType {
   Status: number;
+  isMaster: boolean;
   dispatchNewData: (value: fetchActionType) => void; // 请求成功后dispatch更新父组件展示的数据
 }
 
@@ -20,6 +22,7 @@ const FriendListItem: React.FC<itemProps> = ({
   UserID,
   Username,
   Status,
+  isMaster,
   dispatchNewData,
 }) => {
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
@@ -28,7 +31,7 @@ const FriendListItem: React.FC<itemProps> = ({
       initUrl: ``,
       initData: {},
       successCbFunc: res => {
-        dispatchNewData({type: fetchStatus.SUCCESS, playload: res});
+        dispatchNewData({type: fetchStatus.SUCCESS, playload: formatList(res)});
       },
       initReqData: {
         token: state.userInfo.token,
@@ -58,12 +61,12 @@ const FriendListItem: React.FC<itemProps> = ({
           alignItems: 'center',
         }}>
         {/* UserID === state.userInfo.userID 当前展示的好友是自己，即自己需要处理接受/拒绝 */}
-        {Status === -1 && UserID === state.userInfo.userID && (
+        {Status === -1 && !isMaster && (
           <TouchableOpacity style={itemStyle.acceptBtn} onPress={acceptFriend}>
             <Text style={{color: '#fff'}}>接受</Text>
           </TouchableOpacity>
         )}
-        {Status === -1 && UserID === state.userInfo.userID && (
+        {Status === -1 && !isMaster && (
           <TouchableOpacity
             onPress={rejectFriend}
             style={[itemStyle.acceptBtn, {backgroundColor: 'red'}]}>
@@ -71,9 +74,8 @@ const FriendListItem: React.FC<itemProps> = ({
           </TouchableOpacity>
         )}
         {/* ！== 说明自己不是被添加用户 等待请求通过 */}
-        {Status === -1 && UserID !== state.userInfo.userID && (
-          <View
-            style={itemStyle.acceptBtn}>
+        {Status === -1 && isMaster && (
+          <View style={itemStyle.acceptBtn}>
             <Text style={{color: '#fff'}}>待接受</Text>
           </View>
         )}

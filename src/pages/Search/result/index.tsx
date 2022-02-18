@@ -9,6 +9,7 @@ import {API_PATH, BASE_URL, fetchStatus} from '../../../const';
 import {fetchActionType} from '../../../type/actions_type';
 interface Props extends userProfileType {
   Status: number;
+  isMaster: boolean; // 代表当前用户  在数据库中的好友关系记录 是否是发起者
   dispatchNewData: (value: fetchActionType) => void; // 请求成功后dispatch更新父组件展示的数据
 }
 
@@ -18,6 +19,7 @@ const Result: React.FC<Props> = ({
   NickName,
   Avatar,
   Status,
+  isMaster,
   dispatchNewData,
 }) => {
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
@@ -52,17 +54,50 @@ const Result: React.FC<Props> = ({
           onPress={() => {
             addFriend();
           }}
-          disabled={Status !== 0}>
+          disabled={Status !== 0 && Status !== -2}>
           {Status === -1 && UserID === state.userInfo.userID && (
             <Text style={{color: '#fff'}}>已发送</Text>
           )}
           {Status === -1 && UserID !== state.userInfo.userID && (
             <Text style={{color: '#fff'}}>待处理</Text>
           )}
-          {Status !== -1 && Status !== 0 && (
+          {Status === 1 && (
             <Ionicons name="checkmark-outline" size={20} color="#fff" />
           )}
-          {Status === 0 && <Ionicons name="add" size={20} color="#fff" />}
+          {Status === 2 && isMaster && (
+            // 已删除对方
+            <Ionicons name="add" size={20} color="#fff" />
+          )}
+          {Status === 2 && !isMaster && (
+            // 被删除
+            <Ionicons name="add" size={20} color="#fff" />
+          )}
+          {Status === 3 && !isMaster && (
+            // 已删除对方
+            <Ionicons name="add" size={20} color="#fff" />
+          )}
+          {Status === 3 && isMaster && (
+            // 被删除
+            <Ionicons name="add" size={20} color="#fff" />
+          )}
+
+          {Status === 4 && isMaster && (
+            <Text style={{color: '#fff'}}>已拉黑</Text>
+          )}
+          {Status === 4 && !isMaster && (
+            <Text style={{color: '#fff'}}>被对方拉黑</Text>
+          )}
+
+          {Status === 5 && isMaster && (
+            <Text style={{color: '#fff'}}>被对方拉黑</Text>
+          )}
+          {Status === 5 && !isMaster && (
+            <Text style={{color: '#fff'}}>已拉黑</Text>
+          )}
+
+          {(Status === 0 || Status === -2) && (
+            <Ionicons name="add" size={20} color="#fff" />
+          )}
         </TouchableOpacity>
       </View>
     </View>

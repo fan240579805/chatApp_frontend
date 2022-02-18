@@ -59,6 +59,7 @@ const Search: React.FC<searchProps> = () => {
           {...data.userInfo}
           Status={data.status}
           dispatchNewData={dispatchNewData}
+          isMaster={data.isMaster}
         />
       )}
       <Text style={searchStyle.tip}>搜索唯一账号添加...</Text>

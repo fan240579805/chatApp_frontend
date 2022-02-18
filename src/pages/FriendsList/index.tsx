@@ -3,17 +3,14 @@ import {TouchableOpacity, FlatList, View, Text} from 'react-native';
 import {API_PATH, BASE_URL, fetchStatus} from '../../const';
 import {useGetData} from '../../network/getDataHook';
 import {Context} from '../../state/stateContext';
-import {ctxPassThroughType, userProfileType} from '../../type/state_type';
-
+import {ctxPassThroughType, friendItemType, userProfileType} from '../../type/state_type';
+import { formatList } from '../../utils';
+import {fpageStyle} from './friendPageStyle';
 import FriendListItem from './listItem';
 interface Props {
   navigation: any;
 }
-interface friendItemType {
-  FriendProfile: userProfileType | null;
-  Status: number;
-  AddTime: string;
-}
+
 const render = (
   navigation: any,
   item: friendItemType,
@@ -22,7 +19,11 @@ const render = (
   const {FriendProfile} = item;
   return (
     <>
-      {item.Status === -100 && <Text>好友请求</Text>}
+      {item.Status === -100 && (
+        <View style={fpageStyle.textWrap}>
+          <Text>待处理请求</Text>
+        </View>
+      )}
       {FriendProfile && FriendProfile.UserID && (
         <TouchableOpacity
           onPress={() => {
@@ -36,10 +37,15 @@ const render = (
             {...FriendProfile}
             Status={item.Status}
             dispatchNewData={dispatchNewData}
+            isMaster={item.IsMaster}
           />
         </TouchableOpacity>
       )}
-      {item.Status === -404 && <Text>好友列表</Text>}
+      {item.Status === -404 && (
+        <View style={fpageStyle.textWrap}>
+          <Text>好友列表</Text>
+        </View>
+      )}
     </>
   );
 };
@@ -62,32 +68,6 @@ const FriendList: React.FC<Props> = ({navigation}) => {
       dispatchNewData({type: fetchStatus.SUCCESS, playload: formatList(res)});
     },
   });
-
-  // 将请求到的好友列表处理一下
-  const formatList = (datalist: Array<friendItemType>): Array<any> => {
-    // willexecFriendlist 待处理的好友请求列表
-    let willexecFriendlist = datalist.filter(friend => {
-      return friend.Status === -1;
-    });
-    willexecFriendlist.length > 0 &&
-      willexecFriendlist.unshift({
-        FriendProfile: null,
-        AddTime: '',
-        Status: -100,
-      });
-    // hasFriendlist 已经成为好友的好友列表
-    let hasFriendlist = datalist.filter(friend => {
-      return friend.Status !== -1;
-    });
-    // 分隔待处理列表和好友列表的分界标志
-    hasFriendlist.length > 0 &&
-      hasFriendlist.unshift({
-        FriendProfile: null,
-        AddTime: '',
-        Status: -404,
-      });
-    return [...willexecFriendlist, ...hasFriendlist];
-  };
 
   return (
     <FlatList
