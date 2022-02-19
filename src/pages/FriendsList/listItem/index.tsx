@@ -35,8 +35,8 @@ const FriendListItem: React.FC<itemProps> = ({
       },
       initReqData: {
         token: state.userInfo.token,
-        From: state.userInfo.userID,
-        To: UserID,
+        From: UserID,
+        To: state.userInfo.userID,
       },
     });
   const acceptFriend = () => {

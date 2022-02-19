@@ -54,7 +54,10 @@ const Result: React.FC<Props> = ({
           onPress={() => {
             addFriend();
           }}
-          disabled={Status !== 0 && Status !== -2}>
+          disabled={Status !== 0}>
+          {UserID === state.userInfo.userID && (
+            <Text style={{color: '#fff'}}>自己</Text>
+          )}
           {Status === -1 && UserID === state.userInfo.userID && (
             <Text style={{color: '#fff'}}>已发送</Text>
           )}
@@ -95,9 +98,7 @@ const Result: React.FC<Props> = ({
             <Text style={{color: '#fff'}}>已拉黑</Text>
           )}
 
-          {(Status === 0 || Status === -2) && (
-            <Ionicons name="add" size={20} color="#fff" />
-          )}
+          {Status === 0 && <Ionicons name="add" size={20} color="#fff" />}
         </TouchableOpacity>
       </View>
     </View>

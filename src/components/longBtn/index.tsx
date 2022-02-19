@@ -8,8 +8,9 @@ interface itemProps {
   FrontIcon?: string;
   showContent: string;
   EndIcon?: string;
-  onPress: () => void;
+  onPress?: () => void;
   style?: any;
+  disabled?: boolean;
 }
 
 const longBtn: React.FC<itemProps> = ({
@@ -18,10 +19,11 @@ const longBtn: React.FC<itemProps> = ({
   EndIcon,
   onPress,
   style,
+  disabled,
   children,
 }) => {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} disabled={disabled}>
       <View style={[BtnStyle.container, style]}>
         {FrontIcon && <Ionicons name={FrontIcon} size={23} />}
         <Text style={BtnStyle.content}>{showContent}</Text>

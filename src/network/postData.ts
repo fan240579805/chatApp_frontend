@@ -1,4 +1,4 @@
-const defaultFetchOptions: any = params => {
+const defaultFetchOptions: any = (params:any) => {
   const {token} = params;
   let headers:any = {
     'Content-Type': 'application/json',
