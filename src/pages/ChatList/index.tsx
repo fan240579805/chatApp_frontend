@@ -5,6 +5,9 @@ import WebSocketClient from '../../network/websocket';
 import ChatListItem from './listItem/ChatListItem';
 import {Context} from '../../state/stateContext';
 import {ctxPassThroughType} from '../../type/state_type';
+import {useGetData} from '../../network/getDataHook';
+import {API_PATH, BASE_URL, stateStatus} from '../../const';
+import {formatList} from '../../utils';
 interface Props {
   navigation: any;
 }
@@ -32,8 +35,22 @@ const ChatList: React.FC<Props> = ({navigation}) => {
   const [isRefresh, setRefresh] = useState(false);
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
   const WS = new WebSocketClient();
-  console.log(state);
   WS.initWebSocket(state.userInfo.userID);
+  useGetData({
+    initUrl: `${BASE_URL}${API_PATH.GET_FRIENDLIST}`,
+    initData: {},
+    fetchOptions: {
+      headers: {
+        Authorization: `Bearer ${state.userInfo.token}`,
+      },
+    },
+    successCbFunc: res => {
+      // 请求成功处理一下data
+      // 更新数据成功后将新数据 dispatch分发给父组件以便页面同步新改的数据
+      dispatch({type: stateStatus.SET_FRIENDLIST, playloads: formatList(res)});
+      console.log(state);
+    },
+  });
 
   return (
     <FlatList

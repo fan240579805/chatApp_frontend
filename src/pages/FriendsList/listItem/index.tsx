@@ -1,19 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import {Text, View, Image, TouchableOpacity} from 'react-native';
 import {itemStyle} from './ItemStyle';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {ctxPassThroughType, userProfileType} from '../../../type/state_type';
 import usePostData, {PostdataType} from '../../../network/postDataHook';
-import {API_PATH, BASE_URL, fetchStatus} from '../../../const';
+import {API_PATH, BASE_URL, stateStatus} from '../../../const';
 import {Context} from '../../../state/stateContext';
-import {fetchActionType} from '../../../type/actions_type';
+import {ctxActionType} from '../../../type/actions_type';
 import {formatList} from '../../../utils';
 
 interface itemProps extends userProfileType {
   Status: number;
   isMaster: boolean;
-  dispatchNewData: (value: fetchActionType) => void; // 请求成功后dispatch更新父组件展示的数据
+  dispatchNewData: React.Dispatch<ctxActionType>; // 请求成功后dispatch更新全局共享的friendlist展示的数据
 }
 
 const FriendListItem: React.FC<itemProps> = ({
@@ -26,19 +25,21 @@ const FriendListItem: React.FC<itemProps> = ({
   dispatchNewData,
 }) => {
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
-  const [submitData, setURL, {isError, isFetching, data}]: PostdataType =
-    usePostData({
-      initUrl: ``,
-      initData: {},
-      successCbFunc: res => {
-        dispatchNewData({type: fetchStatus.SUCCESS, playload: formatList(res)});
-      },
-      initReqData: {
-        token: state.userInfo.token,
-        From: UserID,
-        To: state.userInfo.userID,
-      },
-    });
+  const [submitData, setURL]: PostdataType = usePostData({
+    initUrl: ``,
+    initData: {},
+    successCbFunc: res => {
+      dispatchNewData({
+        type: stateStatus.SET_FRIENDLIST,
+        playloads: formatList(res),
+      });
+    },
+    initReqData: {
+      token: state.userInfo.token,
+      From: UserID,
+      To: state.userInfo.userID,
+    },
+  });
   const acceptFriend = () => {
     setURL(`${BASE_URL}${API_PATH.ACCEPT_FRIEND}`);
   };

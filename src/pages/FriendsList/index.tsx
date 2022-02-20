@@ -67,26 +67,11 @@ const render = (
 
 const FriendList: React.FC<Props> = ({navigation}) => {
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
-  // data为请求到的数据 dispatchNewData更新数据函数
-  const [setURL, dispatchNewData, {isError, isFetching, data}] = useGetData({
-    initUrl: `${BASE_URL}${API_PATH.GET_FRIENDLIST}`,
-    initData: {},
-    fetchOptions: {
-      headers: {
-        Authorization: `Bearer ${state.userInfo.token}`,
-      },
-    },
-    successCbFunc: res => {
-      // 请求成功处理一下data
-      // 更新数据成功后将新数据 dispatch分发给父组件以便页面同步新改的数据
-      dispatchNewData({type: fetchStatus.SUCCESS, playload: formatList(res)});
-    },
-  });
 
   return (
     <FlatList
-      data={data}
-      renderItem={({item}) => render(navigation, item, dispatchNewData)}
+      data={state.friendList}
+      renderItem={({item}) => render(navigation, item, dispatch)}
       keyExtractor={item => {
         const {FriendProfile} = item;
         if (FriendProfile) {
