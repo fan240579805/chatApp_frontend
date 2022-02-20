@@ -69,7 +69,7 @@ const Profile: React.FC<Props> = () => {
           userName={data.Username}
           avatarUrl={data.Avatar}>
           <DisplayBar
-            friendNum={66}
+            friendNum={state.friendList.length}
             blackListNum={5}
             unDisturbNum={2}
             subNum={4}
