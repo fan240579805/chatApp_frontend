@@ -1,7 +1,9 @@
-import { friendItemType } from "../type/state_type";
+import {friendItemType} from '../type/state_type';
 
 // 将请求到的好友列表处理一下
-export const formatList = (datalist: Array<friendItemType>): Array<friendItemType> => {
+export const formatList = (
+  datalist: Array<friendItemType>,
+): Array<friendItemType> => {
   // willexecFriendlist 待处理的好友请求列表
   let willexecFriendlist = datalist.filter(friend => {
     return friend.Status === -1;
@@ -27,3 +29,19 @@ export const formatList = (datalist: Array<friendItemType>): Array<friendItemTyp
     });
   return [...willexecFriendlist, ...hasFriendlist];
 };
+
+export function throttle(fn: Function, delay: number) {
+  let valid = true;
+  return function (evt: any) {
+    if (!valid) {
+      //休息时间 暂不接客
+      return;
+    }
+    // 工作时间，执行函数并且在间隔期内把状态位设为无效
+    valid = false;
+    setTimeout(() => {
+      fn();
+      valid = true;
+    }, delay);
+  };
+}

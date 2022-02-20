@@ -1,9 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Text, View, Image, Switch, TouchableOpacity} from 'react-native';
 import {InfoStyle} from './InfoStyle';
 import LongBtn from '../../../components/longBtn';
-import longBtn from '../../../components/longBtn';
+import usePostData, {PostdataType} from '../../../network/postDataHook';
+import {API_PATH, BASE_URL, fetchStatus} from '../../../const';
+import {formatList, throttle} from '../../../utils';
+import {ctxPassThroughType} from '../../../type/state_type';
+import {Context} from '../../../state/stateContext';
+import {useGetData} from '../../../network/getDataHook';
 
 interface infoProps {
   route: any;
@@ -12,12 +17,77 @@ interface infoProps {
 
 const FriendInofo: React.FC<infoProps> = ({route, navigation}) => {
   // 接收路由跳转携带过来的user数据
-  // 后续补上添加日期,userid
-  const {UserID, Username, Avatar, Email, NickName, addtime, friendStatus} =
-    route.params;
+  const {
+    UserID,
+    Username,
+    Avatar,
+    Email,
+    NickName,
+    addtime,
+    friendFlag,
+    firendStatus,
+    dispatchFriendList, // 拉黑或者删除之后，将得到的新好友列表dispatch给好友列表组件以便更新渲染
+  } = route.params;
 
   const [isBlacked, setBlack] = useState(false);
+  const {dispatch, state}: ctxPassThroughType = useContext(Context);
 
+  const initReqData = {
+    token: state.userInfo.token,
+    From: state.userInfo.userID,
+    To: UserID,
+  };
+
+  const [submitData, setBlackURL]: PostdataType = usePostData({
+    initUrl: ``,
+    initData: {},
+    successCbFunc: res => {
+      dispatchFriendList({
+        type: fetchStatus.SUCCESS,
+        playload: formatList(res),
+      });
+      setBlack(!isBlacked);
+    },
+    initReqData,
+  });
+  const [delData, setDelURL]: PostdataType = usePostData({
+    initUrl: ``,
+    initData: {},
+    successCbFunc: res => {
+      dispatchFriendList({
+        type: fetchStatus.SUCCESS,
+        playload: formatList(res),
+      });
+      navigation.navigate('FriendsList');
+    },
+    initReqData,
+  });
+  // 获取拉黑态
+  useGetData({
+    initUrl: `${BASE_URL}${API_PATH.GET_BLACK_STATUS}?from=${state.userInfo.userID}&to=${UserID}`,
+    initData: {},
+    fetchOptions: {
+      headers: {
+        Authorization: `Bearer ${state.userInfo.token}`,
+      },
+    },
+    successCbFunc: res => {
+      setBlack(res.isblack);
+    },
+  });
+
+  const toggleBlacked = throttle(() => {
+    isBlacked && setBlackURL(`${BASE_URL}${API_PATH.CANCEL_BLACK}`);
+    !isBlacked && setBlackURL(`${BASE_URL}${API_PATH.TAKE_BLACK}`);
+  }, 300);
+
+  const delFriend = () => {
+    setDelURL(`${BASE_URL}${API_PATH.DELETE_FRIEND}`);
+  };
+
+  const bothDel = () => {
+    setDelURL(`${BASE_URL}${API_PATH.BOTH_DEL_FRIEND}`);
+  };
   return (
     <View style={InfoStyle.container}>
       <View style={InfoStyle.userWrap}>
@@ -29,7 +99,7 @@ const FriendInofo: React.FC<infoProps> = ({route, navigation}) => {
           <Text style={InfoStyle.otherText}>邮箱:{Email}</Text>
         </View>
       </View>
-      {friendStatus === -1 ? (
+      {!friendFlag ? (
         <TouchableOpacity disabled={true}>
           <Text style={[InfoStyle.msgBtn, {fontSize: 16, color: 'grey'}]}>
             你们还不是好友哦
@@ -39,10 +109,9 @@ const FriendInofo: React.FC<infoProps> = ({route, navigation}) => {
         <>
           <LongBtn
             showContent="加入黑名单"
-            onPress={() => console.log(123)}
             style={{marginTop: 10, matginBottom: 10}}
             disabled={true}>
-            <Switch value={isBlacked} onChange={() => setBlack(!isBlacked)} />
+            <Switch value={isBlacked} onChange={toggleBlacked} />
           </LongBtn>
           <View style={InfoStyle.BtnWrap}>
             <TouchableOpacity
@@ -54,11 +123,17 @@ const FriendInofo: React.FC<infoProps> = ({route, navigation}) => {
               }}>
               <Text style={InfoStyle.msgBtn}>发消息</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={delFriend}>
               <Text style={InfoStyle.delBtn}>删除</Text>
             </TouchableOpacity>
           </View>
         </>
+      )}
+      {/* 被单删了 */}
+      {firendStatus !== -1 && !friendFlag && (
+        <TouchableOpacity onPress={bothDel}>
+          <Text style={InfoStyle.delBtn}>从列表移除</Text>
+        </TouchableOpacity>
       )}
     </View>
   );

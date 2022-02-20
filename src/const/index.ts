@@ -11,13 +11,14 @@ export enum stateStatus {
   LOG_IN_AND_SIGN_IN = 'LOG_IN_AND_SIGN_IN',
   LOG_OUT = 'LOG_OUT',
   NO_TOKEN = 'NO_TOKEN',
+
+  SET_FRIENDLIST = 'SET_FRIENDLIST',
 }
 
 // export const BASE_URL = 'http://127.0.0.1:9998/';
 export const BASE_URL = 'http://192.168.43.142:9998/';
 // export const BASE_URL = 'http://192.168.43.216:9998/';
-// export const BASE_URL = 'http://10.43.15.107:9998/'; 
-
+// export const BASE_URL = 'http://10.43.15.107:9998/';
 
 export const WEBSOCKET_URL = 'ws://192.168.43.142:9998/';
 
@@ -39,7 +40,12 @@ export enum API_PATH {
   ADD_FRIEND = 'api/addFriendReq',
   ACCEPT_FRIEND = 'api/acceptFriendReq',
   REJECT_FRIEND = 'api/rejectFriendReq',
+  TAKE_BLACK = 'api/takeBlack',
+  CANCEL_BLACK = 'api/cancelBlack',
+  GET_BLACK_STATUS = 'api/getBlackStatus',
 
+  DELETE_FRIEND = 'api/deleteFriendReq',
+  BOTH_DEL_FRIEND = 'api/bothDelFriend',
 
   WS = 'api/ws',
   AJAX = 'api/AJAX',

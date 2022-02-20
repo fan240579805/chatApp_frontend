@@ -1,10 +1,17 @@
-const defaultFetchOptions: any = (params:any) => {
+const defaultFetchOptions: any = (params: any) => {
   const {token} = params;
-  let headers:any = {
+  let headers: any = {
     'Content-Type': 'application/json',
   };
+  let excludeTokenParams: any;
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
+    // 解构赋值，因为params是usePostdata hook的引用，直接忽略掉token会导致整个hook状态丢失token
+    // 所以引用新的对象
+    excludeTokenParams = {...params};
+    excludeTokenParams.token = '';
+  } else {
+    excludeTokenParams = {...params};
   }
 
   return {
@@ -15,7 +22,7 @@ const defaultFetchOptions: any = (params:any) => {
     headers,
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-    body: JSON.stringify(params),
+    body: JSON.stringify(excludeTokenParams),
   };
 };
 

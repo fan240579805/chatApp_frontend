@@ -9,6 +9,7 @@ export interface userInfoType {
 export interface stateType {
   isLogin: boolean;
   userInfo: userInfoType;
+  friendList: friendItemType | any;
 }
 
 export interface ctxPassThroughType {
@@ -32,7 +33,6 @@ export interface userProfileType {
   Email: string | undefined;
   NickName: string | undefined;
 }
-
 
 export interface friendItemType {
   FriendProfile: userProfileType | null;

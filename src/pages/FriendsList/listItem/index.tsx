@@ -79,6 +79,17 @@ const FriendListItem: React.FC<itemProps> = ({
             <Text style={{color: '#fff'}}>待接受</Text>
           </View>
         )}
+
+        {Status === 2 && !isMaster && (
+          <View style={[itemStyle.acceptBtn, {backgroundColor: 'red'}]}>
+            <Text style={{color: '#fff', fontSize: 12}}>您已被删除</Text>
+          </View>
+        )}
+        {Status === 3 && isMaster && (
+          <View style={[itemStyle.acceptBtn, {backgroundColor: 'red'}]}>
+            <Text style={{color: '#fff', fontSize: 12}}>您已被删除</Text>
+          </View>
+        )}
       </View>
     </View>
   );

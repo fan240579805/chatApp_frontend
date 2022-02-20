@@ -54,7 +54,7 @@ const Result: React.FC<Props> = ({
           onPress={() => {
             addFriend();
           }}
-          disabled={Status !== 0}>
+          disabled={Status !== 0 && Status !== 2 && Status !== 3}>
           {UserID === state.userInfo.userID && (
             <Text style={{color: '#fff'}}>自己</Text>
           )}

@@ -29,6 +29,11 @@ export function contextReducer(
           token: '',
         },
       };
+    case stateStatus.SET_FRIENDLIST:
+      return {
+        ...state,
+        friendList: [...action.playloads],
+      };
     default:
       return {
         ...state,
