@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {itemStyle} from '../result/itemStyle';
 import {Context} from '../../../state/stateContext';
 import usePostData, {PostdataType} from '../../../network/postDataHook';
-import {API_PATH, BASE_URL, fetchStatus} from '../../../const';
+import {API_PATH, BASE_URL, fetchStatus, stateStatus} from '../../../const';
 import {fetchActionType} from '../../../type/actions_type';
 interface Props extends userProfileType {
   Status: number;
@@ -23,14 +23,16 @@ const Result: React.FC<Props> = ({
   dispatchNewData,
 }) => {
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
-  const [submitData, setURL, {isError, isFetching, data}]: PostdataType =
-    usePostData({
-      initUrl: `${BASE_URL}${API_PATH.ADD_FRIEND}`,
-      initData: {},
-      successCbFunc: res => {
-        dispatchNewData({type: fetchStatus.SUCCESS, playload: res});
-      },
-    });
+  const [submitData]: PostdataType = usePostData({
+    initUrl: `${BASE_URL}${API_PATH.ADD_FRIEND}`,
+    initData: {},
+    successCbFunc: res => {
+      // 更新Status
+      dispatchNewData({type: fetchStatus.SUCCESS, playload: res});
+      // 更新共享的全局friendList
+      dispatch({type: stateStatus.SET_FRIENDLIST, playloads: res.friendList});
+    },
+  });
   const addFriend = () => {
     submitData({
       token: state.userInfo.token,

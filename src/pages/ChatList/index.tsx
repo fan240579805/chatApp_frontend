@@ -34,8 +34,7 @@ const render = (navigation, item) => {
 const ChatList: React.FC<Props> = ({navigation}) => {
   const [isRefresh, setRefresh] = useState(false);
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
-  const WS = new WebSocketClient();
-  WS.initWebSocket(state.userInfo.userID);
+  // 在这里拉取好友列表的目的是，他是首页，加载首屏数据易于理解
   useGetData({
     initUrl: `${BASE_URL}${API_PATH.GET_FRIENDLIST}`,
     initData: {},
@@ -48,7 +47,8 @@ const ChatList: React.FC<Props> = ({navigation}) => {
       // 请求成功处理一下data
       // 更新数据成功后将新数据 dispatch分发给父组件以便页面同步新改的数据
       dispatch({type: stateStatus.SET_FRIENDLIST, playloads: formatList(res)});
-      console.log(state);
+      const WS = new WebSocketClient();
+      WS.initWebSocket(state.userInfo.userID);
     },
   });
 

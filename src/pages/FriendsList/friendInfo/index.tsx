@@ -4,7 +4,7 @@ import {Text, View, Image, Switch, TouchableOpacity} from 'react-native';
 import {InfoStyle} from './InfoStyle';
 import LongBtn from '../../../components/longBtn';
 import usePostData, {PostdataType} from '../../../network/postDataHook';
-import {API_PATH, BASE_URL, fetchStatus} from '../../../const';
+import {API_PATH, BASE_URL, fetchStatus, stateStatus} from '../../../const';
 import {formatList, throttle} from '../../../utils';
 import {ctxPassThroughType} from '../../../type/state_type';
 import {Context} from '../../../state/stateContext';
@@ -26,7 +26,6 @@ const FriendInofo: React.FC<infoProps> = ({route, navigation}) => {
     addtime,
     friendFlag,
     firendStatus,
-    dispatchFriendList, // 拉黑或者删除之后，将得到的新好友列表dispatch给好友列表组件以便更新渲染
   } = route.params;
 
   const [isBlacked, setBlack] = useState(false);
@@ -42,9 +41,9 @@ const FriendInofo: React.FC<infoProps> = ({route, navigation}) => {
     initUrl: ``,
     initData: {},
     successCbFunc: res => {
-      dispatchFriendList({
-        type: fetchStatus.SUCCESS,
-        playload: formatList(res),
+      dispatch({
+        type: stateStatus.SET_FRIENDLIST,
+        playloads: formatList(res),
       });
       setBlack(!isBlacked);
     },
@@ -54,9 +53,9 @@ const FriendInofo: React.FC<infoProps> = ({route, navigation}) => {
     initUrl: ``,
     initData: {},
     successCbFunc: res => {
-      dispatchFriendList({
-        type: fetchStatus.SUCCESS,
-        playload: formatList(res),
+      dispatch({
+        type: stateStatus.SET_FRIENDLIST,
+        playloads: formatList(res),
       });
       navigation.navigate('FriendsList');
     },

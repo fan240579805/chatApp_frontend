@@ -45,7 +45,6 @@ const render = (
               addtime: item.AddTime,
               friendFlag,
               firendStatus: item.Status,
-              dispatchFriendList: dispatchNewData,
             });
           }}>
           <FriendListItem

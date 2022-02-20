@@ -57,7 +57,7 @@ const Search: React.FC<searchProps> = () => {
       {data.userInfo && (
         <SearchResult
           {...data.userInfo}
-          Status={data.status}
+          Status={data.Status}
           dispatchNewData={dispatchNewData}
           isMaster={data.isMaster}
         />
