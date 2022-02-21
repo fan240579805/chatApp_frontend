@@ -13,6 +13,7 @@ import {fetchActionType} from '../../type/actions_type';
 interface uploadProps {
   hasBtn: boolean;
   cRef: any;
+  iconName?: string;
   dispatchNewData?: (value: fetchActionType) => void; // 请求成功后dispatch更新父组件展示的数据
   setModalVisable?: (value: boolean) => void;
 }
@@ -20,6 +21,7 @@ interface uploadProps {
 const UploadImageBtn: React.FC<uploadProps> = ({
   hasBtn,
   cRef,
+  iconName = 'md-camera',
   dispatchNewData,
   setModalVisable,
 }) => {
@@ -85,7 +87,7 @@ const UploadImageBtn: React.FC<uploadProps> = ({
       <View style={styles.cameraBtn}>
         <TouchableOpacity onPress={() => showImagePicker()}>
           {imgUrl.length === 0 ? (
-            <Icon name="md-camera" color="#aaa" size={105} />
+            <Icon name={iconName} color="#aaa" size={105} />
           ) : (
             <View style={styles.ImageWrap}>
               <Image

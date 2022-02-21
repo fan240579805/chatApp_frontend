@@ -16,4 +16,13 @@ export const chatRoomStyle = StyleSheet.create({
     width: '100%',
     backgroundColor: '#fff',
   },
+  toolBtn: {
+    backgroundColor: '#fff',
+    width: 70,
+    height: 70,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    margin: 20,
+  }
 });

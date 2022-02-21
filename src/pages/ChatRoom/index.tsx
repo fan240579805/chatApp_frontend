@@ -1,9 +1,19 @@
 import React, {useRef, useState} from 'react';
-import {View, ScrollView, Text, FlatList, ListRenderItem} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+} from 'react-native';
 import {chatRoomStyle} from './chatRoomStyle';
 import BottomTool from './bottomTool';
 import ChatBubble from './chatBubble';
 import {msgType} from '../../type/state_type';
+import EmojiSelector, {Categories} from 'react-native-emoji-selector';
+import Icon from 'react-native-vector-icons/Ionicons';
+import UploadImageBtn from '../../components/uploadImage';
+import ModalCMP from '../../components/Modal';
 
 interface Props {
   navigation: any;
@@ -14,6 +24,8 @@ const ChatRoom: React.FC<Props> = ({navigation}) => {
   // 0 初始态 1 拉起键盘，2拉起emoji，3拉起工具栏
   const [bottomStatus, setBottomStatus] = useState(0);
   const [ToolHeight, setToolHeight] = useState(0);
+
+  const [modalVisable, setModalVisable] = useState(false);
 
   const initMsgList: Array<msgType> = Array(20)
     .fill('')
@@ -84,15 +96,36 @@ const ChatRoom: React.FC<Props> = ({navigation}) => {
       {bottomStatus === 2 && (
         <View
           style={[chatRoomStyle.bottomToolBody, {height: ToolHeight || '40%'}]}>
-          <Text>emoji</Text>
+          <EmojiSelector
+            category={Categories.emotion}
+            showSectionTitles={false}
+            showSearchBar={false}
+            columns={10}
+            onEmojiSelected={emoji => console.log(emoji)}
+          />
         </View>
       )}
       {bottomStatus === 3 && (
         <View
-          style={[chatRoomStyle.bottomToolBody, {height: ToolHeight || '40%'}]}>
-          <Text>tool</Text>
+          style={[
+            chatRoomStyle.bottomToolBody,
+            {height: ToolHeight || '40%', backgroundColor: '#e9e9e9'},
+          ]}>
+          <TouchableOpacity
+            style={chatRoomStyle.toolBtn}
+            onPress={() => setModalVisable(true)}>
+            <Icon name="image-outline" color="#aaa" size={50} />
+          </TouchableOpacity>
         </View>
       )}
+
+      <ModalCMP modalVisible={modalVisable} setModalVisible={setModalVisable}>
+        <UploadImageBtn
+          hasBtn={true}
+          cRef={null}
+          setModalVisable={setModalVisable}
+        />
+      </ModalCMP>
     </View>
   );
 };
