@@ -14,6 +14,7 @@ import EmojiSelector, {Categories} from 'react-native-emoji-selector';
 import Icon from 'react-native-vector-icons/Ionicons';
 import UploadImageBtn from '../../components/uploadImage';
 import ModalCMP from '../../components/Modal';
+import {API_PATH} from '../../const';
 
 interface Props {
   navigation: any;
@@ -24,7 +25,6 @@ const ChatRoom: React.FC<Props> = ({navigation}) => {
   // 0 初始态 1 拉起键盘，2拉起emoji，3拉起工具栏
   const [bottomStatus, setBottomStatus] = useState(0);
   const [ToolHeight, setToolHeight] = useState(0);
-
   const [modalVisable, setModalVisable] = useState(false);
 
   const initMsgList: Array<msgType> = Array(20)
@@ -39,18 +39,25 @@ const ChatRoom: React.FC<Props> = ({navigation}) => {
       avatarUrl:
         'https://img0.baidu.com/it/u=2991084227,3927319913&fm=26&fmt=auto',
     }));
+  const childRef = useRef<any>(null);
   // 传递给子组件，为什么不在子组件直接关闭popup组件?
   // 因为每个组件useState独立，子组件只能控制自己的状态
   // 所以在父组件chatroom中封装好再回传给儿子
-  // 这样旧能借父组件的手关闭其他的popup
+  // 这样就能借父组件的手关闭其他的popup
   const closePopup = () => {
-    childRef.current.changeShow(false);
+    childRef!.current.changeShow(false);
   };
   // 消息列表，记得修改
   const [msgList, setMsgList] = useState<Array<msgType>>(initMsgList);
 
-  const scrollContainer = useRef(null);
-  const childRef = useRef(null);
+  const scrollContainer = useRef<any>(null);
+  const inputCmpRef = useRef<any>(null);
+
+  // 选择完emoji事件
+  const selectEmojiHandle = (emoji: string) => {
+    const {inputValue, setInputValue} = childRef.current;
+    setInputValue(inputValue + emoji);
+  };
 
   return (
     <View
@@ -92,6 +99,7 @@ const ChatRoom: React.FC<Props> = ({navigation}) => {
         setContentHeight={setContentHeight}
         setToolHeight={setToolHeight}
         scrollEnd={() => scrollContainer.current.scrollToEnd({animated: false})}
+        inputCmpRef={inputCmpRef}
       />
       {bottomStatus === 2 && (
         <View
@@ -101,7 +109,7 @@ const ChatRoom: React.FC<Props> = ({navigation}) => {
             showSectionTitles={false}
             showSearchBar={false}
             columns={10}
-            onEmojiSelected={emoji => console.log(emoji)}
+            onEmojiSelected={emoji => selectEmojiHandle(emoji)}
           />
         </View>
       )}
@@ -123,7 +131,9 @@ const ChatRoom: React.FC<Props> = ({navigation}) => {
         <UploadImageBtn
           hasBtn={true}
           cRef={null}
+          apiPath={API_PATH.UPLOAD_CHATIMG}
           setModalVisable={setModalVisable}
+          AfterUploadCb={() => {}}
         />
       </ModalCMP>
     </View>

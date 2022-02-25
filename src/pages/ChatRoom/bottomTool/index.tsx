@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useImperativeHandle, useRef, useState} from 'react';
 import {
   View,
   TextInput,
@@ -18,6 +18,7 @@ interface bottomProps {
   setContentHeight: (value: number) => void;
   setToolHeight: (value: number) => void;
   scrollEnd: () => void;
+  inputCmpRef: any;
 }
 
 const BottomTool: React.FC<bottomProps> = ({
@@ -27,13 +28,23 @@ const BottomTool: React.FC<bottomProps> = ({
   setContentHeight,
   setToolHeight,
   scrollEnd,
+  inputCmpRef,
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [keyb, setKeyBoradHeight] = useState(0);
 
+  useImperativeHandle(
+    inputCmpRef,
+    () => ({
+      inputValue,
+      setInputValue,
+    }),
+    [inputValue,inputCmpRef],
+  );
+
   // input实例
-  const inputRef = useRef(null);
-  const inputContainerRef = useRef(null);
+  const inputRef = useRef<any>(null);
+  const inputContainerRef = useRef<any>(null);
   let keyBoardHeight = 0;
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
@@ -57,7 +68,14 @@ const BottomTool: React.FC<bottomProps> = ({
   const _resetChatHeight = () => {
     if (inputContainerRef) {
       inputContainerRef?.current?.measure(
-        (x, y, width, height, pageX, pageY) => {
+        (
+          x: any,
+          y: any,
+          width: any,
+          height: any,
+          pageX: any,
+          pageY: number,
+        ) => {
           bottomStatus !== 0 && setContentHeight(pageY - 70);
         },
       );

@@ -29,13 +29,14 @@ export enum API_PATH {
 
   GET_USERINFO = 'api/userInfo',
   GET_FRIENDLIST = 'api/getFriendList',
-
+  // 更新用户信息api地址
   UPDATE_USERINFO = 'api/updateUserInfo',
   MODIFY_PWD = 'api/modifypwd',
   MODIFY_USRNAME = 'api/modifyusrname',
   UPLOAD_IMG = 'api/uploadImg',
   MODIFY_AVATAR = 'api/modifyAvatar',
 
+  // 搜索，操作好友api地址
   SEARCH_USER = 'api/searchUser',
   ADD_FRIEND = 'api/addFriendReq',
   ACCEPT_FRIEND = 'api/acceptFriendReq',
@@ -43,9 +44,11 @@ export enum API_PATH {
   TAKE_BLACK = 'api/takeBlack',
   CANCEL_BLACK = 'api/cancelBlack',
   GET_BLACK_STATUS = 'api/getBlackStatus',
-
   DELETE_FRIEND = 'api/deleteFriendReq',
   BOTH_DEL_FRIEND = 'api/bothDelFriend',
+
+  // 聊天相关api地址
+  UPLOAD_CHATIMG = 'api/uploadChatImg',
 
   WS = 'api/ws',
   AJAX = 'api/AJAX',

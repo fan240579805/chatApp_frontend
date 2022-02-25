@@ -14,14 +14,17 @@ interface uploadProps {
   hasBtn: boolean;
   cRef: any;
   iconName?: string;
+  apiPath?: string;
   dispatchNewData?: (value: fetchActionType) => void; // 请求成功后dispatch更新父组件展示的数据
   setModalVisable?: (value: boolean) => void;
+  AfterUploadCb?: () => void; // 成功上传图片后执行的函数
 }
 
 const UploadImageBtn: React.FC<uploadProps> = ({
   hasBtn,
   cRef,
   iconName = 'md-camera',
+  apiPath = API_PATH.MODIFY_AVATAR,
   dispatchNewData,
   setModalVisable,
 }) => {
@@ -38,7 +41,7 @@ const UploadImageBtn: React.FC<uploadProps> = ({
   };
   const [setReqParams, setURL, {isError, isFetching, data}]: PostdataType =
     usePostData({
-      initUrl: `${BASE_URL}${API_PATH.MODIFY_AVATAR}`,
+      initUrl: `${BASE_URL}${apiPath}`,
       initData: {},
       successCbFunc,
       options: fileOptions,
