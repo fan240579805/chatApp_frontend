@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {TouchableOpacity, FlatList} from 'react-native';
-import {getValueFromStorage} from '../../utils/storage';
-import WebSocketClient from '../../network/websocket';
+import {wsInstance} from '../../network/websocket';
 import ChatListItem from './listItem/ChatListItem';
 import {Context} from '../../state/stateContext';
 import {ctxPassThroughType} from '../../type/state_type';
@@ -47,8 +46,7 @@ const ChatList: React.FC<Props> = ({navigation}) => {
       // 请求成功处理一下data
       // 更新数据成功后将新数据 dispatch分发给父组件以便页面同步新改的数据
       dispatch({type: stateStatus.SET_FRIENDLIST, playloads: formatList(res)});
-      const WS = new WebSocketClient();
-      WS.initWebSocket(state.userInfo.userID);
+      wsInstance.initWebSocket(state.userInfo.userID);
     },
   });
 

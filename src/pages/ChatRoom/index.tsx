@@ -1,36 +1,45 @@
-import React, {useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
   FlatList,
-  TouchableWithoutFeedback,
   TouchableOpacity,
+  DeviceEventEmitter,
 } from 'react-native';
 import {chatRoomStyle} from './chatRoomStyle';
 import BottomTool from './bottomTool';
 import ChatBubble from './chatBubble';
-import {msgType} from '../../type/state_type';
+import {
+  bePushedMsgType,
+  ctxPassThroughType,
+  msgType,
+} from '../../type/state_type';
 import EmojiSelector, {Categories} from 'react-native-emoji-selector';
 import Icon from 'react-native-vector-icons/Ionicons';
 import UploadImageBtn from '../../components/uploadImage';
 import ModalCMP from '../../components/Modal';
 import {API_PATH} from '../../const';
+import {Context} from '../../state/stateContext';
 
 interface Props {
   navigation: any;
 }
 
 const ChatRoom: React.FC<Props> = ({navigation}) => {
+  const {dispatch, state}: ctxPassThroughType = useContext(Context);
+
   const [ContentHeight, setContentHeight] = useState(0);
   // 0 初始态 1 拉起键盘，2拉起emoji，3拉起工具栏
   const [bottomStatus, setBottomStatus] = useState(0);
   const [ToolHeight, setToolHeight] = useState(0);
   const [modalVisable, setModalVisable] = useState(false);
+  const [isFirstScroll, setIsScroll] = useState(true);
 
   const initMsgList: Array<msgType> = Array(20)
     .fill('')
     .map((item, index) => ({
-      id: index + 1,
+      msgid: index + 1 + '',
+      ownerid: '123123',
       time: new Date().toLocaleString(),
       type: 'image',
       isSender: index % 2 === 0,
@@ -47,15 +56,37 @@ const ChatRoom: React.FC<Props> = ({navigation}) => {
   const closePopup = () => {
     childRef!.current.changeShow(false);
   };
+
   // 消息列表，记得修改
   const [msgList, setMsgList] = useState<Array<msgType>>(initMsgList);
-
   const scrollContainer = useRef<any>(null);
   const inputCmpRef = useRef<any>(null);
+  useEffect(() => {
+    DeviceEventEmitter.addListener(
+      'pushMsg',
+      (bePushedObj: bePushedMsgType) => {
+        const {Message, UserInfo} = bePushedObj;
+        const messageItem: msgType = {
+          msgid: Message.MsgID,
+          content: Message.content,
+          ownerid: UserInfo.UserID,
+          type: Message.type,
+          time: Message.time,
+          isSender: Message.sender === state.userInfo.userID ? true : false,
+          avatarUrl: UserInfo.Avatar,
+        };
+        // console.log(messageItem);
+        // msgList.push(messageItem)
+        const tempArr = [...msgList];
+        tempArr.push(messageItem);
+        setMsgList([...tempArr]);
+      },
+    );
+  }, [msgList]);
 
   // 选择完emoji事件
   const selectEmojiHandle = (emoji: string) => {
-    const {inputValue, setInputValue} = childRef.current;
+    const {inputValue, setInputValue} = inputCmpRef.current;
     setInputValue(inputValue + emoji);
   };
 
@@ -82,12 +113,24 @@ const ChatRoom: React.FC<Props> = ({navigation}) => {
             />
           )}
           initialNumToRender={msgList.length}
-          keyExtractor={msgItem => String(msgItem.id)}
+          keyExtractor={msgItem => String(msgItem.msgid)}
           ref={scrollContainer}
+          onContentSizeChange={() => {
+            // 发消息时滚动到底部
+            if (!isFirstScroll) {
+              scrollContainer.current.scrollToEnd({animated: true});
+            }
+          }}
           // 滚动区域布局(高度)改变，自动滚到最底部
           onLayout={() => {
             if (scrollContainer) {
-              scrollContainer.current.scrollToEnd({animated: false});
+              // 初次渲染不带动画滚动到底部
+              if (isFirstScroll) {
+                scrollContainer.current.scrollToEnd({animated: false});
+              } else {
+                scrollContainer.current.scrollToEnd({animated: true});
+              }
+              setIsScroll(false);
             }
           }}
         />
@@ -101,6 +144,7 @@ const ChatRoom: React.FC<Props> = ({navigation}) => {
         scrollEnd={() => scrollContainer.current.scrollToEnd({animated: false})}
         inputCmpRef={inputCmpRef}
       />
+
       {bottomStatus === 2 && (
         <View
           style={[chatRoomStyle.bottomToolBody, {height: ToolHeight || '40%'}]}>
@@ -126,7 +170,7 @@ const ChatRoom: React.FC<Props> = ({navigation}) => {
           </TouchableOpacity>
         </View>
       )}
-
+      {/* 发送图片组件 */}
       <ModalCMP modalVisible={modalVisable} setModalVisible={setModalVisable}>
         <UploadImageBtn
           hasBtn={true}

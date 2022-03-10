@@ -13,7 +13,7 @@ interface bubbleProps extends msgType {
 }
 
 const ChatBubble: React.FC<bubbleProps> = ({
-  id,
+  msgid,
   type,
   content,
   time,

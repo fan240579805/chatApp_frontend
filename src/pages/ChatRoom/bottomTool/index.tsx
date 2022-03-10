@@ -1,5 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect, useImperativeHandle, useRef, useState} from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import {
   View,
   TextInput,
@@ -9,6 +15,9 @@ import {
   KeyboardEvent,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {wsInstance} from '../../../network/websocket';
+import {Context} from '../../../state/stateContext';
+import {ctxPassThroughType} from '../../../type/state_type';
 import {bottomStyle} from './bottomStyle';
 
 interface bottomProps {
@@ -32,6 +41,7 @@ const BottomTool: React.FC<bottomProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [keyb, setKeyBoradHeight] = useState(0);
+  const {dispatch, state}: ctxPassThroughType = useContext(Context);
 
   useImperativeHandle(
     inputCmpRef,
@@ -39,7 +49,7 @@ const BottomTool: React.FC<bottomProps> = ({
       inputValue,
       setInputValue,
     }),
-    [inputValue,inputCmpRef],
+    [inputValue, inputCmpRef],
   );
 
   // input实例
@@ -80,6 +90,19 @@ const BottomTool: React.FC<bottomProps> = ({
         },
       );
     }
+  };
+  const sendChatMessage = () => {
+    wsInstance.sendMessage(
+      JSON.stringify({
+        chatID: 'asdasda',
+        Message: {
+          Sender: state.userInfo.userID,
+          Recipient: 'hkj',
+          Content: inputValue,
+          Type: 'text',
+        },
+      }),
+    );
   };
   return (
     <>
@@ -129,7 +152,7 @@ const BottomTool: React.FC<bottomProps> = ({
               setBottomStatus(1);
               setTimeout(() => {
                 inputRef.current.focus();
-              }, 82);
+              }, 2);
             }}
             activeOpacity={1}>
             <MaterialIcons name="keyboard" size={35} />
@@ -155,7 +178,7 @@ const BottomTool: React.FC<bottomProps> = ({
         )}
         {inputValue.trim().length > 0 && (
           <View style={bottomStyle.subBtn}>
-            <Button title="发送" />
+            <Button title="发送" onPress={() => sendChatMessage()} />
           </View>
         )}
       </View>

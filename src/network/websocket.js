@@ -4,6 +4,7 @@ const url = `${BASE_URL}${API_PATH.WS}`;
 let that = null;
 
 export default class WebSocketClient {
+  uid = '';
   constructor() {
     this.ws = null;
     that = this;
@@ -25,9 +26,9 @@ export default class WebSocketClient {
    */
   initWebSocket(userid) {
     try {
+      this.uid = userid;
       //timer为发送心跳的计时器
       // this.timer && clearInterval(this.timer);
-      console.log(`${url}/?userid=${userid}`);
       this.ws = new WebSocket(`${url}/?userid=${userid}`);
       this.initWsEvent();
     } catch (e) {
@@ -51,9 +52,9 @@ export default class WebSocketClient {
       if (evt.data !== 'pong') {
         //不是心跳消息，消息处理逻辑
         console.log('WebSocket: response msg', evt.data);
-        //接收到消息，处理逻辑...
-        //更新广播
-        DeviceEventEmitter.emit('pushEmitter', '');
+        const wsData = JSON.parse(evt.data);
+        wsData.DataType == 'msg' && DeviceEventEmitter.emit('pushMsg', wsData);
+        wsData.DataType == 'friend' && DeviceEventEmitter.emit('pushFriend', wsData);
       } else {
         console.log('WebSocket: response pong msg=', evt.data);
       }
@@ -100,7 +101,9 @@ export default class WebSocketClient {
     }
     this.timeout = setTimeout(function () {
       //重新连接WebSocket
-      this.initWebSocket();
+      that.initWebSocket(that.uid);
     }, 15000);
   }
 }
+
+export const wsInstance = new WebSocketClient();
