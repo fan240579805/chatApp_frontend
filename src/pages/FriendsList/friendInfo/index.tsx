@@ -11,6 +11,7 @@ import {Context} from '../../../state/stateContext';
 import {useGetData} from '../../../network/getDataHook';
 import {postData} from '../../../network/postData';
 import {RESP_TYPE} from '../../../type/api_types';
+import {dateFormat, FormatsEnums} from '../../../utils/common/time';
 
 interface infoProps {
   route: any;
@@ -118,7 +119,9 @@ const FriendInofo: React.FC<infoProps> = ({route, navigation}) => {
         <View style={InfoStyle.TextWrap}>
           <Text style={InfoStyle.nameText}>{NickName}</Text>
           <Text style={InfoStyle.otherText}>账号:{Username}</Text>
-          <Text style={InfoStyle.otherText}>添加日期:{addtime}</Text>
+          <Text style={InfoStyle.otherText}>
+            添加日期:{dateFormat(addtime, FormatsEnums._YMD)}
+          </Text>
           <Text style={InfoStyle.otherText}>邮箱:{Email}</Text>
         </View>
       </View>

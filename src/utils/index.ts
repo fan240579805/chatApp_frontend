@@ -11,7 +11,7 @@ export const formatList = (
   willexecFriendlist.length > 0 &&
     willexecFriendlist.unshift({
       FriendProfile: null,
-      AddTime: '',
+      AddTime: 0,
       Status: -100,
       IsMaster: false,
     });
@@ -23,7 +23,7 @@ export const formatList = (
   hasFriendlist.length > 0 &&
     hasFriendlist.unshift({
       FriendProfile: null,
-      AddTime: '',
+      AddTime: 0,
       Status: -404,
       IsMaster: false,
     });

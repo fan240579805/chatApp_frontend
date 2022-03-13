@@ -23,7 +23,7 @@ export interface msgType {
   ownerid: string;
   type: string;
   content: string;
-  time: string;
+  time: number;
   isSender: boolean;
   avatarUrl: string | undefined;
 }
@@ -34,7 +34,7 @@ export interface message {
   content: string;
   recipient: string;
   sender: string;
-  time: string;
+  time: number;
   type: string;
   updatedat: string;
   createdat: string;
@@ -65,7 +65,7 @@ export interface userProfileType {
 export interface friendItemType {
   FriendProfile: userProfileType | null;
   Status: number;
-  AddTime: string;
+  AddTime: number;
   IsMaster: boolean;
 }
 
@@ -75,5 +75,5 @@ export interface chatListItemType {
   ChatToNickName: string;
   ChatToUserID: string;
   ChatToUserAvatar: string;
-  RecentTime: string;
+  RecentTime: number;
 }

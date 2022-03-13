@@ -6,6 +6,7 @@ import {listStyle} from './listItemStyle';
 import {operateType} from '../../../type/props_type';
 import {useState} from 'react';
 import {chatListItemType} from '../../../type/state_type';
+import {dateFormat, FormatsEnums} from '../../../utils/common/time';
 
 interface itemProps extends chatListItemType {}
 
@@ -34,7 +35,9 @@ const ChatListItem: React.FC<itemProps> = ({
       {/* {isShowPop && <Popup operations={operations} />} */}
 
       <View style={listStyle.timeWrap}>
-        <Text style={{fontSize: 12}}>{RecentTime}</Text>
+        <Text style={{fontSize: 12}}>
+          {dateFormat(RecentTime, FormatsEnums._MD)}
+        </Text>
       </View>
     </View>
   );
