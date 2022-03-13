@@ -25,8 +25,8 @@ interface bottomProps {
   bottomStatus: number;
   setBottomStatus: (value: number) => void;
   setContentHeight: (value: number) => void;
-  setToolHeight: (value: number) => void;
-  scrollEnd: () => void;
+  chatID: string;
+  recipient: string;
   inputCmpRef: any;
 }
 
@@ -35,8 +35,8 @@ const BottomTool: React.FC<bottomProps> = ({
   bottomStatus,
   setBottomStatus,
   setContentHeight,
-  setToolHeight,
-  scrollEnd,
+  chatID,
+  recipient,
   inputCmpRef,
 }) => {
   const [inputValue, setInputValue] = useState('');
@@ -94,10 +94,10 @@ const BottomTool: React.FC<bottomProps> = ({
   const sendChatMessage = () => {
     wsInstance.sendMessage(
       JSON.stringify({
-        chatID: 'asdasda',
+        ChatID: chatID,
         Message: {
           Sender: state.userInfo.userID,
-          Recipient: 'hkj',
+          Recipient: recipient,
           Content: inputValue,
           Type: 'text',
         },

@@ -22,6 +22,8 @@ const render = (navigation: any, ChatItem: chatListItemType) => {
         navigation.navigate('ChatRoomPage', {
           showTitle: ChatItem.ChatToNickName,
           isChangeTitle: true,
+          chatID: ChatItem.ChatID,
+          recipient: ChatItem.ChatToUserID,
         });
       }}>
       <ChatListItem {...ChatItem} />

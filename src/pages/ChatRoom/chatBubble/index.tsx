@@ -71,7 +71,7 @@ const ChatBubble: React.FC<bubbleProps> = ({
           </Text>
         </TouchableOpacity>
       )}
-      {type === 'image' && (
+      {type === 'img' && (
         <TouchableOpacity
           onPress={() => closePopup()}
           onLongPress={() => {

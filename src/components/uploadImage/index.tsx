@@ -18,6 +18,8 @@ interface uploadProps {
   dispatchNewData?: (value: fetchActionType) => void; // 请求成功后dispatch更新父组件展示的数据
   setModalVisable?: (value: boolean) => void;
   AfterUploadCb?: () => void; // 成功上传图片后执行的函数
+  chatID?: string;
+  recipient?: string;
 }
 
 const UploadImageBtn: React.FC<uploadProps> = ({
@@ -27,6 +29,8 @@ const UploadImageBtn: React.FC<uploadProps> = ({
   apiPath = API_PATH.MODIFY_AVATAR,
   dispatchNewData,
   setModalVisable,
+  chatID,
+  recipient,
 }) => {
   // 相册中的uri
   const [imgUrl, setimgUrl] = useState('');
@@ -54,9 +58,9 @@ const UploadImageBtn: React.FC<uploadProps> = ({
       apiPath === API_PATH.UPLOAD_CHATIMG
         ? {
             token: state.userInfo.token,
-            chatID: 'asdsadaas',
+            chatID: chatID,
             sender: state.userInfo.userID,
-            recipient: 'hkj',
+            recipient: recipient,
             file: imgUrl,
             fileName: imageName,
           }

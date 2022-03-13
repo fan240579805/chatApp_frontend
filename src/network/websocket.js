@@ -51,7 +51,7 @@ export default class WebSocketClient {
     this.ws.onmessage = function (evt) {
       if (evt.data !== 'pong') {
         //不是心跳消息，消息处理逻辑
-        console.log('WebSocket: response msg', evt.data);
+        // console.log('WebSocket: response msg', evt.data);
         const wsData = JSON.parse(evt.data);
         wsData.DataType == 'msg' && DeviceEventEmitter.emit('pushMsg', wsData);
         wsData.DataType == 'friend' && DeviceEventEmitter.emit('pushFriend', wsData);
