@@ -34,6 +34,11 @@ export function contextReducer(
         ...state,
         friendList: [...action.playloads],
       };
+    case stateStatus.SET_CHATLIST:
+      return {
+        ...state,
+        chatList: [...action.playloads],
+      };
     case stateStatus.APPEND_CHATITEM:
       const newChatList: chatListItemType[] = state.chatList;
       const newChatItem: chatListItemType = action.playloads;

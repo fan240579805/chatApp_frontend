@@ -32,6 +32,20 @@ const render = (navigation: any, ChatItem: chatListItemType) => {
 const ChatList: React.FC<Props> = ({navigation}) => {
   const [isRefresh, setRefresh] = useState(false);
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
+  // 拉取聊天chatList
+  useGetData({
+    initUrl: `${BASE_URL}${API_PATH.GET_CHAT_LIST}`,
+    initData: {},
+    fetchOptions: {
+      headers: {
+        Authorization: `Bearer ${state.userInfo.token}`,
+      },
+    },
+    successCbFunc: res => {
+      // 请求成功处理一下data
+      dispatch({type: stateStatus.SET_CHATLIST, playloads: res});
+    },
+  });
   // 在这里拉取好友列表的目的是，他是首页，加载首屏数据易于理解
   useGetData({
     initUrl: `${BASE_URL}${API_PATH.GET_FRIENDLIST}`,

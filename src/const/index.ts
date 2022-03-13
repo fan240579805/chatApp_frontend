@@ -51,6 +51,7 @@ export enum API_PATH {
 
   // 聊天相关api地址
   UPLOAD_CHATIMG = 'api/uploadChatImg',
+  GET_CHAT_LIST='api/getChatList',
   MAKE_CHAT = 'api/makeChat',
 
   WS = 'api/ws',
