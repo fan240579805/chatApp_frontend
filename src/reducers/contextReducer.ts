@@ -1,6 +1,6 @@
 import {stateStatus} from '../const';
 import {ctxActionType} from '../type/actions_type';
-import {stateType} from '../type/state_type';
+import {chatListItemType, stateType} from '../type/state_type';
 
 export function contextReducer(
   state: stateType,
@@ -33,6 +33,21 @@ export function contextReducer(
       return {
         ...state,
         friendList: [...action.playloads],
+      };
+    case stateStatus.APPEND_CHATITEM:
+      const newChatList: chatListItemType[] = state.chatList;
+      const newChatItem: chatListItemType = action.playloads;
+      const preChatItemIndex = newChatList.findIndex(
+        chatItem => chatItem.ChatID === newChatItem.ChatID,
+      );
+      if (preChatItemIndex !== -1) {
+        newChatList[preChatItemIndex] = newChatItem;
+      } else {
+        newChatList.push(newChatItem);
+      }
+      return {
+        ...state,
+        chatList: [...newChatList],
       };
     default:
       return {

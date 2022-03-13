@@ -1,5 +1,10 @@
 import React, {useReducer} from 'react';
-import {ctxPassThroughType, friendItemType, stateType} from '../type/state_type';
+import {
+  chatListItemType,
+  ctxPassThroughType,
+  friendItemType,
+  stateType,
+} from '../type/state_type';
 import reducers from '../reducers';
 import {ctxActionType} from '../type/actions_type';
 
@@ -17,6 +22,7 @@ const state: stateType = {
     username: '',
   },
   friendList: new Array<friendItemType>(),
+  chatList: new Array<chatListItemType>(),
 };
 // 暴露出全局统一的上下文
 export const Context: any = React.createContext(null);

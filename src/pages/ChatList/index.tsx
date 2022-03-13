@@ -3,7 +3,11 @@ import {TouchableOpacity, FlatList} from 'react-native';
 import {wsInstance} from '../../network/websocket';
 import ChatListItem from './listItem/ChatListItem';
 import {Context} from '../../state/stateContext';
-import {ctxPassThroughType} from '../../type/state_type';
+import {
+  chatListItemType,
+  ctxPassThroughType,
+  stateType,
+} from '../../type/state_type';
 import {useGetData} from '../../network/getDataHook';
 import {API_PATH, BASE_URL, stateStatus} from '../../const';
 import {formatList} from '../../utils';
@@ -11,21 +15,16 @@ interface Props {
   navigation: any;
 }
 
-const render = (navigation, item) => {
+const render = (navigation: any, ChatItem: chatListItemType) => {
   return (
     <TouchableOpacity
       onPress={() => {
         navigation.navigate('ChatRoomPage', {
-          showTitle: String(item),
+          showTitle: ChatItem.ChatToNickName,
           isChangeTitle: true,
         });
       }}>
-      <ChatListItem
-        chatName={item}
-        chatTime="21:50"
-        showContent="你好"
-        avatarUrl="https://reactnative.dev/img/tiny_logo.png"
-      />
+      <ChatListItem {...ChatItem} />
     </TouchableOpacity>
   );
 };
@@ -52,9 +51,9 @@ const ChatList: React.FC<Props> = ({navigation}) => {
 
   return (
     <FlatList
-      data={[123, 13, 14, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 99, 22]}
+      data={state.chatList}
       renderItem={({item}) => render(navigation, item)}
-      keyExtractor={item => String(item)}
+      keyExtractor={item => item.ChatID}
       refreshing={isRefresh}
       onRefresh={() => console.log(1)}
     />

@@ -4,7 +4,7 @@ import {validateToken} from '../network/authToken';
 import {useCtxHook} from '../state/stateContext';
 import {stateStatus} from '../const';
 import {ctxPassThroughType} from '../type/state_type';
-import {getActionFromState} from '@react-navigation/native';
+
 type loginStatusType = [
   number,
   (value: number) => void,

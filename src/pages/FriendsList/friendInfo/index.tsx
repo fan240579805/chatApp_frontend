@@ -9,6 +9,8 @@ import {formatList, throttle} from '../../../utils';
 import {ctxPassThroughType} from '../../../type/state_type';
 import {Context} from '../../../state/stateContext';
 import {useGetData} from '../../../network/getDataHook';
+import {postData} from '../../../network/postData';
+import {RESP_TYPE} from '../../../type/api_types';
 
 interface infoProps {
   route: any;
@@ -87,6 +89,28 @@ const FriendInofo: React.FC<infoProps> = ({route, navigation}) => {
   const bothDel = () => {
     setDelURL(`${BASE_URL}${API_PATH.BOTH_DEL_FRIEND}`);
   };
+  // 发起聊天
+  const makeChat = async () => {
+    try {
+      const res = await postData(`${BASE_URL}${API_PATH.MAKE_CHAT}`, {
+        Sender: state.userInfo.userID,
+        Recipient: UserID,
+        token: state.userInfo.token,
+      });
+      const resp: RESP_TYPE = await res.json();
+      if (resp.code === 200) {
+        navigation.navigate('ChatRoomPage', {
+          showTitle: NickName,
+          isChangeTitle: true,
+        });
+        // 分发dispatch修改全局的chatlist，resp.data = chatItem
+        dispatch({type: stateStatus.APPEND_CHATITEM, playloads: resp.data});
+      } else {
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <View style={InfoStyle.container}>
       <View style={InfoStyle.userWrap}>
@@ -113,13 +137,7 @@ const FriendInofo: React.FC<infoProps> = ({route, navigation}) => {
             <Switch value={isBlacked} onChange={toggleBlacked} />
           </LongBtn>
           <View style={InfoStyle.BtnWrap}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('ChatRoomPage', {
-                  showTitle: NickName,
-                  isChangeTitle: true,
-                });
-              }}>
+            <TouchableOpacity onPress={makeChat}>
               <Text style={InfoStyle.msgBtn}>发消息</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={delFriend}>

@@ -49,13 +49,25 @@ const UploadImageBtn: React.FC<uploadProps> = ({
 
   // 封装好的上传图片方法，暴露给父组件或自己用，待完善
   const uploadFile = async () => {
-    setReqParams({
-      token: state.userInfo.token,
-      InfoAttr: 'avatar',
-      userid: state.userInfo.userID,
-      file: imgUrl,
-      fileName: imageName,
-    });
+    let reqConfig;
+    reqConfig =
+      apiPath === API_PATH.UPLOAD_CHATIMG
+        ? {
+            token: state.userInfo.token,
+            chatID: 'asdsadaas',
+            sender: state.userInfo.userID,
+            recipient: 'hkj',
+            file: imgUrl,
+            fileName: imageName,
+          }
+        : {
+            token: state.userInfo.token,
+            InfoAttr: 'avatar',
+            userid: state.userInfo.userID,
+            file: imgUrl,
+            fileName: imageName,
+          };
+    setReqParams(reqConfig);
   };
   useImperativeHandle(
     cRef,

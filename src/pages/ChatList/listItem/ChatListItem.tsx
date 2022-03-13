@@ -5,19 +5,17 @@ import Popup from '../../../components/popup';
 import {listStyle} from './listItemStyle';
 import {operateType} from '../../../type/props_type';
 import {useState} from 'react';
+import {chatListItemType} from '../../../type/state_type';
 
-interface itemProps {
-  chatName: string;
-  chatTime: string;
-  avatarUrl: string;
-  showContent?: string;
-}
+interface itemProps extends chatListItemType {}
 
 const ChatListItem: React.FC<itemProps> = ({
-  chatName,
-  chatTime,
-  avatarUrl,
-  showContent,
+  ChatID,
+  RecentMsg,
+  ChatToNickName,
+  ChatToUserID,
+  ChatToUserAvatar,
+  RecentTime,
 }) => {
   const [isShowPop, setShow] = useState(false);
 
@@ -27,16 +25,16 @@ const ChatListItem: React.FC<itemProps> = ({
   return (
     <View style={listStyle.container}>
       <View>
-        <Image source={{uri: avatarUrl}} style={listStyle.imgStyle} />
+        <Image source={{uri: ChatToUserAvatar}} style={listStyle.imgStyle} />
       </View>
       <View style={listStyle.contentWrap}>
-        <Text style={{fontSize: 18}}>{chatName}</Text>
-        <Text style={{fontSize: 14}}>{showContent}</Text>
+        <Text style={{fontSize: 18}}>{ChatToNickName}</Text>
+        <Text style={{fontSize: 14}}>{RecentMsg}</Text>
       </View>
       {/* {isShowPop && <Popup operations={operations} />} */}
 
       <View style={listStyle.timeWrap}>
-        <Text style={{fontSize: 12}}>{chatTime}</Text>
+        <Text style={{fontSize: 12}}>{RecentTime}</Text>
       </View>
     </View>
   );

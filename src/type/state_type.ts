@@ -9,7 +9,8 @@ export interface userInfoType {
 export interface stateType {
   isLogin: boolean;
   userInfo: userInfoType;
-  friendList: friendItemType | any;
+  friendList: friendItemType[];
+  chatList: chatListItemType[];
 }
 
 export interface ctxPassThroughType {
@@ -66,4 +67,13 @@ export interface friendItemType {
   Status: number;
   AddTime: string;
   IsMaster: boolean;
+}
+
+export interface chatListItemType {
+  ChatID: string;
+  RecentMsg: string;
+  ChatToNickName: string;
+  ChatToUserID: string;
+  ChatToUserAvatar: string;
+  RecentTime: string;
 }
