@@ -71,7 +71,7 @@ export interface friendItemType {
 
 export interface chatListItemType {
   ChatID: string;
-  RecentMsg: string;
+  RecentMsg: any;
   ChatToNickName: string;
   ChatToUserID: string;
   ChatToUserAvatar: string;

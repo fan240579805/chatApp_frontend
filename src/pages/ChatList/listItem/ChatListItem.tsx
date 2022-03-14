@@ -30,7 +30,7 @@ const ChatListItem: React.FC<itemProps> = ({
       </View>
       <View style={listStyle.contentWrap}>
         <Text style={{fontSize: 18}}>{ChatToNickName}</Text>
-        <Text style={{fontSize: 14}}>{RecentMsg}</Text>
+        <Text style={{fontSize: 14}}>{RecentMsg.content}</Text>
       </View>
       {/* {isShowPop && <Popup operations={operations} />} */}
 
