@@ -15,6 +15,7 @@ export enum stateStatus {
   SET_FRIENDLIST = 'SET_FRIENDLIST',
   SET_CHATLIST = 'SET_CHATLIST',
   APPEND_CHATITEM = 'APPEND_CHATITEM',
+  NEW_MSG_CHATITEM = 'NEW_MSG_CHATITEM',
 }
 
 // export const BASE_URL = 'http://127.0.0.1:9998/';
@@ -51,7 +52,7 @@ export enum API_PATH {
 
   // 聊天相关api地址
   UPLOAD_CHATIMG = 'api/uploadChatImg',
-  GET_CHAT_LIST='api/getChatList',
+  GET_CHAT_LIST = 'api/getChatList',
   MAKE_CHAT = 'api/makeChat',
 
   WS = 'api/ws',

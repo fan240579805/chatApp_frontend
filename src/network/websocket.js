@@ -54,6 +54,7 @@ export default class WebSocketClient {
         // console.log('WebSocket: response msg', evt.data);
         const wsData = JSON.parse(evt.data);
         wsData.DataType == 'msg' && DeviceEventEmitter.emit('pushMsg', wsData);
+        wsData.DataType == 'chatItem' && DeviceEventEmitter.emit('pushChatItem', wsData);
         wsData.DataType == 'friend' && DeviceEventEmitter.emit('pushFriend', wsData);
       } else {
         console.log('WebSocket: response pong msg=', evt.data);

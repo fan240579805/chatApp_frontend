@@ -11,6 +11,8 @@ export interface stateType {
   userInfo: userInfoType;
   friendList: friendItemType[];
   chatList: chatListItemType[];
+  TopChatList: chatListItemType[]; // 置顶了的聊天列表
+  otherData: any; // 一些便于全局修改，共享的数据
 }
 
 export interface ctxPassThroughType {
@@ -52,6 +54,13 @@ export interface bePushedFriendType {
   DataType: string; // 区分websocket要推送的数据是好友类型还是消息类型
   BePushedID: string;
   Friend: friendItemType;
+}
+
+// 服务器推送的聊天item数据类型
+export interface bePushedChatType {
+  DataType: string; // 区分websocket要推送的数据是好友类型还是消息类型
+  BePushedID: string;
+  Chat: chatListItemType;
 }
 
 export interface userProfileType {

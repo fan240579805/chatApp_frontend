@@ -1,9 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {TouchableOpacity, FlatList} from 'react-native';
+import {TouchableOpacity, FlatList, DeviceEventEmitter} from 'react-native';
 import {wsInstance} from '../../network/websocket';
 import ChatListItem from './listItem/ChatListItem';
 import {Context} from '../../state/stateContext';
 import {
+  bePushedChatType,
   chatListItemType,
   ctxPassThroughType,
   stateType,
@@ -45,6 +46,13 @@ const ChatList: React.FC<Props> = ({navigation}) => {
     },
     successCbFunc: res => {
       // 请求成功处理一下data
+      const chatList: chatListItemType[] = res;
+      // 缓存中看看是否有置顶chatidList, 有的话处理，无的话直接set
+      // 1. 查看缓存
+
+      // 2. dispatch处理TopChatList
+
+      // 3. 处理未置顶Chat
       dispatch({type: stateStatus.SET_CHATLIST, playloads: res});
     },
   });
@@ -65,6 +73,18 @@ const ChatList: React.FC<Props> = ({navigation}) => {
     },
   });
 
+  useEffect(() => {
+    DeviceEventEmitter.addListener(
+      'pushChatItem',
+      (bePushedObj: bePushedChatType) => {
+        const {Chat} = bePushedObj;
+        const chatItem: chatListItemType = {
+          ...Chat,
+        };
+        dispatch({type: stateStatus.NEW_MSG_CHATITEM, playloads: chatItem});
+      },
+    );
+  }, [state.chatList]);
   return (
     <FlatList
       data={state.chatList}

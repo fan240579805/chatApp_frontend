@@ -39,21 +39,64 @@ export function contextReducer(
         ...state,
         chatList: [...action.playloads],
       };
+    // 用于用户点击（开始聊天）按钮之后，更新chatList到首页
     case stateStatus.APPEND_CHATITEM:
       const newChatList: chatListItemType[] = state.chatList;
+      const newTopList: chatListItemType[] = state.TopChatList;
       const newChatItem: chatListItemType = action.playloads;
+
       const preChatItemIndex = newChatList.findIndex(
         chatItem => chatItem.ChatID === newChatItem.ChatID,
       );
+      const preTopItemIndex = newTopList.findIndex(
+        chatItem => chatItem.ChatID === newChatItem.ChatID,
+      );
+
       if (preChatItemIndex !== -1) {
         newChatList[preChatItemIndex] = newChatItem;
+      } else if (preTopItemIndex !== -1) {
+        newTopList[preTopItemIndex] = newChatItem;
+        return {
+          ...state,
+          TopChatList: [...newTopList],
+        };
       } else {
-        newChatList.push(newChatItem);
+        // 既不在置顶list也不在常规chatList，说明是第一次点击发送聊天按钮，直接unshift
+        newChatList.unshift(newChatItem);
       }
       return {
         ...state,
         chatList: [...newChatList],
       };
+    // 被发送消息的人得到新的chat聊天框，更新chatList
+    case stateStatus.NEW_MSG_CHATITEM:
+      const preChatList: chatListItemType[] = state.chatList;
+      const tempTopList: chatListItemType[] = state.TopChatList;
+      const newChat: chatListItemType = action.playloads;
+
+      const index = tempTopList.findIndex(
+        chatItem => chatItem.ChatID === newChat.ChatID,
+      );
+
+      if (index === -1) {
+        // 说明要更新的chatItem不再置顶list中，更新正常chatList
+        const tmpChatList = preChatList.filter(
+          chat => chat.ChatID !== newChat.ChatID,
+        );
+        tmpChatList.unshift(newChat);
+        return {
+          ...state,
+          chatList: [...tmpChatList],
+        };
+      } else {
+        // 要更新的chatItem在置顶List中
+        tempTopList[index] = newChat;
+        return {
+          ...state,
+          TopChatList: [...tempTopList],
+        };
+      }
+
     default:
       return {
         ...state,

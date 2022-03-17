@@ -105,8 +105,6 @@ const FriendInofo: React.FC<infoProps> = ({route, navigation}) => {
           isChangeTitle: true,
         });
         // 分发dispatch修改全局的chatlist，resp.data = chatItem
-        console.log("xxxxxxxxxxx");
-        // console.log(resp.data);
         dispatch({type: stateStatus.APPEND_CHATITEM, playloads: resp.data});
       } else {
       }
