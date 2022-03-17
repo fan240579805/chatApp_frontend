@@ -8,7 +8,9 @@ import {useState} from 'react';
 import {chatListItemType} from '../../../type/state_type';
 import {dateFormat, FormatsEnums} from '../../../utils/common/time';
 
-interface itemProps extends chatListItemType {}
+interface itemProps extends chatListItemType {
+  isTop?: boolean;
+}
 
 const ChatListItem: React.FC<itemProps> = ({
   ChatID,
@@ -17,6 +19,7 @@ const ChatListItem: React.FC<itemProps> = ({
   ChatToUserID,
   ChatToUserAvatar,
   RecentTime,
+  isTop,
 }) => {
   const [isShowPop, setShow] = useState(false);
 
@@ -28,9 +31,14 @@ const ChatListItem: React.FC<itemProps> = ({
       <View>
         <Image source={{uri: ChatToUserAvatar}} style={listStyle.imgStyle} />
       </View>
-      <View style={listStyle.contentWrap}>
+      <View
+        style={
+          isTop
+            ? [listStyle.contentWrap, {backgroundColor: '#eee'}]
+            : listStyle.contentWrap
+        }>
         <Text style={{fontSize: 18}}>{ChatToNickName}</Text>
-        <Text style={{fontSize: 14}}>{RecentMsg.content}</Text>
+        <Text style={{fontSize: 14}}>{RecentMsg && RecentMsg.content}</Text>
       </View>
       {/* {isShowPop && <Popup operations={operations} />} */}
 

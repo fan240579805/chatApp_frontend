@@ -12,6 +12,7 @@ export interface stateType {
   friendList: friendItemType[];
   chatList: chatListItemType[];
   TopChatList: chatListItemType[]; // 置顶了的聊天列表
+  CurChatItem: chatListItemType;
   otherData: any; // 一些便于全局修改，共享的数据
 }
 
@@ -85,4 +86,9 @@ export interface chatListItemType {
   ChatToUserID: string;
   ChatToUserAvatar: string;
   RecentTime: number;
+}
+
+export interface chatInfoType {
+  chatID: string;
+  recipient: string;
 }

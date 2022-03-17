@@ -23,6 +23,16 @@ const state: stateType = {
   },
   friendList: new Array<friendItemType>(),
   chatList: new Array<chatListItemType>(),
+  TopChatList: new Array<chatListItemType>(),
+  CurChatItem: {
+    ChatID: '',
+    RecentMsg: null,
+    ChatToNickName: '',
+    ChatToUserID: '',
+    ChatToUserAvatar: '',
+    RecentTime: 0,
+  },
+  otherData: null,
 };
 // 暴露出全局统一的上下文
 export const Context: any = React.createContext(null);

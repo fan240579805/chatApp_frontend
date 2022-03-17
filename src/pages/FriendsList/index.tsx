@@ -8,7 +8,6 @@ import {
   friendItemType,
   userProfileType,
 } from '../../type/state_type';
-import {formatList} from '../../utils';
 import {fpageStyle} from './friendPageStyle';
 import FriendListItem from './listItem';
 interface Props {

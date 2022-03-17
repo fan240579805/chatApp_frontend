@@ -29,6 +29,12 @@ export function contextReducer(
           token: '',
         },
       };
+    // 设置当前所在chat聊天的必要信息
+    case stateStatus.SET_CHAT_DATA:
+      return {
+        ...state,
+        CurChatItem: {...action.playloads},
+      };
     case stateStatus.SET_FRIENDLIST:
       return {
         ...state,
@@ -38,6 +44,28 @@ export function contextReducer(
       return {
         ...state,
         chatList: [...action.playloads],
+      };
+
+    case stateStatus.SET_TOP_LIST:
+      return {
+        ...state,
+        TopChatList: [...action.playloads],
+      };
+    case stateStatus.TOGGLE_TOP_LIST:
+      let preTopList = state.TopChatList;
+      let prevChatList = state.chatList;
+      const {operFlag, chatItem} = action.playloads;
+      if (!operFlag) {
+        preTopList = preTopList.filter(item => item.ChatID !== chatItem.ChatID);
+        prevChatList.push(chatItem);
+      }else {
+        preTopList.push(chatItem);
+        prevChatList = prevChatList.filter(item => item.ChatID !== chatItem.ChatID);
+      }
+      return {
+        ...state,
+        TopChatList: [...preTopList],
+        chatList: [...prevChatList],
       };
     // 用于用户点击（开始聊天）按钮之后，更新chatList到首页
     case stateStatus.APPEND_CHATITEM:

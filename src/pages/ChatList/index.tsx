@@ -1,5 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {TouchableOpacity, FlatList, DeviceEventEmitter} from 'react-native';
+import {
+  TouchableOpacity,
+  FlatList,
+  DeviceEventEmitter,
+  ScrollView,
+} from 'react-native';
 import {wsInstance} from '../../network/websocket';
 import ChatListItem from './listItem/ChatListItem';
 import {Context} from '../../state/stateContext';
@@ -7,19 +12,30 @@ import {
   bePushedChatType,
   chatListItemType,
   ctxPassThroughType,
-  stateType,
 } from '../../type/state_type';
 import {useGetData} from '../../network/getDataHook';
 import {API_PATH, BASE_URL, stateStatus} from '../../const';
 import {formatList} from '../../utils';
+import {getValueFromStorage, StorageHasValue} from '../../utils/storage';
+import {ctxActionType} from '../../type/actions_type';
 interface Props {
   navigation: any;
 }
 
-const render = (navigation: any, ChatItem: chatListItemType) => {
+const render = (
+  navigation: any,
+  ChatItem: chatListItemType,
+  dispatch: React.Dispatch<ctxActionType>,
+  isTop: boolean,
+) => {
   return (
     <TouchableOpacity
       onPress={() => {
+        // 点击跳转前，dispatch分发chatInfo需要的数据，因为不这样比较难进行跨路由父子组件传值
+        dispatch({
+          type: stateStatus.SET_CHAT_DATA,
+          playloads: ChatItem,
+        });
         navigation.navigate('ChatRoomPage', {
           showTitle: ChatItem.ChatToNickName,
           isChangeTitle: true,
@@ -27,7 +43,7 @@ const render = (navigation: any, ChatItem: chatListItemType) => {
           recipient: ChatItem.ChatToUserID,
         });
       }}>
-      <ChatListItem {...ChatItem} />
+      <ChatListItem {...ChatItem} isTop={isTop} />
     </TouchableOpacity>
   );
 };
@@ -47,13 +63,27 @@ const ChatList: React.FC<Props> = ({navigation}) => {
     successCbFunc: res => {
       // 请求成功处理一下data
       const chatList: chatListItemType[] = res;
-      // 缓存中看看是否有置顶chatidList, 有的话处理，无的话直接set
-      // 1. 查看缓存
-
-      // 2. dispatch处理TopChatList
-
-      // 3. 处理未置顶Chat
-      dispatch({type: stateStatus.SET_CHATLIST, playloads: res});
+      // 1. 缓存中看看是否有置顶chatIds, 有的话处理，无的话直接set
+      StorageHasValue('topChatIds').then(hasValue => {
+        if (hasValue) {
+          getValueFromStorage('topChatIds').then(value => {
+            const chatIds: string[] = JSON.parse(value);
+            const topChatList = chatIds.map(chatId => {
+              const i = chatList.findIndex(
+                chatItem => chatItem.ChatID === chatId,
+              );
+              chatList.splice(i, 1); // 从chatList移除掉在置顶List中的item
+              return chatList[i];
+            });
+            // 2. dispatch处理TopChatList
+            dispatch({type: stateStatus.SET_TOP_LIST, playloads: topChatList});
+            // 3. 处理未置顶Chat
+            dispatch({type: stateStatus.SET_CHATLIST, playloads: chatList});
+          });
+        } else {
+          dispatch({type: stateStatus.SET_CHATLIST, playloads: chatList});
+        }
+      });
     },
   });
   // 在这里拉取好友列表的目的是，他是首页，加载首屏数据易于理解
@@ -86,13 +116,28 @@ const ChatList: React.FC<Props> = ({navigation}) => {
     );
   }, [state.chatList]);
   return (
-    <FlatList
-      data={state.chatList}
-      renderItem={({item}) => render(navigation, item)}
-      keyExtractor={item => item.ChatID}
-      refreshing={isRefresh}
-      onRefresh={() => console.log(1)}
-    />
+    <>
+      <ScrollView>
+        {state.TopChatList.map(chat => {
+          return render(navigation, chat, dispatch, true);
+        })}
+        {state.chatList.map(chat => {
+          return render(navigation, chat, dispatch, false);
+        })}
+      </ScrollView>
+      {/* <FlatList
+        data={state.TopChatList}
+        renderItem={({item}) => render(navigation, item, dispatch)}
+        keyExtractor={item => item.ChatID}
+      />
+      <FlatList
+        data={state.chatList}
+        renderItem={({item}) => render(navigation, item, dispatch)}
+        keyExtractor={item => item.ChatID}
+        refreshing={isRefresh}
+        onRefresh={() => console.log(1)}
+      /> */}
+    </>
   );
 };
 
