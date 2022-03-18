@@ -5,10 +5,6 @@ import {stateStatus} from '../../../const';
 import useTopFromStorage from '../../../hooks/topStorageHook';
 import {Context} from '../../../state/stateContext';
 import {ctxPassThroughType} from '../../../type/state_type';
-import storage, {
-  getValueFromStorage,
-  StorageHasValue,
-} from '../../../utils/storage';
 import {infoStyle} from './infoStyle';
 interface Props {}
 
@@ -20,7 +16,7 @@ const ChatInfo: React.FC<Props> = () => {
   const [isTop, setTop, removeChatId, appendToChatIds] = useTopFromStorage(CurChatItem);
 
   const [isUnTip, setUnTip] = useState(false);
-  
+
   const [isBlacked, setBlack] = useState(false);
 
   const toggleTop = () => {

@@ -6,8 +6,8 @@ import storage, {getValueFromStorage, StorageHasValue} from '../utils/storage';
 type returnType = [
   boolean,
   React.Dispatch<React.SetStateAction<boolean>>,
-  () => void,
-  () => void,
+  () => Promise<void>,
+  () => Promise<void>,
 ];
 // 获取置顶 chatList 钩子🪝
 export default function useTopFromStorage(
