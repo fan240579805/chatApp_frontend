@@ -32,7 +32,6 @@ export const StorageHasValue = async (key: string): Promise<boolean> => {
     const ret = await storage.load({key});
     ret ? (flag = true) : (flag = false);
   } catch (error) {
-    console.log(error);
     flag = false;
   }
   return flag;
@@ -42,7 +41,7 @@ export const getValueFromStorage = async (key: string): Promise<string> => {
   try {
     res = await storage.load({key});
   } catch (error) {
-    console.log(error);
+    console.log('获取本地storage出错', error);
   }
   return res;
 };

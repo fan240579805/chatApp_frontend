@@ -6,12 +6,8 @@ import ChatRoomPage from '../../pages/ChatRoom';
 import IconBtn from '../../components/IconBtn';
 import ChatInfo from '../../pages/ChatRoom/chatInfo';
 import FriendInfo from '../../pages/FriendsList/friendInfo';
-import {Context} from '../../state/stateContext';
-import {ctxPassThroughType} from '../../type/state_type';
 
 export const TabRouterPage: React.FC<any> = RootStack => {
-  const {dispatch, state}: ctxPassThroughType = useContext(Context);
-
   return (
     <RootStack.Group>
       <RootStack.Screen
@@ -36,7 +32,6 @@ export const TabRouterPage: React.FC<any> = RootStack => {
                 navigation.navigate('ChatInfo', {
                   showTitle: '聊天信息',
                   isChangeTitle: true,
-                  ...state.chatInfoData,
                 });
               }}
             />

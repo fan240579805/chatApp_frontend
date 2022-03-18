@@ -27,9 +27,11 @@ const render = (
   ChatItem: chatListItemType,
   dispatch: React.Dispatch<ctxActionType>,
   isTop: boolean,
+  index: number,
 ) => {
   return (
     <TouchableOpacity
+      key={ChatItem.ChatID || index}
       onPress={() => {
         // 点击跳转前，dispatch分发chatInfo需要的数据，因为不这样比较难进行跨路由父子组件传值
         dispatch({
@@ -72,9 +74,11 @@ const ChatList: React.FC<Props> = ({navigation}) => {
               const i = chatList.findIndex(
                 chatItem => chatItem.ChatID === chatId,
               );
+              const tempCaht = chatList[i];
               chatList.splice(i, 1); // 从chatList移除掉在置顶List中的item
-              return chatList[i];
+              return tempCaht;
             });
+
             // 2. dispatch处理TopChatList
             dispatch({type: stateStatus.SET_TOP_LIST, playloads: topChatList});
             // 3. 处理未置顶Chat
@@ -118,25 +122,13 @@ const ChatList: React.FC<Props> = ({navigation}) => {
   return (
     <>
       <ScrollView>
-        {state.TopChatList.map(chat => {
-          return render(navigation, chat, dispatch, true);
+        {state.TopChatList.map((chat, index) => {
+          return render(navigation, chat, dispatch, true, index);
         })}
-        {state.chatList.map(chat => {
-          return render(navigation, chat, dispatch, false);
+        {state.chatList.map((chat, index) => {
+          return render(navigation, chat, dispatch, false, index);
         })}
       </ScrollView>
-      {/* <FlatList
-        data={state.TopChatList}
-        renderItem={({item}) => render(navigation, item, dispatch)}
-        keyExtractor={item => item.ChatID}
-      />
-      <FlatList
-        data={state.chatList}
-        renderItem={({item}) => render(navigation, item, dispatch)}
-        keyExtractor={item => item.ChatID}
-        refreshing={isRefresh}
-        onRefresh={() => console.log(1)}
-      /> */}
     </>
   );
 };

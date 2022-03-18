@@ -2,18 +2,26 @@ import React, {useContext, useState} from 'react';
 import {Switch, View} from 'react-native';
 import LongBtn from '../../../components/longBtn';
 import {stateStatus} from '../../../const';
+import useTopFromStorage from '../../../hooks/topStorageHook';
 import {Context} from '../../../state/stateContext';
 import {ctxPassThroughType} from '../../../type/state_type';
+import storage, {
+  getValueFromStorage,
+  StorageHasValue,
+} from '../../../utils/storage';
 import {infoStyle} from './infoStyle';
 interface Props {}
 
 const ChatInfo: React.FC<Props> = () => {
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
 
-  const [isTop, setTop] = useState(false);
-  const [isUnTip, setUnTip] = useState(false);
-  const [isBlacked, setBlack] = useState(false);
   const {CurChatItem} = state;
+
+  const [isTop, setTop, removeChatId, appendToChatIds] = useTopFromStorage(CurChatItem);
+
+  const [isUnTip, setUnTip] = useState(false);
+  
+  const [isBlacked, setBlack] = useState(false);
 
   const toggleTop = () => {
     if (isTop) {
@@ -21,15 +29,15 @@ const ChatInfo: React.FC<Props> = () => {
         type: stateStatus.TOGGLE_TOP_LIST,
         playloads: {operFlag: false, chatItem: CurChatItem},
       });
-      // 补充缓存添加chatIDs
+      removeChatId();
     } else {
       dispatch({
         type: stateStatus.TOGGLE_TOP_LIST,
         playloads: {operFlag: true, chatItem: CurChatItem},
       });
-      // 补充缓存，从chatIDS中移除相应的chatid
-
+      appendToChatIds();
     }
+
     setTop(!isTop);
   };
   return (
