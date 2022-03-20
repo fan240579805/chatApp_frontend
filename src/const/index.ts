@@ -53,6 +53,7 @@ export enum API_PATH {
   REJECT_FRIEND = 'api/rejectFriendReq',
   TAKE_BLACK = 'api/takeBlack',
   CANCEL_BLACK = 'api/cancelBlack',
+  GET_BLACK_LIST = 'api/getBlackList',
   GET_BLACK_STATUS = 'api/getBlackStatus',
   DELETE_FRIEND = 'api/deleteFriendReq',
   BOTH_DEL_FRIEND = 'api/bothDelFriend',

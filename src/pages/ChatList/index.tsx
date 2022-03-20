@@ -106,6 +106,19 @@ const ChatList: React.FC<Props> = ({navigation}) => {
       wsInstance.initWebSocket(state.userInfo.userID);
     },
   });
+  // 获取拉黑list（长度）
+  useGetData({
+    initUrl: `${BASE_URL}${API_PATH.GET_BLACK_LIST}`,
+    initData: {},
+    fetchOptions: {
+      headers: {
+        Authorization: `Bearer ${state.userInfo.token}`,
+      },
+    },
+    successCbFunc: res => {
+      dispatch({type: stateStatus.SET_BLACK_NUM, playloads: res.length});
+    },
+  });
 
   useEffect(() => {
     DeviceEventEmitter.addListener(
