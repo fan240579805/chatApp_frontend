@@ -49,6 +49,8 @@ const FriendInofo: React.FC<infoProps> = ({route, navigation}) => {
         playloads: formatList(res),
       });
       setBlack(!isBlacked);
+      isBlacked && dispatch({type: stateStatus.SET_BLACK_NUM, playloads: -1});
+      !isBlacked && dispatch({type: stateStatus.SET_BLACK_NUM, playloads: 1});
     },
     initReqData,
   });

@@ -44,7 +44,9 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
   // 所以在父组件chatroom中封装好再回传给儿子
   // 这样就能借父组件的手关闭其他的popup
   const closePopup = () => {
-    childRef!.current.changeShow(false);
+    if (childRef) {
+      childRef?.current?.changeShow(false);
+    }
   };
 
   // 消息列表，记得修改

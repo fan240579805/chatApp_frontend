@@ -70,9 +70,9 @@ const Profile: React.FC<Props> = () => {
           avatarUrl={data.Avatar}>
           <DisplayBar
             friendNum={state.friendList.length}
-            blackListNum={5}
-            unDisturbNum={2}
-            subNum={4}
+            blackListNum={state.otherData?.BlackNum || 0}
+            unDisturbNum={state.otherData?.unDisturbNum || 0}
+            subNum={state.TopChatList.length}
           />
         </InfoCard>
       )}

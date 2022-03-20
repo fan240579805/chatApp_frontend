@@ -58,9 +58,11 @@ export function contextReducer(
       if (!operFlag) {
         preTopList = preTopList.filter(item => item.ChatID !== chatItem.ChatID);
         prevChatList.push(chatItem);
-      }else {
+      } else {
         preTopList.push(chatItem);
-        prevChatList = prevChatList.filter(item => item.ChatID !== chatItem.ChatID);
+        prevChatList = prevChatList.filter(
+          item => item.ChatID !== chatItem.ChatID,
+        );
       }
       return {
         ...state,
@@ -124,7 +126,20 @@ export function contextReducer(
           TopChatList: [...tempTopList],
         };
       }
-
+    case stateStatus.SET_BLACK_NUM:
+      const preBlackNum = state?.otherData?.BlackNum || 0;
+      return {
+        ...state,
+        otherData: {
+          ...state.otherData,
+          BlackNum: preBlackNum + action.playloads,
+        },
+      };
+    case stateStatus.SET_OTHER_DATA:
+      return {
+        ...state,
+        otherData: {...action.playloads},
+      };
     default:
       return {
         ...state,
