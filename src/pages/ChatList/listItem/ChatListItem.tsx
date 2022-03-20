@@ -27,16 +27,16 @@ const ChatListItem: React.FC<itemProps> = ({
     {title: '删除聊天', execfunc: () => console.log('del')},
   ];
   return (
-    <View style={listStyle.container}>
+    <View
+      style={
+        isTop
+          ? [listStyle.container, {backgroundColor: '#e9e9e9'}]
+          : listStyle.container
+      }>
       <View>
         <Image source={{uri: ChatToUserAvatar}} style={listStyle.imgStyle} />
       </View>
-      <View
-        style={
-          isTop
-            ? [listStyle.contentWrap, {backgroundColor: '#eee'}]
-            : listStyle.contentWrap
-        }>
+      <View style={listStyle.contentWrap}>
         <Text style={{fontSize: 18}}>{ChatToNickName}</Text>
         <Text style={{fontSize: 14}}>{RecentMsg && RecentMsg.content}</Text>
       </View>
