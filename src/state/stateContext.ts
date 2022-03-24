@@ -3,6 +3,7 @@ import {
   chatListItemType,
   ctxPassThroughType,
   friendItemType,
+  msgType,
   stateType,
 } from '../type/state_type';
 import reducers from '../reducers';

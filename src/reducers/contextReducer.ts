@@ -135,6 +135,7 @@ export function contextReducer(
           BlackNum: preBlackNum + action.playloads,
         },
       };
+    // 设置一些其他便于全局修改共享的数据
     case stateStatus.SET_OTHER_DATA:
       return {
         ...state,

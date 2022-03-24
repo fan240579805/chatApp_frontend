@@ -1,5 +1,5 @@
-import {DeviceEventEmitter} from 'react-native';
 import {API_PATH, BASE_URL} from '../const';
+import eventBus from '../utils/eventBus'
 const url = `${BASE_URL}${API_PATH.WS}`;
 let that = null;
 
@@ -53,9 +53,9 @@ export default class WebSocketClient {
         //不是心跳消息，消息处理逻辑
         // console.log('WebSocket: response msg', evt.data);
         const wsData = JSON.parse(evt.data);
-        wsData.DataType == 'msg' && DeviceEventEmitter.emit('pushMsg', wsData);
-        wsData.DataType == 'chatItem' && DeviceEventEmitter.emit('pushChatItem', wsData);
-        wsData.DataType == 'friend' && DeviceEventEmitter.emit('pushFriend', wsData);
+        wsData.DataType == 'msg' && eventBus.emit('pushMsg', wsData);
+        wsData.DataType == 'chatItem' && eventBus.emit('pushChatItem', wsData);
+        wsData.DataType == 'friend' && eventBus.emit('pushFriend', wsData);
       } else {
         console.log('WebSocket: response pong msg=', evt.data);
       }

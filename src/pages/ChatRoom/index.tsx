@@ -1,11 +1,12 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  DeviceEventEmitter,
-} from 'react-native';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from 'react';
+import {View, FlatList, TouchableOpacity, ScrollView} from 'react-native';
 import {chatRoomStyle} from './chatRoomStyle';
 import BottomTool from './bottomTool';
 import ChatBubble from './chatBubble';
@@ -18,8 +19,10 @@ import EmojiSelector, {Categories} from 'react-native-emoji-selector';
 import Icon from 'react-native-vector-icons/Ionicons';
 import UploadImageBtn from '../../components/uploadImage';
 import ModalCMP from '../../components/Modal';
-import {API_PATH} from '../../const';
+import {API_PATH, stateStatus} from '../../const';
 import {Context} from '../../state/stateContext';
+import {msgReducer, MsgStatus} from '../../reducers/msgListReducer';
+import eventBus from '../../utils/eventBus';
 
 interface Props {
   route: any;
@@ -51,28 +54,56 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
 
   // 消息列表，记得修改
   const [msgList, setMsgList] = useState<Array<msgType>>([]);
+  const [msgState, dispatchMsg] = useReducer(msgReducer, {
+    msgList: new Array<msgType>(),
+  });
+
   const scrollContainer = useRef<any>(null);
   const inputCmpRef = useRef<any>(null);
+
+  const receiveMsgAction = useCallback(
+    (bePushedObj: bePushedMsgType) => {
+      const {Message, UserInfo} = bePushedObj;
+      console.log(Message);
+      const messageItem: msgType = {
+        msgid: Message.MsgID,
+        content: Message.content,
+        ownerid: UserInfo.UserID,
+        type: Message.type,
+        time: Message.time,
+        isSender: Message.sender === state.userInfo.userID ? true : false,
+        avatarUrl: UserInfo.Avatar,
+      };
+      // const tempArr = [...msgList];
+      // tempArr.push(messageItem);
+      // setMsgList([...tempArr]);
+      dispatchMsg({type: MsgStatus.APPEND_MSG_LIST, playloads: messageItem});
+    },
+    [chatID],
+  );
+  const receiveMsgAction1 = (bePushedObj: bePushedMsgType) => {
+    const {Message, UserInfo} = bePushedObj;
+    console.log(Message);
+    const messageItem: msgType = {
+      msgid: Message.MsgID,
+      content: Message.content,
+      ownerid: UserInfo.UserID,
+      type: Message.type,
+      time: Message.time,
+      isSender: Message.sender === state.userInfo.userID ? true : false,
+      avatarUrl: UserInfo.Avatar,
+    };
+    const tempArr = [...msgList];
+    tempArr.push(messageItem);
+    setMsgList([...tempArr]);
+  };
+
   useEffect(() => {
-    DeviceEventEmitter.addListener(
-      'pushMsg',
-      (bePushedObj: bePushedMsgType) => {
-        const {Message, UserInfo} = bePushedObj;
-        const messageItem: msgType = {
-          msgid: Message.MsgID,
-          content: Message.content,
-          ownerid: UserInfo.UserID,
-          type: Message.type,
-          time: Message.time,
-          isSender: Message.sender === state.userInfo.userID ? true : false,
-          avatarUrl: UserInfo.Avatar,
-        };
-        const tempArr = [...msgList];
-        tempArr.push(messageItem);
-        setMsgList([...tempArr]);
-      },
-    );
-  }, [msgList]);
+    const listener = eventBus.addListener('pushMsg', receiveMsgAction);
+    return () => {
+      listener.remove();
+    };
+  }, [receiveMsgAction]);
 
   // 选择完emoji事件
   const selectEmojiHandle = (emoji: string) => {
@@ -92,8 +123,33 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
         style={
           [chatRoomStyle.chatContent, {height: ContentHeight || '90%'}] //根据输入框内容动态赋给聊天区域高度
         }>
+        {/* <ScrollView
+          ref={scrollContainer}
+          // 滚动区域布局(高度)改变，自动滚到最底部
+          onLayout={() => {
+            if (scrollContainer) {
+              // 初次渲染不带动画滚动到底部
+              if (isFirstScroll) {
+                scrollContainer.current.scrollToEnd({animated: false});
+              } else {
+                scrollContainer.current.scrollToEnd({animated: true});
+              }
+              setIsScroll(false);
+            }
+          }}>
+          {state.curMsgList.map(item => (
+            <ChatBubble
+              key={item.msgid}
+              {...item}
+              closePopup={closePopup}
+              cRef={childRef}
+              navigation={navigation}
+            />
+          ))}
+        </ScrollView> */}
         <FlatList
-          data={msgList}
+          extraData={msgState.msgList}
+          data={msgState.msgList}
           renderItem={({item}) => (
             <ChatBubble
               {...item}
@@ -102,13 +158,13 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
               navigation={navigation}
             />
           )}
-          initialNumToRender={msgList.length}
-          keyExtractor={msgItem => String(msgItem.msgid)}
+          initialNumToRender={msgState.msgList.length}
+          keyExtractor={msgItem => msgItem.msgid}
           ref={scrollContainer}
           onContentSizeChange={() => {
             // 发消息时滚动到底部
             if (!isFirstScroll) {
-              scrollContainer.current.scrollToEnd({animated: true});
+              scrollContainer!.current.scrollToEnd({animated: true});
             }
           }}
           // 滚动区域布局(高度)改变，自动滚到最底部

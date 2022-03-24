@@ -1,10 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {
-  TouchableOpacity,
-  FlatList,
-  DeviceEventEmitter,
-  ScrollView,
-} from 'react-native';
+import {TouchableOpacity, FlatList, ScrollView} from 'react-native';
 import {wsInstance} from '../../network/websocket';
 import ChatListItem from './listItem/ChatListItem';
 import {Context} from '../../state/stateContext';
@@ -18,6 +13,7 @@ import {API_PATH, BASE_URL, stateStatus} from '../../const';
 import {formatList} from '../../utils';
 import {getValueFromStorage, StorageHasValue} from '../../utils/storage';
 import {ctxActionType} from '../../type/actions_type';
+import eventBus from '../../utils/eventBus';
 interface Props {
   navigation: any;
 }
@@ -121,7 +117,7 @@ const ChatList: React.FC<Props> = ({navigation}) => {
   });
 
   useEffect(() => {
-    DeviceEventEmitter.addListener(
+    const listener = eventBus.addListener(
       'pushChatItem',
       (bePushedObj: bePushedChatType) => {
         const {Chat} = bePushedObj;
@@ -131,6 +127,9 @@ const ChatList: React.FC<Props> = ({navigation}) => {
         dispatch({type: stateStatus.NEW_MSG_CHATITEM, playloads: chatItem});
       },
     );
+    return () => {
+      listener.remove();
+    };
   }, [state.chatList]);
   return (
     <>
