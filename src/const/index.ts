@@ -34,11 +34,12 @@ export const WEBSOCKET_URL = 'ws://192.168.43.142:9998/';
 
 export enum API_PATH {
   LOGIN = 'api/login',
+  LOG_OUT = 'api/logout',
   REGISTER = 'api/Registerauth',
   AUTH_TOKEN = 'api/AuthToken',
-
   GET_USERINFO = 'api/userInfo',
   GET_FRIENDLIST = 'api/getFriendList',
+
   // 更新用户信息api地址
   UPDATE_USERINFO = 'api/updateUserInfo',
   MODIFY_PWD = 'api/modifypwd',
@@ -62,6 +63,9 @@ export enum API_PATH {
   UPLOAD_CHATIMG = 'api/uploadChatImg',
   GET_CHAT_LIST = 'api/getChatList',
   MAKE_CHAT = 'api/makeChat',
+
+  // msg相关api
+  GET_MSG_LIST = 'api/getMsgList',
 
   WS = 'api/ws',
   AJAX = 'api/AJAX',

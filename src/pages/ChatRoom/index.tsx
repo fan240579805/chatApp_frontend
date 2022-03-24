@@ -58,7 +58,7 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
   });
 
   const scrollContainer = useRef<any>(null);
-  
+
   const inputCmpRef = useRef<any>(null);
 
   const receiveMsgAction = useCallback(
@@ -74,9 +74,6 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
         isSender: Message.sender === state.userInfo.userID ? true : false,
         avatarUrl: UserInfo.Avatar,
       };
-      // const tempArr = [...msgList];
-      // tempArr.push(messageItem);
-      // setMsgList([...tempArr]);
       dispatchMsg({type: MsgStatus.APPEND_MSG_LIST, playloads: messageItem});
     },
     [chatID],

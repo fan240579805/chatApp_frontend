@@ -7,7 +7,9 @@ import ModalCMP from '../../components/Modal';
 import UploadImageBtn from '../../components/uploadImage';
 import {API_PATH, BASE_URL, stateStatus} from '../../const';
 import {useGetData} from '../../network/getDataHook';
+import {postData} from '../../network/postData';
 import {Context} from '../../state/stateContext';
+import {RESP_TYPE} from '../../type/api_types';
 import {ctxPassThroughType} from '../../type/state_type';
 import storage from '../../utils/storage';
 import DisplayBar from './displayBar';
@@ -47,14 +49,32 @@ const Profile: React.FC<Props> = () => {
     isInput && inputName && setPropInputName(inputName);
     inputType && setInputType(inputType);
   };
+
+  const exitServerLogin = async () => {
+    const res = await postData(`${BASE_URL}${API_PATH.LOG_OUT}`, {
+      token: state.userInfo.token,
+    });
+    const resp: RESP_TYPE = await res.json();
+    if (resp.code === 200) {
+      ToastAndroid.showWithGravityAndOffset(
+        '成功登出',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        10,
+        100,
+      );
+    } else {
+      ToastAndroid.showWithGravityAndOffset(
+        '登陆态清除失败',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        10,
+        100,
+      );
+    }
+  };
   const exitLogin = () => {
-    ToastAndroid.showWithGravityAndOffset(
-      '成功登出',
-      ToastAndroid.SHORT,
-      ToastAndroid.BOTTOM,
-      10,
-      100,
-    );
+    exitServerLogin();
     dispatch({type: stateStatus.LOG_OUT});
     // 清除本地缓存所有key
     ['username', 'token', 'userID'].forEach(key => {
