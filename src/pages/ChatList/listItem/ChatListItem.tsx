@@ -1,31 +1,33 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useContext} from 'react';
 import {Text, View, Image} from 'react-native';
-import Popup from '../../../components/popup';
 import {listStyle} from './listItemStyle';
-import {operateType} from '../../../type/props_type';
-import {useState} from 'react';
-import {chatListItemType} from '../../../type/state_type';
+import {chatListItemType, ctxPassThroughType} from '../../../type/state_type';
 import {dateFormat, FormatsEnums} from '../../../utils/common/time';
+import {Context} from '../../../state/stateContext';
 
 interface itemProps extends chatListItemType {
   isTop?: boolean;
+  isMineUnread?: boolean;
 }
 
 const ChatListItem: React.FC<itemProps> = ({
   ChatID,
   RecentMsg,
   ChatToNickName,
+  UnRead,
   ChatToUserID,
   ChatToUserAvatar,
   RecentTime,
   isTop,
+  isMineUnread,
 }) => {
-  const [isShowPop, setShow] = useState(false);
+  const {dispatch, state}: ctxPassThroughType = useContext(Context);
 
-  const operations: Array<operateType> = [
-    {title: '删除聊天', execfunc: () => console.log('del')},
-  ];
+  // 当前最新消息的recipient是当前登录用户的话，说明未读消息是自己的
+  // const [isMineUnread, setMineUnreadFlag] = useState(
+  //   RecentMsg.recipient === state.userInfo.userID,
+  // );
   return (
     <View
       style={
@@ -33,12 +35,17 @@ const ChatListItem: React.FC<itemProps> = ({
           ? [listStyle.container, {backgroundColor: '#e9e9e9'}]
           : listStyle.container
       }>
-      <View>
+      <View style={listStyle.avatarWrap}>
         <Image source={{uri: ChatToUserAvatar}} style={listStyle.imgStyle} />
+        {UnRead > 0 && isMineUnread && <Text style={listStyle.unReadStyle}>{UnRead}</Text>}
       </View>
       <View style={listStyle.contentWrap}>
         <Text style={{fontSize: 18}}>{ChatToNickName}</Text>
-        <Text style={{fontSize: 14}} numberOfLines={1}>{RecentMsg && RecentMsg.content}</Text>
+        <Text style={{fontSize: 14}} numberOfLines={1}>
+          {RecentMsg && RecentMsg.type === 'text' && RecentMsg.content}
+          {RecentMsg && RecentMsg.type === 'img' && '[图片]'}
+          {RecentMsg && RecentMsg.type === 'audio' && '[语音]'}
+        </Text>
       </View>
 
       <View style={listStyle.timeWrap}>

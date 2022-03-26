@@ -126,6 +126,7 @@ export function contextReducer(
           TopChatList: [...tempTopList],
         };
       }
+    // 设置拉黑数量
     case stateStatus.SET_BLACK_NUM:
       const preBlackNum = state?.otherData?.BlackNum || 0;
       return {
@@ -135,12 +136,22 @@ export function contextReducer(
           BlackNum: preBlackNum + action.playloads,
         },
       };
-    // 设置一些其他便于全局修改共享的数据
-    case stateStatus.SET_OTHER_DATA:
+
+    case stateStatus.SET_UNREAD_NUM:
+      const preUnReadNum = state?.otherData?.totalUnReadNum || 0;
       return {
         ...state,
-        otherData: {...action.playloads},
+        otherData: {
+          ...state.otherData,
+          totalUnReadNum: preUnReadNum + action.playloads,
+        },
       };
+    // 设置一些其他便于全局修改共享的数据
+    // case stateStatus.SET_OTHER_DATA:
+    //   return {
+    //     ...state,
+    //     otherData: {...action.playloads},
+    //   };
     default:
       return {
         ...state,

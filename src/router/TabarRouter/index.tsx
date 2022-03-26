@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -6,11 +6,15 @@ import ChatListPage from '../../pages/ChatList';
 import FriendsListPage from '../../pages/FriendsList';
 import ProfilePage from '../../pages/Profile';
 import SearchPage from '../../pages/Search';
+import { Context } from '../../state/stateContext';
+import { ctxPassThroughType } from '../../type/state_type';
 
 const Tab = createBottomTabNavigator();
 
 // tabbar 选项卡
 const TabarRouter: React.FC<any> = () => {
+  const {dispatch, state}: ctxPassThroughType = useContext(Context);
+
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -43,7 +47,7 @@ const TabarRouter: React.FC<any> = () => {
       <Tab.Screen
         name="ChatList"
         component={ChatListPage}
-        options={{tabBarBadge: 3, headerShown: false}}
+        options={{tabBarBadge: state?.otherData?.totalUnReadNum || undefined, headerShown: false}}
       />
       <Tab.Screen
         name="FriendsList"

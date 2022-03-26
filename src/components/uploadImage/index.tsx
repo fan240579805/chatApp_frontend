@@ -5,7 +5,7 @@ import {TouchableOpacity, StyleSheet, View, Image, Button} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {API_PATH, BASE_URL, fetchStatus} from '../../const';
-import usePostData, {PostdataType} from '../../network/postDataHook';
+import usePostData, {PostdataType, showTips} from '../../network/postDataHook';
 import {fileOptions} from '../../network/formData';
 import {Context} from '../../state/stateContext';
 import {ctxPassThroughType} from '../../type/state_type';
@@ -20,6 +20,7 @@ interface uploadProps {
   AfterUploadCb?: () => void; // 成功上传图片后执行的函数
   chatID?: string;
   recipient?: string;
+  canChat?: boolean;
 }
 
 const UploadImageBtn: React.FC<uploadProps> = ({
@@ -31,6 +32,7 @@ const UploadImageBtn: React.FC<uploadProps> = ({
   setModalVisable,
   chatID,
   recipient,
+  canChat = true,
 }) => {
   // 相册中的uri
   const [imgUrl, setimgUrl] = useState('');
@@ -124,7 +126,8 @@ const UploadImageBtn: React.FC<uploadProps> = ({
           <Button
             title=" 提交 "
             onPress={() => {
-              uploadFile();
+              canChat && uploadFile();
+              !canChat && showTips('你们的好友关系拉黑或删除，无法聊天');
             }}
           />
         </View>

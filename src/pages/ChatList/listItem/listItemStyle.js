@@ -11,6 +11,21 @@ export const listStyle = StyleSheet.create({
   imgWrap: {
     flex: 1,
   },
+  avatarWrap: {},
+  unReadStyle: {
+    position: 'absolute',
+    padding: 3,
+    textAlign: 'center',
+    minWidth: 18,
+    minHeight: 10,
+    fontSize: 10,
+    lineHeight: 12,
+    color: '#fff',
+    right: -10,
+    top: -8,
+    backgroundColor: 'red',
+    borderRadius: 9,
+  },
   imgStyle: {
     width: 42,
     height: 42,

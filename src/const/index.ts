@@ -23,6 +23,8 @@ export enum stateStatus {
 
   SET_OTHER_DATA = 'SET_OTHER_DATA',
   SET_BLACK_NUM = 'SET_BLACK_NUM',
+
+  SET_UNREAD_NUM = 'SET_UNREAD_NUM',
 }
 
 // export const BASE_URL = 'http://127.0.0.1:9998/';
@@ -63,6 +65,8 @@ export enum API_PATH {
   UPLOAD_CHATIMG = 'api/uploadChatImg',
   GET_CHAT_LIST = 'api/getChatList',
   MAKE_CHAT = 'api/makeChat',
+  CAN_I_CHAT = 'api/canIChat',
+  RESET_UNREAD = 'api/resetUnread',
 
   // msg相关api
   GET_MSG_LIST = 'api/getMsgList',

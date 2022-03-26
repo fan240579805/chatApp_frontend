@@ -15,6 +15,7 @@ import {
   KeyboardEvent,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {showTips} from '../../../network/postDataHook';
 import {wsInstance} from '../../../network/websocket';
 import {Context} from '../../../state/stateContext';
 import {ctxPassThroughType} from '../../../type/state_type';
@@ -28,6 +29,7 @@ interface bottomProps {
   chatID: string;
   recipient: string;
   inputCmpRef: any;
+  canChat: boolean;
 }
 
 const BottomTool: React.FC<bottomProps> = ({
@@ -38,6 +40,7 @@ const BottomTool: React.FC<bottomProps> = ({
   chatID,
   recipient,
   inputCmpRef,
+  canChat,
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [keyb, setKeyBoradHeight] = useState(0);
@@ -92,17 +95,21 @@ const BottomTool: React.FC<bottomProps> = ({
     }
   };
   const sendChatMessage = () => {
-    wsInstance.sendMessage(
-      JSON.stringify({
-        ChatID: chatID,
-        Message: {
-          Sender: state.userInfo.userID,
-          Recipient: recipient,
-          Content: inputValue,
-          Type: 'text',
-        },
-      }),
-    );
+    if (canChat) {
+      wsInstance.sendMessage(
+        JSON.stringify({
+          ChatID: chatID,
+          Message: {
+            Sender: state.userInfo.userID,
+            Recipient: recipient,
+            Content: inputValue,
+            Type: 'text',
+          },
+        }),
+      );
+    } else {
+      showTips('你们的好友关系拉黑或删除，无法聊天');
+    }
   };
   return (
     <>

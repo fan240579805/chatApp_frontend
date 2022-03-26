@@ -32,7 +32,7 @@ export interface msgType {
 }
 
 export interface message {
-  ID: number;
+  MID: number;
   MsgID: string;
   content: string;
   recipient: string;
@@ -81,7 +81,8 @@ export interface friendItemType {
 
 export interface chatListItemType {
   ChatID: string;
-  RecentMsg: any;
+  UnRead: number;
+  RecentMsg: message;
   ChatToNickName: string;
   ChatToUserID: string;
   ChatToUserAvatar: string;

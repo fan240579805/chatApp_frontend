@@ -19,10 +19,11 @@ import EmojiSelector, {Categories} from 'react-native-emoji-selector';
 import Icon from 'react-native-vector-icons/Ionicons';
 import UploadImageBtn from '../../components/uploadImage';
 import ModalCMP from '../../components/Modal';
-import {API_PATH} from '../../const';
+import {API_PATH, BASE_URL} from '../../const';
 import {Context} from '../../state/stateContext';
 import {msgReducer, MsgStatus} from '../../reducers/msgListReducer';
 import eventBus from '../../utils/eventBus';
+import usePostData, {PostdataType, showTips} from '../../network/postDataHook';
 
 interface Props {
   route: any;
@@ -33,6 +34,19 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
 
   const {chatID, recipient} = route.params;
+
+  const [canChat, setCanChat] = useState(true);
+
+  const [setReqData, setURL] = usePostData({
+    initUrl: '',
+    initData: {},
+    initReqData: {
+      token: state.userInfo.token,
+    },
+    successCbFunc: res => {
+      setCanChat(res);
+    },
+  });
 
   const [ContentHeight, setContentHeight] = useState(0);
   // 0 初始态 1 拉起键盘，2拉起emoji，3拉起工具栏
@@ -64,7 +78,6 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
   const receiveMsgAction = useCallback(
     (bePushedObj: bePushedMsgType) => {
       const {Message, UserInfo} = bePushedObj;
-      console.log(Message);
       const messageItem: msgType = {
         msgid: Message.MsgID,
         content: Message.content,
@@ -85,6 +98,19 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
       listener.remove();
     };
   }, [receiveMsgAction]);
+
+  // 模拟react组件销毁
+  useEffect(() => {
+    setURL(
+      `${BASE_URL}${API_PATH.CAN_I_CHAT}?from=${state.userInfo.userID}&to=${state.CurChatItem.ChatToUserID}`,
+    );
+    return () => {
+      console.log(
+        'chatRoom销毁,发请求让服务器把对应的chat unread清零',
+        state.CurChatItem.ChatID,
+      );
+    };
+  }, []);
 
   // 选择完emoji事件
   const selectEmojiHandle = (emoji: string) => {
@@ -146,6 +172,7 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
         setBottomStatus={setBottomStatus}
         setContentHeight={setContentHeight}
         inputCmpRef={inputCmpRef}
+        canChat={canChat}
       />
 
       {bottomStatus === 2 && (
@@ -183,6 +210,7 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
           apiPath={API_PATH.UPLOAD_CHATIMG}
           setModalVisable={setModalVisable}
           AfterUploadCb={() => {}}
+          canChat={canChat}
         />
       </ModalCMP>
     </View>

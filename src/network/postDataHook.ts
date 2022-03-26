@@ -55,7 +55,7 @@ export default function usePostData(
             } else {
               dispatchData({type: fetchStatus.ERROR});
             }
-            showTips(resp.msg);
+            resp.msg !== '' && showTips(resp.msg);
           } else {
             // 信息n不存在数据库。模态框展示, 返回的状态码为422
             dispatchData({type: fetchStatus.ERROR});
@@ -76,7 +76,7 @@ export default function usePostData(
   return [setReqData, setURL, state, dispatchData];
 }
 
-const showTips = (msg: string) => {
+export const showTips = (msg: string) => {
   ToastAndroid.showWithGravityAndOffset(
     msg,
     ToastAndroid.SHORT,

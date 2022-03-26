@@ -7,6 +7,7 @@ import {
   bePushedChatType,
   chatListItemType,
   ctxPassThroughType,
+  stateType,
 } from '../../type/state_type';
 import {useGetData} from '../../network/getDataHook';
 import {API_PATH, BASE_URL, stateStatus} from '../../const';
@@ -14,6 +15,8 @@ import {formatList} from '../../utils';
 import {getValueFromStorage, StorageHasValue} from '../../utils/storage';
 import {ctxActionType} from '../../type/actions_type';
 import eventBus from '../../utils/eventBus';
+import {postData} from '../../network/postData';
+import {RESP_TYPE} from '../../type/api_types';
 interface Props {
   navigation: any;
 }
@@ -21,10 +24,14 @@ interface Props {
 const render = (
   navigation: any,
   ChatItem: chatListItemType,
+  state: stateType,
   dispatch: React.Dispatch<ctxActionType>,
   isTop: boolean,
   index: number,
+  resetUnReadToZero: (val: string) => Promise<void>, // 待补充
 ) => {
+  // 当前最新消息的recipient是当前登录用户的话，说明未读消息是自己的
+  const isMineUnread = ChatItem.RecentMsg.recipient === state.userInfo.userID;
   return (
     <TouchableOpacity
       key={ChatItem.ChatID || index}
@@ -34,6 +41,15 @@ const render = (
           type: stateStatus.SET_CHAT_DATA,
           playloads: ChatItem,
         });
+        // 如果是自己的unread，跳转之前先发起请求，把该条chatID服务器db的unread置为0
+        isMineUnread && resetUnReadToZero(ChatItem.ChatID);
+        // 同时还把当前全局的未读数量 减掉
+        isMineUnread &&
+          dispatch({
+            type: stateStatus.SET_UNREAD_NUM,
+            playloads: -ChatItem.UnRead,
+          });
+
         navigation.navigate('ChatRoomPage', {
           showTitle: ChatItem.ChatToNickName,
           isChangeTitle: true,
@@ -41,13 +57,12 @@ const render = (
           recipient: ChatItem.ChatToUserID,
         });
       }}>
-      <ChatListItem {...ChatItem} isTop={isTop} />
+      <ChatListItem {...ChatItem} isTop={isTop} isMineUnread={isMineUnread} />
     </TouchableOpacity>
   );
 };
 
 const ChatList: React.FC<Props> = ({navigation}) => {
-  const [isRefresh, setRefresh] = useState(false);
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
   // 拉取聊天chatList
   useGetData({
@@ -61,6 +76,22 @@ const ChatList: React.FC<Props> = ({navigation}) => {
     successCbFunc: res => {
       // 请求成功处理一下data
       const chatList: chatListItemType[] = res;
+
+      // 整个chatList的未读数量
+      let totalUnread = 0;
+      chatList.forEach(cItem => {
+        const isMineUnread =
+          cItem.RecentMsg.recipient === state.userInfo.userID;
+        if (isMineUnread) {
+          totalUnread += cItem.UnRead;
+        }
+      });
+      // 将所有的 chatList 的正确未读数量设置到全局中
+      dispatch({
+        type: stateStatus.SET_UNREAD_NUM,
+        playloads: totalUnread,
+      });
+
       // 1. 缓存中看看是否有置顶chatIds, 有的话处理，无的话直接set
       StorageHasValue('topChatIds').then(hasValue => {
         if (hasValue) {
@@ -124,21 +155,60 @@ const ChatList: React.FC<Props> = ({navigation}) => {
         const chatItem: chatListItemType = {
           ...Chat,
         };
+        const isMineUnread = Chat.RecentMsg.recipient === state.userInfo.userID;
+
         dispatch({type: stateStatus.NEW_MSG_CHATITEM, playloads: chatItem});
+        isMineUnread &&
+          dispatch({
+            type: stateStatus.SET_UNREAD_NUM,
+            playloads: chatItem.UnRead,
+          });
       },
     );
     return () => {
       listener.remove();
     };
   }, [state.chatList]);
+
+  // 发起请求将chat未读消息归零
+  const resetUnReadToZero = async (chatid: string) => {
+    try {
+      const resp = await postData(`${BASE_URL}${API_PATH.RESET_UNREAD}`, {
+        ChatID: chatid,
+        token: state.userInfo.token,
+      });
+      const res: RESP_TYPE = await resp.json();
+      if (res.code === 200) {
+        dispatch({type: stateStatus.NEW_MSG_CHATITEM, playloads: res.data});
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <ScrollView>
         {state.TopChatList.map((chat, index) => {
-          return render(navigation, chat, dispatch, true, index);
+          return render(
+            navigation,
+            chat,
+            state,
+            dispatch,
+            true,
+            index,
+            resetUnReadToZero,
+          );
         })}
         {state.chatList.map((chat, index) => {
-          return render(navigation, chat, dispatch, false, index);
+          return render(
+            navigation,
+            chat,
+            state,
+            dispatch,
+            false,
+            index,
+            resetUnReadToZero,
+          );
         })}
       </ScrollView>
     </>
