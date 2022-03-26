@@ -67,6 +67,8 @@ export enum API_PATH {
   MAKE_CHAT = 'api/makeChat',
   CAN_I_CHAT = 'api/canIChat',
   RESET_UNREAD = 'api/resetUnread',
+  JOIN_CHAT = 'api/toggleInTheChat',
+  EXIT_CHAT = 'api/exitChat',
 
   // msg相关api
   GET_MSG_LIST = 'api/getMsgList',

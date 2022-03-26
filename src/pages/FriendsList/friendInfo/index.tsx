@@ -4,7 +4,7 @@ import {Text, View, Image, Switch, TouchableOpacity} from 'react-native';
 import {InfoStyle} from './InfoStyle';
 import LongBtn from '../../../components/longBtn';
 import usePostData, {PostdataType} from '../../../network/postDataHook';
-import {API_PATH, BASE_URL, fetchStatus, stateStatus} from '../../../const';
+import {API_PATH, BASE_URL, stateStatus} from '../../../const';
 import {formatList, throttle} from '../../../utils';
 import {ctxPassThroughType} from '../../../type/state_type';
 import {Context} from '../../../state/stateContext';

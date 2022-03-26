@@ -23,7 +23,8 @@ import {API_PATH, BASE_URL} from '../../const';
 import {Context} from '../../state/stateContext';
 import {msgReducer, MsgStatus} from '../../reducers/msgListReducer';
 import eventBus from '../../utils/eventBus';
-import usePostData, {PostdataType, showTips} from '../../network/postDataHook';
+import usePostData from '../../network/postDataHook';
+import {postData} from '../../network/postData';
 
 interface Props {
   route: any;
@@ -44,7 +45,7 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
       token: state.userInfo.token,
     },
     successCbFunc: res => {
-      setCanChat(res);
+      res !== '' && setCanChat(res);
     },
   });
 
@@ -75,6 +76,7 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
 
   const inputCmpRef = useRef<any>(null);
 
+  // ws接受到实时message
   const receiveMsgAction = useCallback(
     (bePushedObj: bePushedMsgType) => {
       const {Message, UserInfo} = bePushedObj;
@@ -104,11 +106,19 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
     setURL(
       `${BASE_URL}${API_PATH.CAN_I_CHAT}?from=${state.userInfo.userID}&to=${state.CurChatItem.ChatToUserID}`,
     );
+    // 加入chatroom，更改服务端状态
+    postData(`${BASE_URL}${API_PATH.JOIN_CHAT}`, {
+      token: state.userInfo.token,
+    });
     return () => {
       console.log(
         'chatRoom销毁,发请求让服务器把对应的chat unread清零',
         state.CurChatItem.ChatID,
       );
+      // 离开chatRoom，toggle用户in the chat状态
+      postData(`${BASE_URL}${API_PATH.EXIT_CHAT}`, {
+        token: state.userInfo.token,
+      });
     };
   }, []);
 

@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {TouchableOpacity, FlatList, ScrollView} from 'react-native';
+import {TouchableOpacity, ScrollView} from 'react-native';
 import {wsInstance} from '../../network/websocket';
 import ChatListItem from './listItem/ChatListItem';
 import {Context} from '../../state/stateContext';
