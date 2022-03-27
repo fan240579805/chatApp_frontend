@@ -1,6 +1,11 @@
 import {stateStatus} from '../const';
 import {ctxActionType} from '../type/actions_type';
-import {chatListItemType, msgType, stateType} from '../type/state_type';
+import {
+  chatListItemType,
+  message,
+  msgType,
+  stateType,
+} from '../type/state_type';
 
 export interface msgListStateType {
   msgList: Array<msgType>;
@@ -12,6 +17,7 @@ export interface ActionType {
 }
 
 export enum MsgStatus {
+  UN_SHIFT_LIST = 'UN_SHIFT_LIST',
   SET_CUR_MSG_LIST = 'SET_CUR_MSG_LIST',
   APPEND_MSG_LIST = 'APPEND_MSG_LIST',
 }
@@ -25,6 +31,13 @@ export function msgReducer(
       return {
         ...state,
         msgList: action.playloads,
+      };
+    case MsgStatus.UN_SHIFT_LIST:
+      const nextMsgList: Array<msgType> = [].concat(action.playloads);
+      const newMsgList: Array<msgType> = nextMsgList.concat(state.msgList);
+      return {
+        ...state,
+        msgList: newMsgList,
       };
     case MsgStatus.APPEND_MSG_LIST:
       state.msgList.push(action.playloads);

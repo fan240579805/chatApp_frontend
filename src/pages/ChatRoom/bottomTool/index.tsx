@@ -143,10 +143,10 @@ const BottomTool: React.FC<bottomProps> = ({
               inputRef.current.blur();
               setTimeout(() => {
                 setBottomStatus(2);
-              }, 82);
+              }, 1);
               setTimeout(() => {
                 _resetChatHeight();
-              }, 150);
+              }, 10);
             }}
             activeOpacity={1}>
             <MaterialIcons name="emoji-emotions" size={35} />
@@ -157,9 +157,9 @@ const BottomTool: React.FC<bottomProps> = ({
             style={bottomStyle.iconWrap}
             onPress={() => {
               setBottomStatus(1);
-              setTimeout(() => {
-                inputRef.current.focus();
-              }, 2);
+              // setTimeout(() => {
+              inputRef.current.focus();
+              // }, 2);
             }}
             activeOpacity={1}>
             <MaterialIcons name="keyboard" size={35} />
@@ -172,10 +172,10 @@ const BottomTool: React.FC<bottomProps> = ({
               Keyboard.dismiss();
               setTimeout(() => {
                 setBottomStatus(3);
-              }, 82);
+              }, 1);
               setTimeout(() => {
                 _resetChatHeight();
-              }, 150);
+              }, 10);
             }}
             activeOpacity={1}>
             <View style={bottomStyle.iconWrap}>

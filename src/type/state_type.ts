@@ -4,6 +4,7 @@ export interface userInfoType {
   token: string;
   userID: string;
   username: string;
+  avatar: string;
 }
 
 export interface stateType {
@@ -24,6 +25,7 @@ export interface ctxPassThroughType {
 export interface msgType {
   msgid: string;
   ownerid: string;
+  otherid: string;
   type: string;
   content: string;
   time: number;

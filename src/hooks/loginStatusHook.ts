@@ -45,6 +45,7 @@ export default function useLoginStatus(): loginStatusType {
                   token: tokenStr,
                   username: data.Username,
                   userID: data.UserID,
+                  avatar: data.Avatar,
                 },
               },
             });

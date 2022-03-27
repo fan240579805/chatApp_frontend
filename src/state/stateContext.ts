@@ -21,6 +21,7 @@ const state: stateType = {
     token: '',
     userID: '',
     username: '',
+    avatar: '',
   },
   friendList: new Array<friendItemType>(),
   chatList: new Array<chatListItemType>(),

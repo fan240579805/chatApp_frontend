@@ -11,6 +11,7 @@ export function successLogin(dispatch: any, res: any) {
     token: res.token,
     userID: res.userID,
     username: res.username,
+    avatar: res.avatar,
   };
   const playloads = {isLogin: true, user: userInfo};
   dispatch({type: stateStatus.LOG_IN_AND_SIGN_IN, playloads: playloads});

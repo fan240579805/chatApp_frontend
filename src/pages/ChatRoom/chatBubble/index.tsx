@@ -19,6 +19,8 @@ const ChatBubble: React.FC<bubbleProps> = ({
   time,
   isSender,
   avatarUrl,
+  ownerid,
+  otherid,
   closePopup,
   cRef,
   navigation,
