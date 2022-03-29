@@ -13,8 +13,10 @@ import {
   TouchableOpacity,
   Keyboard,
   KeyboardEvent,
+  Text,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useVoiceAction} from '../../../hooks/voiceHook';
 import {showTips} from '../../../network/postDataHook';
 import {wsInstance} from '../../../network/websocket';
 import {Context} from '../../../state/stateContext';
@@ -46,6 +48,10 @@ const BottomTool: React.FC<bottomProps> = ({
   const [keyb, setKeyBoradHeight] = useState(0);
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
 
+  const [isSound, setIsSound] = useState(false);
+
+  const [_startRecognizing, _stopRecognizing] = useVoiceAction();
+
   useImperativeHandle(
     inputCmpRef,
     () => ({
@@ -67,6 +73,7 @@ const BottomTool: React.FC<bottomProps> = ({
       Keyboard.removeAllListeners('keyboardDidHide');
     };
   }, []);
+
   const _keyboardDidShow = (e: KeyboardEvent) => {
     // 将键盘高度设置为工具栏高度
     keyBoardHeight = e.endCoordinates.height;
@@ -74,9 +81,11 @@ const BottomTool: React.FC<bottomProps> = ({
       setKeyBoradHeight(e.endCoordinates.height);
     }
   };
+
   const _keyboardDidHide = () => {
     setKeyBoradHeight(keyBoardHeight);
   };
+
   // 切换键盘表情时执行重置聊天内容区域
   const _resetChatHeight = () => {
     if (inputContainerRef) {
@@ -123,9 +132,19 @@ const BottomTool: React.FC<bottomProps> = ({
         onLayout={() => {
           _resetChatHeight();
         }}>
-        <View style={bottomStyle.iconWrap}>
+        <TouchableOpacity
+          style={bottomStyle.iconWrap}
+          onPress={() => setIsSound(!isSound)}>
           <MaterialIcons name="contactless" size={35} />
-        </View>
+        </TouchableOpacity>
+        {isSound && (
+          <TouchableOpacity
+            style={bottomStyle.VoiceBtn}
+            onLongPress={_startRecognizing}
+            onPressOut={_stopRecognizing}>
+            <Text>长按开始录音</Text>
+          </TouchableOpacity>
+        )}
         <TextInput
           ref={inputRef}
           value={inputValue}
@@ -134,12 +153,13 @@ const BottomTool: React.FC<bottomProps> = ({
           }}
           multiline={true}
           onChangeText={text => setInputValue(text)}
-          style={bottomStyle.input}
+          style={[bottomStyle.input, {display: isSound ? 'none' : 'flex'}]}
         />
         {bottomStatus !== 2 && (
           <TouchableOpacity
             style={bottomStyle.iconWrap}
             onPress={() => {
+              setIsSound(false);
               inputRef.current.blur();
               setTimeout(() => {
                 setBottomStatus(2);
@@ -156,6 +176,7 @@ const BottomTool: React.FC<bottomProps> = ({
           <TouchableOpacity
             style={bottomStyle.iconWrap}
             onPress={() => {
+              setIsSound(false);
               setBottomStatus(1);
               // setTimeout(() => {
               inputRef.current.focus();
@@ -170,6 +191,7 @@ const BottomTool: React.FC<bottomProps> = ({
             style={bottomStyle.iconWrap}
             onPress={() => {
               Keyboard.dismiss();
+              setIsSound(false);
               setTimeout(() => {
                 setBottomStatus(3);
               }, 1);

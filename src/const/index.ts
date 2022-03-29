@@ -69,6 +69,7 @@ export enum API_PATH {
   RESET_UNREAD = 'api/resetUnread',
   JOIN_CHAT = 'api/toggleInTheChat',
   EXIT_CHAT = 'api/exitChat',
+  UPLOAD_AUDIO = 'api/uploadAudio',
 
   // msg相关api
   GET_MSG_LIST = 'api/getMsgList',

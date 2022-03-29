@@ -17,6 +17,14 @@ export const bottomStyle = StyleSheet.create({
     justifyContent: 'space-around',
     backgroundColor: 'rgba(178,178,178,0)',
   },
+  VoiceBtn: {
+    flex: 4.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 50,
+    borderRadius: 10,
+    backgroundColor: '#fff',
+  },
   input: {
     flex: 4,
     maxHeight: 100,

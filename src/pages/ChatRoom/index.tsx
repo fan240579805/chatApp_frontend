@@ -120,10 +120,13 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
           keyExtractor={msgItem => msgItem.msgid}
           ref={scrollContainer}
           onContentSizeChange={() => {
-            if (isFirstScroll) {
-              scrollContainer.current.scrollToEnd({animated: false});
+            // if (isFirstScroll) {
+              console.log('asdasda');
+              setTimeout(() => {
+                scrollContainer.current.scrollToEnd({animated: false});
+              }, 1);
               setIsScroll(false);
-            }
+            // }
           }}
           // 滚动区域布局(高度)改变，自动滚到最底部
           onLayout={() => {
