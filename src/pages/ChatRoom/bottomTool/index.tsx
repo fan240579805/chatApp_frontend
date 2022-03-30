@@ -23,6 +23,8 @@ import {Context} from '../../../state/stateContext';
 import {ctxPassThroughType} from '../../../type/state_type';
 import {bottomStyle} from './bottomStyle';
 
+import Toast from '../../../components/Toast';
+
 interface bottomProps {
   ToolHeight: number;
   bottomStatus: number;
@@ -50,7 +52,7 @@ const BottomTool: React.FC<bottomProps> = ({
 
   const [isSound, setIsSound] = useState(false);
 
-  const [_startRecognizing, _stopRecognizing] = useVoiceAction();
+  const [_startRecognizing, _stopRecognizing, recording] = useVoiceAction();
 
   useImperativeHandle(
     inputCmpRef,
@@ -140,8 +142,12 @@ const BottomTool: React.FC<bottomProps> = ({
         {isSound && (
           <TouchableOpacity
             style={bottomStyle.VoiceBtn}
-            onLongPress={_startRecognizing}
-            onPressOut={_stopRecognizing}>
+            onLongPress={() => {
+              _startRecognizing();
+            }}
+            onPressOut={() => {
+              _stopRecognizing();
+            }}>
             <Text>长按开始录音</Text>
           </TouchableOpacity>
         )}
@@ -211,6 +217,7 @@ const BottomTool: React.FC<bottomProps> = ({
           </View>
         )}
       </View>
+      {recording && <Toast showContent="录音中，释放手指发送" Icon="mic" />}
     </>
   );
 };

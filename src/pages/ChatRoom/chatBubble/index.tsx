@@ -5,6 +5,8 @@ import {bubbleStyle} from './bubbleStyle';
 import {operateType} from '../../../type/props_type';
 import {msgType} from '../../../type/state_type';
 import useResizeImg from '../../../hooks/resizeImgHook';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {usePlaySound} from '../../../hooks/playSoundHook';
 
 interface bubbleProps extends msgType {
   cRef: any;
@@ -26,6 +28,7 @@ const ChatBubble: React.FC<bubbleProps> = ({
   navigation,
 }) => {
   const [isShow, setShow] = useState(false);
+
   // 将子组件内部状态方法暴露给父组件的ref以便调用
   useImperativeHandle(
     cRef,
@@ -37,6 +40,16 @@ const ChatBubble: React.FC<bubbleProps> = ({
   );
   // 获取通过判断图片宽高的新大小
   const [img_width, img_height] = useResizeImg(type, content);
+
+  const [
+    duration,
+    curTime,
+    showTime,
+    playSound,
+    pauseSound,
+    isPlaying,
+    setisPlay,
+  ] = usePlaySound(type, content);
 
   const operations: Array<operateType> = [
     {title: '删除', execfunc: () => console.log('del')},
@@ -84,15 +97,34 @@ const ChatBubble: React.FC<bubbleProps> = ({
             width={img_width}
             height={img_height}
             source={{uri: content}}
-            style={[
-              {height: img_height, width: img_width},
-              bubbleStyle.contentImage,
-            ]}
+            style={{
+              height: img_height,
+              width: img_width,
+              margin: 10,
+              marginTop: 0,
+              borderRadius: 10,
+            }}
           />
         </TouchableOpacity>
       )}
-      {type === 'voice' && (
-        <Image source={{uri: avatarUrl}} style={bubbleStyle.contentImage} />
+      {type === 'audio' && (
+        <TouchableOpacity
+          onPress={() => {
+            closePopup();
+            !isPlaying && playSound();
+            isPlaying && pauseSound();
+          }}
+          onLongPress={() => {
+            closePopup();
+            setShow(true);
+          }}
+          style={[
+            isSender ? bubbleStyle.RightBubbleWrap : bubbleStyle.LeftBubbleWrap,
+            isSender ? bubbleStyle.rightVoiceFlex : bubbleStyle.leftvoiceFlex,
+          ]}>
+          <Text style={bubbleStyle.voiceSecond}>{showTime + '"'}</Text>
+          <Icon name="mic-outline" color="#666" size={22} />
+        </TouchableOpacity>
       )}
       {isShow && <Popup operations={operations} />}
     </View>

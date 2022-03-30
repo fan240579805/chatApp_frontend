@@ -1,18 +1,20 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {View, FlatList, TouchableOpacity} from 'react-native';
+import {View, FlatList, TouchableOpacity, Text} from 'react-native';
 import {chatRoomStyle} from './chatRoomStyle';
-import BottomTool from './bottomTool';
-import ChatBubble from './chatBubble';
 import {ctxPassThroughType} from '../../type/state_type';
 import EmojiSelector, {Categories} from 'react-native-emoji-selector';
 import Icon from 'react-native-vector-icons/Ionicons';
-import UploadImageBtn from '../../components/uploadImage';
-import ModalCMP from '../../components/Modal';
+
 import {API_PATH, BASE_URL} from '../../const';
 import {Context} from '../../state/stateContext';
 import usePostData from '../../network/postDataHook';
 import {postData} from '../../network/postData';
 import {useHandleMessage} from '../../hooks/messageHook';
+
+import BottomTool from './bottomTool';
+import ChatBubble from './chatBubble';
+import UploadImageBtn from '../../components/uploadImage';
+import ModalCMP from '../../components/Modal';
 
 interface Props {
   route: any;
@@ -76,11 +78,13 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
     // 加入chatroom，更改服务端状态
     postData(`${BASE_URL}${API_PATH.JOIN_CHAT}`, {
       token: state.userInfo.token,
+      ChatID: state.CurChatItem.ChatID,
     });
     return () => {
       // 离开chatRoom，toggle用户in the chat状态
       postData(`${BASE_URL}${API_PATH.EXIT_CHAT}`, {
         token: state.userInfo.token,
+        ChatID: state.CurChatItem.ChatID,
       });
     };
   }, []);
@@ -121,11 +125,11 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
           ref={scrollContainer}
           onContentSizeChange={() => {
             // if (isFirstScroll) {
-              console.log('asdasda');
-              setTimeout(() => {
-                scrollContainer.current.scrollToEnd({animated: false});
-              }, 1);
-              setIsScroll(false);
+            console.log('asdasda');
+            setTimeout(() => {
+              scrollContainer.current.scrollToEnd({animated: false});
+            }, 1);
+            setIsScroll(false);
             // }
           }}
           // 滚动区域布局(高度)改变，自动滚到最底部
@@ -178,6 +182,7 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
           </TouchableOpacity>
         </View>
       )}
+
       {/* 发送图片组件 */}
       <ModalCMP modalVisible={modalVisable} setModalVisible={setModalVisable}>
         <UploadImageBtn

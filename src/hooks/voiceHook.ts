@@ -8,7 +8,9 @@ import usePostData, {PostdataType} from '../network/postDataHook';
 import {API_PATH, BASE_URL} from '../const';
 import {fileOptions} from '../network/formData';
 
-export const useVoiceAction = () => {
+type returnType = [() => Promise<void>, () => Promise<void>, boolean];
+
+export const useVoiceAction = (): returnType => {
   const _checkPermission = async () => {
     const rationale: Rationale = {
       title: 'message.Chat.Voice.tips',
@@ -28,21 +30,17 @@ export const useVoiceAction = () => {
     }
 
     if (askForGrant) {
-      Alert.alert(
-        'Can we access your microphone and Speech Recognition?',
-        'We need access so you can record your voice',
-        [
-          {
-            text: 'Later',
-            onPress: () => console.log('Permission denied'),
-            style: 'cancel',
-          },
-          {
-            text: 'Open Settings',
-            onPress: Permissions.openSettings,
-          },
-        ],
-      );
+      Alert.alert('我们可以获取您的录音权限吗?', '需要您同意录音权限才可录音', [
+        {
+          text: 'Later',
+          onPress: () => console.log('Permission denied'),
+          style: 'cancel',
+        },
+        {
+          text: 'Open Settings',
+          onPress: Permissions.openSettings,
+        },
+      ]);
     }
   };
 
@@ -95,7 +93,7 @@ export const useVoiceAction = () => {
       sender: state.userInfo.userID,
       recipient: state.CurChatItem.ChatToUserID,
       file: audioFileUrl,
-      fileName: filePath.split("/")[6],
+      fileName: filePath.split('/')[6],
     });
   };
 
@@ -131,5 +129,5 @@ export const useVoiceAction = () => {
     return () => {};
   }, []);
 
-  return [_startRecognizing, _stopRecognizing];
+  return [_startRecognizing, _stopRecognizing, recording];
 };
