@@ -34,7 +34,7 @@ const SignPage: React.FC<Props> = ({navigation}) => {
     usePostData({
       initUrl: `${BASE_URL}${API_PATH.REGISTER}`,
       initData: {},
-      successCbFunc: res => successLogin(dispatch, res),
+      successCbFunc: res => successLogin(res, dispatch),
       failedCbFunc: () => failedLogin(),
       options: fileOptions,
     });

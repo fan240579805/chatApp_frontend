@@ -2,7 +2,7 @@ import {ToastAndroid} from 'react-native';
 import {stateStatus} from '../../../const';
 import {userInfoType} from '../../../type/state_type';
 import storage from '../../../utils/storage';
-export function successLogin(dispatch: any, res: any) {
+export function successLogin(res: any, dispatch?: any) {
   // 本地存储登录态，userid 等全局关键信息
   for (const resKey in res) {
     storage.save({key: resKey, data: res[resKey]});

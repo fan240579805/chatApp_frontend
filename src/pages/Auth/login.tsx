@@ -30,7 +30,7 @@ const LoginPage: React.FC<Props> = ({navigation}) => {
     usePostData({
       initUrl: `${BASE_URL}${API_PATH.LOGIN}`,
       initData: {},
-      successCbFunc: res => successLogin(dispatch, res),
+      successCbFunc: res => successLogin(res, dispatch),
       failedCbFunc: () => failedLogin(),
     });
 

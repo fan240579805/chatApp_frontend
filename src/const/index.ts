@@ -41,6 +41,7 @@ export enum API_PATH {
   AUTH_TOKEN = 'api/AuthToken',
   GET_USERINFO = 'api/userInfo',
   GET_FRIENDLIST = 'api/getFriendList',
+  RESET_PWD = 'api/resetPassword',
 
   // 更新用户信息api地址
   UPDATE_USERINFO = 'api/updateUserInfo',
@@ -73,6 +74,9 @@ export enum API_PATH {
 
   // msg相关api
   GET_MSG_LIST = 'api/getMsgList',
+
+  SEND_MAIL_CODE = 'api/sendEmailVcode',
+  CHECK_VCODE = 'api/checkVcode',
 
   WS = 'api/ws',
   AJAX = 'api/AJAX',

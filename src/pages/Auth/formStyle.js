@@ -49,4 +49,24 @@ export const formStyle = StyleSheet.create({
     color: '#eee',
     fontSize: 13,
   },
+  emailCodeWrap: {
+    width: '80%',
+    flexDirection: 'row',
+  },
+  codeInput: {
+    flex: 5,
+    borderBottomWidth: 0.8,
+    borderColor: '#e9e9e9',
+    paddingBottom: 8,
+  },
+  sendCodeBtn: {
+    flex: 2,
+    marginTop: 10,
+    height: 40,
+    alignItems: 'center',
+    justifyContent:'center',
+    backgroundColor: 'rgb(0, 170, 255)',
+    borderRadius: 8,
+    padding: 8,
+  },
 });
