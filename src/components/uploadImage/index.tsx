@@ -99,7 +99,6 @@ const UploadImageBtn: React.FC<uploadProps> = ({
     const {assets} = result;
     if (assets && assets[0]) {
       const {uri, fileName} = assets[0];
-      console.log(fileName);
       uri && setimgUrl(uri);
       fileName && setimageName(fileName);
     }

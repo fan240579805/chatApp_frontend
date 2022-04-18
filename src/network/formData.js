@@ -43,7 +43,6 @@ export const signOptions = params => {
 export const editFile = (sessionId, firstName, lastName, image) =>
   new Promise((resolve, reject) => {
     var data = new FormData();
-    console.log(image);
     data.append('session_id', sessionId);
     data.append('firstname', firstName);
     data.append('lastname', lastName);

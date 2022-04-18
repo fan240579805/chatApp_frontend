@@ -147,7 +147,7 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
         />
       </View>
       <BottomTool
-        chatID={chatID}
+        chatID={chatID || state.CurChatItem.ChatID}
         recipient={recipient || state.CurChatItem.ChatToUserID}
         ToolHeight={ToolHeight}
         bottomStatus={bottomStatus}
@@ -186,7 +186,7 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
       {/* 发送图片组件 */}
       <ModalCMP modalVisible={modalVisable} setModalVisible={setModalVisable}>
         <UploadImageBtn
-          chatID={chatID}
+          chatID={chatID || state.CurChatItem.ChatID}
           recipient={recipient || state.CurChatItem.ChatToUserID}
           hasBtn={true}
           cRef={null}

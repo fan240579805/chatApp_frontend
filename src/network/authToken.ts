@@ -13,7 +13,6 @@ export const validateToken = async (token: string): Promise<[number, any]> => {
       },
     });
     res = await resp.json();
-    console.log(res);
     tip = res.msg;
     if (res.code !== 200) {
       ToastAndroid.showWithGravityAndOffset(

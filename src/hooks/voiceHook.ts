@@ -110,7 +110,7 @@ export const useVoiceAction = (): returnType => {
     prepareRecordingPath(audioPath);
     try {
       const filePath = await AudioRecorder.startRecording();
-      console.log('startxxxxxxx', filePath);
+      console.log('startRecord', filePath);
     } catch (error) {}
   };
 

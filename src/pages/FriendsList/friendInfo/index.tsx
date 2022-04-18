@@ -102,19 +102,18 @@ const FriendInofo: React.FC<infoProps> = ({route, navigation}) => {
       });
 
       const resp: RESP_TYPE = await res.json();
-      console.log("friendChat",resp);
 
       if (resp.code === 200) {
-        navigation.navigate('ChatRoomPage', {
-          showTitle: NickName,
-          isChangeTitle: true,
-        });
         // 分发dispatch修改全局的chatlist，resp.data = chatItem
         dispatch({type: stateStatus.APPEND_CHATITEM, playloads: resp.data});
         // 点击跳转前，dispatch分发chatInfo需要的数据，因为不这样比较难进行跨路由父子组件传值
         dispatch({
           type: stateStatus.SET_CHAT_DATA,
           playloads: resp.data,
+        });
+        navigation.navigate('ChatRoomPage', {
+          showTitle: NickName,
+          isChangeTitle: true,
         });
       } else {
       }
