@@ -84,7 +84,7 @@ export interface friendItemType {
 export interface chatListItemType {
   ChatID: string;
   UnRead: number;
-  RecentMsg: message;
+  RecentMsg: message | null;
   ChatToNickName: string;
   ChatToUserID: string;
   ChatToUserAvatar: string;

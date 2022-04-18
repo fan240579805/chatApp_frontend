@@ -33,7 +33,8 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
   const scrollEnd = () => {
     scrollContainer!.current.scrollToEnd({animated: true});
   };
-  const [msgState, fetchPreMsgRecord] = useHandleMessage(scrollEnd); // 处理消息钩子
+  const [msgState, fetchPreMsgRecord, isFetchRecord, setFetch] =
+    useHandleMessage(scrollEnd); // 处理消息钩子
 
   const [setReqData, setURL] = usePostData({
     initUrl: '',
@@ -124,13 +125,12 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
           keyExtractor={msgItem => msgItem.msgid}
           ref={scrollContainer}
           onContentSizeChange={() => {
-            // if (isFirstScroll) {
-            console.log('asdasda');
-            setTimeout(() => {
-              scrollContainer.current.scrollToEnd({animated: false});
-            }, 1);
-            setIsScroll(false);
-            // }
+            if (!isFetchRecord) {
+              setTimeout(() => {
+                scrollContainer.current.scrollToEnd({animated: false});
+              }, 1);
+              setIsScroll(false);
+            }
           }}
           // 滚动区域布局(高度)改变，自动滚到最底部
           onLayout={() => {
@@ -148,7 +148,7 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
       </View>
       <BottomTool
         chatID={chatID}
-        recipient={recipient}
+        recipient={recipient || state.CurChatItem.ChatToUserID}
         ToolHeight={ToolHeight}
         bottomStatus={bottomStatus}
         setBottomStatus={setBottomStatus}
@@ -187,7 +187,7 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
       <ModalCMP modalVisible={modalVisable} setModalVisible={setModalVisable}>
         <UploadImageBtn
           chatID={chatID}
-          recipient={recipient}
+          recipient={recipient || state.CurChatItem.ChatToUserID}
           hasBtn={true}
           cRef={null}
           apiPath={API_PATH.UPLOAD_CHATIMG}

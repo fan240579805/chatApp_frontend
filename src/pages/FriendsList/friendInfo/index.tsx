@@ -100,7 +100,10 @@ const FriendInofo: React.FC<infoProps> = ({route, navigation}) => {
         Recipient: UserID,
         token: state.userInfo.token,
       });
+
       const resp: RESP_TYPE = await res.json();
+      console.log("friendChat",resp);
+
       if (resp.code === 200) {
         navigation.navigate('ChatRoomPage', {
           showTitle: NickName,

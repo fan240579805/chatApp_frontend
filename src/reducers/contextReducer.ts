@@ -23,10 +23,15 @@ export function contextReducer(
       return {
         ...state,
         isLogin: false,
+        chatList:[],
+        friendList:[],
+        TopChatList:[],
+        otherData: null,
         userInfo: {
           userID: '',
           username: '',
           token: '',
+          avatar:'',
         },
       };
     // 设置当前所在chat聊天的必要信息

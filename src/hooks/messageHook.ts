@@ -15,7 +15,7 @@ import {
 } from '../type/state_type';
 import eventBus from '../utils/eventBus';
 
-type returnType = [msgListStateType, () => void];
+type returnType = [msgListStateType, () => void, boolean, () => void];
 
 /**
  * 处理消息逻辑hook
@@ -25,6 +25,8 @@ export const useHandleMessage = (scrollEnd: any): returnType => {
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
 
   const [pageIndex, setpageIndex] = useState(0);
+
+  const [isFetchRecord, setFetch] = useState(false);
 
   // 消息列表
   const [msgState, dispatchMsg] = useReducer(msgReducer, {
@@ -68,6 +70,7 @@ export const useHandleMessage = (scrollEnd: any): returnType => {
 
   // 翻页拉去聊天记录
   const fetchPreMsgRecord = () => {
+    setFetch(true);
     const pageSum = Math.ceil(msgState.msgList.length / 20);
     if (pageSum < pageIndex) {
       return;
@@ -110,5 +113,5 @@ export const useHandleMessage = (scrollEnd: any): returnType => {
     };
   }, [receiveMsgAction]);
 
-  return [msgState, fetchPreMsgRecord];
+  return [msgState, fetchPreMsgRecord, isFetchRecord, setFetch];
 };

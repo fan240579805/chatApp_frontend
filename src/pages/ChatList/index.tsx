@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {TouchableOpacity, ScrollView} from 'react-native';
 import {wsInstance} from '../../network/websocket';
 import ChatListItem from './listItem/ChatListItem';
@@ -31,7 +31,7 @@ const render = (
   resetUnReadToZero: (val: string) => Promise<void>, // 待补充
 ) => {
   // 当前最新消息的recipient是当前登录用户的话，说明未读消息是自己的
-  const isMineUnread = ChatItem.RecentMsg.recipient === state.userInfo.userID;
+  const isMineUnread = ChatItem.RecentMsg!.recipient === state.userInfo.userID;
   return (
     <TouchableOpacity
       key={ChatItem.ChatID || index}
@@ -81,7 +81,7 @@ const ChatList: React.FC<Props> = ({navigation}) => {
       let totalUnread = 0;
       chatList.forEach(cItem => {
         const isMineUnread =
-          cItem.RecentMsg.recipient === state.userInfo.userID;
+          cItem.RecentMsg!.recipient === state.userInfo.userID;
         if (isMineUnread) {
           totalUnread += cItem.UnRead;
         }
@@ -155,7 +155,7 @@ const ChatList: React.FC<Props> = ({navigation}) => {
         const chatItem: chatListItemType = {
           ...Chat,
         };
-        const isMineUnread = Chat.RecentMsg.recipient === state.userInfo.userID;
+        const isMineUnread = Chat.RecentMsg!.recipient === state.userInfo.userID;
 
         dispatch({type: stateStatus.NEW_MSG_CHATITEM, playloads: chatItem});
         isMineUnread &&

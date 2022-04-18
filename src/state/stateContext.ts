@@ -14,21 +14,23 @@ type ctxReturn = [
   React.Dispatch<ctxActionType>,
   stateType,
 ];
+
 // 全局状态树
 const state: stateType = {
   isLogin: false,
-  userInfo: {
+  userInfo: { // 用户必要的个人信息，供全局组件取用
     token: '',
     userID: '',
     username: '',
     avatar: '',
   },
-  friendList: new Array<friendItemType>(),
-  chatList: new Array<chatListItemType>(),
-  TopChatList: new Array<chatListItemType>(),
+  friendList: new Array<friendItemType>(),// 好友列表
+  chatList: new Array<chatListItemType>(),// 聊天会话列表
+  TopChatList: new Array<chatListItemType>(),// 置顶列表
   CurChatItem: {
     ChatID: '',
     RecentMsg: null,
+    UnRead: 0,
     ChatToNickName: '',
     ChatToUserID: '',
     ChatToUserAvatar: '',
@@ -36,6 +38,7 @@ const state: stateType = {
   },
   otherData: null,
 };
+
 // 暴露出全局统一的上下文
 export const Context: any = React.createContext(null);
 // 根组件自定义钩子，用于获取状态树以及dispatch函数
