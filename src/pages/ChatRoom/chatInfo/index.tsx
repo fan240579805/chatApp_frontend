@@ -9,9 +9,11 @@ import {Context} from '../../../state/stateContext';
 import {ctxPassThroughType} from '../../../type/state_type';
 import {throttle} from '../../../utils';
 import {infoStyle} from './infoStyle';
-interface Props {}
+interface Props {
+  navigation: any;
+}
 
-const ChatInfo: React.FC<Props> = () => {
+const ChatInfo: React.FC<Props> = ({navigation}) => {
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
 
   const {CurChatItem} = state;
@@ -75,6 +77,11 @@ const ChatInfo: React.FC<Props> = () => {
     !isBlacked && setBlackURL(`${BASE_URL}${API_PATH.TAKE_BLACK}`);
   }, 300);
 
+  const removeCurChat = () => {
+    dispatch({type: stateStatus.REMOVE_CUR_CHAT, playloads: CurChatItem});
+    navigation.navigate('ChatList');
+  };
+
   return (
     <View style={infoStyle.container}>
       <View style={infoStyle.userWrap}></View>
@@ -90,7 +97,7 @@ const ChatInfo: React.FC<Props> = () => {
         </LongBtn>
         <LongBtn
           showContent="删除聊天"
-          onPress={() => console.log(123)}
+          onPress={removeCurChat}
           EndIcon="chevron-forward"
           style={{marginTop: 10}}
         />

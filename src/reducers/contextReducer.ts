@@ -23,15 +23,15 @@ export function contextReducer(
       return {
         ...state,
         isLogin: false,
-        chatList:[],
-        friendList:[],
-        TopChatList:[],
+        chatList: [],
+        friendList: [],
+        TopChatList: [],
         otherData: null,
         userInfo: {
           userID: '',
           username: '',
           token: '',
-          avatar:'',
+          avatar: '',
         },
       };
     // 设置当前所在chat聊天的必要信息
@@ -131,6 +131,22 @@ export function contextReducer(
           TopChatList: [...tempTopList],
         };
       }
+    // 从列表移除当前会话框
+    case stateStatus.REMOVE_CUR_CHAT:
+      const curChatItem: chatListItemType = action.playloads;
+
+      const filterTops = state.TopChatList.filter(
+        citem => citem.ChatID !== curChatItem.ChatID,
+      );
+      const filterNormals = state.chatList.filter(
+        citem => citem.ChatID !== curChatItem.ChatID,
+      );
+      return {
+        ...state,
+        TopChatList: [...filterTops],
+        chatList: [...filterNormals],
+      };
+
     // 设置拉黑数量
     case stateStatus.SET_BLACK_NUM:
       const preBlackNum = state?.otherData?.BlackNum || 0;
@@ -151,12 +167,7 @@ export function contextReducer(
           totalUnReadNum: preUnReadNum + action.playloads,
         },
       };
-    // 设置一些其他便于全局修改共享的数据
-    // case stateStatus.SET_OTHER_DATA:
-    //   return {
-    //     ...state,
-    //     otherData: {...action.playloads},
-    //   };
+
     default:
       return {
         ...state,

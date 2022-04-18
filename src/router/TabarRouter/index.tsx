@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -6,8 +6,8 @@ import ChatListPage from '../../pages/ChatList';
 import FriendsListPage from '../../pages/FriendsList';
 import ProfilePage from '../../pages/Profile';
 import SearchPage from '../../pages/Search';
-import { Context } from '../../state/stateContext';
-import { ctxPassThroughType } from '../../type/state_type';
+import {Context} from '../../state/stateContext';
+import {ctxPassThroughType} from '../../type/state_type';
 
 const Tab = createBottomTabNavigator();
 
@@ -39,7 +39,7 @@ const TabarRouter: React.FC<any> = () => {
           }
 
           // You can return any component that you like here!
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return <Ionicons name={iconName || ''} size={size} color={color} />;
         },
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
@@ -47,7 +47,10 @@ const TabarRouter: React.FC<any> = () => {
       <Tab.Screen
         name="ChatList"
         component={ChatListPage}
-        options={{tabBarBadge: state?.otherData?.totalUnReadNum || undefined, headerShown: false}}
+        options={{
+          tabBarBadge: state?.otherData?.totalUnReadNum || undefined,
+          headerShown: false,
+        }}
       />
       <Tab.Screen
         name="FriendsList"
