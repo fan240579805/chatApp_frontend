@@ -15,7 +15,7 @@ import {
 } from '../type/state_type';
 import eventBus from '../utils/eventBus';
 
-type returnType = [msgListStateType, () => void, boolean, () => void];
+type returnType = [msgListStateType, () => void, boolean];
 
 /**
  * 处理消息逻辑hook
@@ -113,5 +113,5 @@ export const useHandleMessage = (scrollEnd: any): returnType => {
     };
   }, [receiveMsgAction]);
 
-  return [msgState, fetchPreMsgRecord, isFetchRecord, setFetch];
+  return [msgState, fetchPreMsgRecord, isFetchRecord];
 };

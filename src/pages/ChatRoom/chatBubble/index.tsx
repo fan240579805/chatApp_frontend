@@ -61,13 +61,11 @@ const ChatBubble: React.FC<bubbleProps> = ({
       <TouchableOpacity
         onPress={() => {
           closePopup();
-          navigation.navigate('FriendInfo', {
-            // 展示写死后续记得改！
-            userName: 'asd',
-            isChangeTitle: true,
-            avatarUrl:
-              'https://img0.baidu.com/it/u=2991084227,3927319913&fm=26&fmt=auto',
-          });
+          // navigation.navigate('FriendInfo', {
+          //   userName: 'asd',
+          //   isChangeTitle: true,
+          //   avatarUrl:avatarUrl,
+          // });
         }}>
         <Image source={{uri: avatarUrl}} style={bubbleStyle.avatar} />
       </TouchableOpacity>

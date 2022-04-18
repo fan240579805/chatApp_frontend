@@ -33,7 +33,7 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
   const scrollEnd = () => {
     scrollContainer!.current.scrollToEnd({animated: true});
   };
-  const [msgState, fetchPreMsgRecord, isFetchRecord, setFetch] =
+  const [msgState, fetchPreMsgRecord, isFetchRecord] =
     useHandleMessage(scrollEnd); // 处理消息钩子
 
   const [setReqData, setURL] = usePostData({

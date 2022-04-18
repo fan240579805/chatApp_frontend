@@ -1,13 +1,8 @@
 import React, {useContext} from 'react';
 import {TouchableOpacity, FlatList, View, Text} from 'react-native';
-import {API_PATH, BASE_URL, fetchStatus} from '../../const';
-import {useGetData} from '../../network/getDataHook';
 import {Context} from '../../state/stateContext';
-import {
-  ctxPassThroughType,
-  friendItemType,
-  userProfileType,
-} from '../../type/state_type';
+
+import {ctxPassThroughType, friendItemType} from '../../type/state_type';
 import {fpageStyle} from './friendPageStyle';
 import FriendListItem from './listItem';
 interface Props {
