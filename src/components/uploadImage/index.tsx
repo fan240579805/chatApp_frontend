@@ -41,17 +41,15 @@ const UploadImageBtn: React.FC<uploadProps> = ({
   // 提交成功回调函数
   const successCbFunc = (res: any) => {
     // 更新数据成功后将新数据 dispatch分发给父组件以便页面同步新改的数据
-    dispatchNewData &&
-      dispatchNewData({type: fetchStatus.SUCCESS, playload: res});
+    dispatchNewData && dispatchNewData({type: fetchStatus.SUCCESS, playload: res});
     setModalVisable && setModalVisable(false);
   };
-  const [setReqParams, setURL, {isError, isFetching, data}]: PostdataType =
-    usePostData({
-      initUrl: `${BASE_URL}${apiPath}`,
-      initData: {},
-      successCbFunc,
-      options: fileOptions,
-    });
+  const [setReqParams, setURL, {isError, isFetching, data}]: PostdataType = usePostData({
+    initUrl: `${BASE_URL}${apiPath}`,
+    initData: {},
+    successCbFunc,
+    options: fileOptions,
+  });
 
   // 封装好的上传图片方法，暴露给父组件或自己用，待完善
   const uploadFile = async () => {
@@ -111,12 +109,7 @@ const UploadImageBtn: React.FC<uploadProps> = ({
             <Icon name={iconName} color="#aaa" size={105} />
           ) : (
             <View style={styles.ImageWrap}>
-              <Image
-                resizeMode="cover"
-                resizeMethod="scale"
-                style={styles.Image}
-                source={{uri: imgUrl}}
-              />
+              <Image resizeMode="cover" resizeMethod="scale" style={styles.Image} source={{uri: imgUrl}} />
             </View>
           )}
         </TouchableOpacity>

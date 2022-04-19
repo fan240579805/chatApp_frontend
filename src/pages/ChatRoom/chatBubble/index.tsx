@@ -19,17 +19,7 @@ interface bubbleProps extends msgType {
   dispatchMsg: React.Dispatch<ActionType>;
 }
 
-const ChatBubble: React.FC<bubbleProps> = ({
-  msgid,
-  type,
-  content,
-  time,
-  isSender,
-  avatarUrl,
-  closePopup,
-  cRef,
-  dispatchMsg,
-}) => {
+const ChatBubble: React.FC<bubbleProps> = ({msgid, type, content, time, isSender, avatarUrl, closePopup, cRef, dispatchMsg}) => {
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
 
   const [isShow, setShow] = useState(false);
@@ -46,15 +36,7 @@ const ChatBubble: React.FC<bubbleProps> = ({
   // 获取通过判断图片宽高的新大小
   const [img_width, img_height] = useResizeImg(type, content);
 
-  const [
-    duration,
-    curTime,
-    showTime,
-    playSound,
-    pauseSound,
-    isPlaying,
-    setisPlay,
-  ] = usePlaySound(type, content);
+  const [duration, curTime, showTime, playSound, pauseSound, isPlaying, setisPlay] = usePlaySound(type, content);
 
   const bothDelMsg = async () => {
     try {
@@ -80,13 +62,8 @@ const ChatBubble: React.FC<bubbleProps> = ({
     }
   };
 
-  const operations: Array<operateType> = [
-    {title: '删除', isSender, execfunc: () => console.log('del')},
-    {title: '撤回', isSender, execfunc: bothDelMsg},
-  ];
   return (
-    <View
-      style={isSender ? bubbleStyle.RightContainer : bubbleStyle.LeftContainer}>
+    <View style={isSender ? bubbleStyle.RightContainer : bubbleStyle.LeftContainer}>
       <TouchableOpacity
         onPress={() => {
           closePopup();
@@ -95,7 +72,8 @@ const ChatBubble: React.FC<bubbleProps> = ({
           //   isChangeTitle: true,
           //   avatarUrl:avatarUrl,
           // });
-        }}>
+        }}
+      >
         <Image source={{uri: avatarUrl}} style={bubbleStyle.avatar} />
       </TouchableOpacity>
       {type === 'text' && (
@@ -105,9 +83,8 @@ const ChatBubble: React.FC<bubbleProps> = ({
             closePopup();
             setShow(true);
           }}
-          style={
-            isSender ? bubbleStyle.RightBubbleWrap : bubbleStyle.LeftBubbleWrap
-          }>
+          style={isSender ? bubbleStyle.RightBubbleWrap : bubbleStyle.LeftBubbleWrap}
+        >
           <Text style={bubbleStyle.textContent} selectable={true}>
             {content}
           </Text>
@@ -119,7 +96,8 @@ const ChatBubble: React.FC<bubbleProps> = ({
           onLongPress={() => {
             closePopup();
             setShow(true);
-          }}>
+          }}
+        >
           <Image
             width={img_width}
             height={img_height}
@@ -148,16 +126,24 @@ const ChatBubble: React.FC<bubbleProps> = ({
           style={[
             isSender ? bubbleStyle.RightBubbleWrap : bubbleStyle.LeftBubbleWrap,
             isSender ? bubbleStyle.rightVoiceFlex : bubbleStyle.leftvoiceFlex,
-          ]}>
+          ]}
+        >
           <Text style={bubbleStyle.voiceSecond}>{showTime + '"'}</Text>
           <Icon name="mic-outline" color="#666" size={22} />
         </TouchableOpacity>
       )}
-      {isShow && isSender && (
-        <Popup operations={[{title: '撤回', execfunc: bothDelMsg}]} />
-      )}
+      {isShow && isSender && <Popup operations={[{title: '撤回', execfunc: bothDelMsg}]} />}
       {isShow && !isSender && (
-        <Popup operations={[{title: '删除', execfunc: ()=>{console.log("del")}}]} />
+        <Popup
+          operations={[
+            {
+              title: '删除',
+              execfunc: () => {
+                console.log('del');
+              },
+            },
+          ]}
+        />
       )}
     </View>
   );

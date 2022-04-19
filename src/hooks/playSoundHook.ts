@@ -2,20 +2,9 @@ import {Dispatch, SetStateAction, useEffect, useState} from 'react';
 import {Alert} from 'react-native';
 import Sound from 'react-native-sound';
 
-type returnType = [
-  number,
-  number,
-  number,
-  () => void,
-  () => void,
-  boolean,
-  Dispatch<SetStateAction<boolean>>,
-];
+type returnType = [number, number, number, () => void, () => void, boolean, Dispatch<SetStateAction<boolean>>];
 
-export const usePlaySound = (
-  msgType: string,
-  musciPath: string,
-): returnType => {
+export const usePlaySound = (msgType: string, musciPath: string): returnType => {
   const [duration, setduration] = useState(0);
 
   const [curTime, setCurTime] = useState(0);

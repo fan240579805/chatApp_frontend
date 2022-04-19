@@ -9,11 +9,7 @@ interface Props {
   navigation: any;
 }
 
-const render = (
-  navigation: any,
-  item: friendItemType,
-  dispatchNewData: any,
-) => {
+const render = (navigation: any, item: friendItemType, dispatchNewData: any) => {
   const {FriendProfile} = item;
   let friendFlag = true;
   if (item.Status === 2 && !item.IsMaster) {
@@ -40,13 +36,9 @@ const render = (
               friendFlag,
               firendStatus: item.Status,
             });
-          }}>
-          <FriendListItem
-            {...FriendProfile}
-            Status={item.Status}
-            dispatchNewData={dispatchNewData}
-            isMaster={item.IsMaster}
-          />
+          }}
+        >
+          <FriendListItem {...FriendProfile} Status={item.Status} dispatchNewData={dispatchNewData} isMaster={item.IsMaster} />
         </TouchableOpacity>
       )}
       {item.Status === -404 && (

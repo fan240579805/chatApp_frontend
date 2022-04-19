@@ -1,20 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {
-  useContext,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
-import {
-  View,
-  TextInput,
-  Button,
-  TouchableOpacity,
-  Keyboard,
-  KeyboardEvent,
-  Text,
-} from 'react-native';
+import React, {useContext, useEffect, useImperativeHandle, useRef, useState} from 'react';
+import {View, TextInput, Button, TouchableOpacity, Keyboard, KeyboardEvent, Text} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useVoiceAction} from '../../../hooks/voiceHook';
 import {showTips} from '../../../network/postDataHook';
@@ -91,18 +77,9 @@ const BottomTool: React.FC<bottomProps> = ({
   // 切换键盘表情时执行重置聊天内容区域
   const _resetChatHeight = () => {
     if (inputContainerRef) {
-      inputContainerRef?.current?.measure(
-        (
-          x: any,
-          y: any,
-          width: any,
-          height: any,
-          pageX: any,
-          pageY: number,
-        ) => {
-          bottomStatus !== 0 && setContentHeight(pageY - 70);
-        },
-      );
+      inputContainerRef?.current?.measure((x: any, y: any, width: any, height: any, pageX: any, pageY: number) => {
+        bottomStatus !== 0 && setContentHeight(pageY - 70);
+      });
     }
   };
   const sendChatMessage = () => {
@@ -127,16 +104,13 @@ const BottomTool: React.FC<bottomProps> = ({
       <View
         ref={inputContainerRef}
         style={
-          bottomStatus !== 1 && bottomStatus !== 0
-            ? [bottomStyle.activeBottomToolHead, {bottom: ToolHeight || '40%'}]
-            : bottomStyle.bottomToolHead
+          bottomStatus !== 1 && bottomStatus !== 0 ? [bottomStyle.activeBottomToolHead, {bottom: ToolHeight || '40%'}] : bottomStyle.bottomToolHead
         }
         onLayout={() => {
           _resetChatHeight();
-        }}>
-        <TouchableOpacity
-          style={bottomStyle.iconWrap}
-          onPress={() => setIsSound(!isSound)}>
+        }}
+      >
+        <TouchableOpacity style={bottomStyle.iconWrap} onPress={() => setIsSound(!isSound)}>
           <MaterialIcons name="contactless" size={35} />
         </TouchableOpacity>
         {isSound && (
@@ -147,7 +121,8 @@ const BottomTool: React.FC<bottomProps> = ({
             }}
             onPressOut={() => {
               _stopRecognizing();
-            }}>
+            }}
+          >
             <Text>长按开始录音</Text>
           </TouchableOpacity>
         )}
@@ -174,7 +149,8 @@ const BottomTool: React.FC<bottomProps> = ({
                 _resetChatHeight();
               }, 10);
             }}
-            activeOpacity={1}>
+            activeOpacity={1}
+          >
             <MaterialIcons name="emoji-emotions" size={35} />
           </TouchableOpacity>
         )}
@@ -188,7 +164,8 @@ const BottomTool: React.FC<bottomProps> = ({
               inputRef.current.focus();
               // }, 2);
             }}
-            activeOpacity={1}>
+            activeOpacity={1}
+          >
             <MaterialIcons name="keyboard" size={35} />
           </TouchableOpacity>
         )}
@@ -205,7 +182,8 @@ const BottomTool: React.FC<bottomProps> = ({
                 _resetChatHeight();
               }, 10);
             }}
-            activeOpacity={1}>
+            activeOpacity={1}
+          >
             <View style={bottomStyle.iconWrap}>
               <MaterialIcons name="add" size={35} />
             </View>

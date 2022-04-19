@@ -3,12 +3,7 @@ import {TouchableOpacity, ScrollView} from 'react-native';
 import {wsInstance} from '../../network/websocket';
 import ChatListItem from './listItem/ChatListItem';
 import {Context} from '../../state/stateContext';
-import {
-  bePushedChatType,
-  chatListItemType,
-  ctxPassThroughType,
-  stateType,
-} from '../../type/state_type';
+import {bePushedChatType, chatListItemType, ctxPassThroughType, stateType} from '../../type/state_type';
 import {useGetData} from '../../network/getDataHook';
 import {API_PATH, BASE_URL, stateStatus} from '../../const';
 import {formatList} from '../../utils';
@@ -56,7 +51,8 @@ const render = (
           chatID: ChatItem.ChatID,
           recipient: ChatItem.ChatToUserID,
         });
-      }}>
+      }}
+    >
       <ChatListItem {...ChatItem} isTop={isTop} isMineUnread={isMineUnread} />
     </TouchableOpacity>
   );
@@ -80,8 +76,7 @@ const ChatList: React.FC<Props> = ({navigation}) => {
       // 整个chatList的未读数量
       let totalUnread = 0;
       chatList.forEach(cItem => {
-        const isMineUnread =
-          cItem.RecentMsg!.recipient === state.userInfo.userID;
+        const isMineUnread = cItem.RecentMsg!.recipient === state.userInfo.userID;
         if (isMineUnread) {
           totalUnread += cItem.UnRead;
         }
@@ -98,9 +93,7 @@ const ChatList: React.FC<Props> = ({navigation}) => {
           getValueFromStorage('topChatIds').then(value => {
             const chatIds: string[] = JSON.parse(value);
             const topChatList = chatIds.map(chatId => {
-              const i = chatList.findIndex(
-                chatItem => chatItem.ChatID === chatId,
-              );
+              const i = chatList.findIndex(chatItem => chatItem.ChatID === chatId);
               const tempCaht = chatList[i];
               chatList.splice(i, 1); // 从chatList移除掉在置顶List中的item
               return tempCaht;
@@ -148,23 +141,20 @@ const ChatList: React.FC<Props> = ({navigation}) => {
   });
 
   useEffect(() => {
-    const listener = eventBus.addListener(
-      'pushChatItem',
-      (bePushedObj: bePushedChatType) => {
-        const {Chat} = bePushedObj;
-        const chatItem: chatListItemType = {
-          ...Chat,
-        };
-        const isMineUnread = Chat.RecentMsg!.recipient === state.userInfo.userID;
+    const listener = eventBus.addListener('pushChatItem', (bePushedObj: bePushedChatType) => {
+      const {Chat} = bePushedObj;
+      const chatItem: chatListItemType = {
+        ...Chat,
+      };
+      const isMineUnread = Chat.RecentMsg!.recipient === state.userInfo.userID;
 
-        dispatch({type: stateStatus.NEW_MSG_CHATITEM, playloads: chatItem});
-        isMineUnread &&
-          dispatch({
-            type: stateStatus.SET_UNREAD_NUM,
-            playloads: chatItem.UnRead,
-          });
-      },
-    );
+      dispatch({type: stateStatus.NEW_MSG_CHATITEM, playloads: chatItem});
+      isMineUnread &&
+        dispatch({
+          type: stateStatus.SET_UNREAD_NUM,
+          playloads: chatItem.UnRead,
+        });
+    });
     return () => {
       listener.remove();
     };
@@ -189,26 +179,10 @@ const ChatList: React.FC<Props> = ({navigation}) => {
     <>
       <ScrollView>
         {state.TopChatList.map((chat, index) => {
-          return render(
-            navigation,
-            chat,
-            state,
-            dispatch,
-            true,
-            index,
-            resetUnReadToZero,
-          );
+          return render(navigation, chat, state, dispatch, true, index, resetUnReadToZero);
         })}
         {state.chatList.map((chat, index) => {
-          return render(
-            navigation,
-            chat,
-            state,
-            dispatch,
-            false,
-            index,
-            resetUnReadToZero,
-          );
+          return render(navigation, chat, state, dispatch, false, index, resetUnReadToZero);
         })}
       </ScrollView>
     </>

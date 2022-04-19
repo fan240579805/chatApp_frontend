@@ -6,11 +6,7 @@ interface ModalProps {
   setModalVisible: (value: boolean) => void;
 }
 
-const ModalCPM: React.FC<ModalProps> = ({
-  modalVisible,
-  setModalVisible,
-  children,
-}) => {
+const ModalCPM: React.FC<ModalProps> = ({modalVisible, setModalVisible, children}) => {
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -19,7 +15,8 @@ const ModalCPM: React.FC<ModalProps> = ({
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible(!modalVisible);
-        }}>
+        }}
+      >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={styles.btnWrap}>
@@ -27,7 +24,8 @@ const ModalCPM: React.FC<ModalProps> = ({
                 style={styles.closeButton}
                 onPress={() => {
                   setModalVisible(!modalVisible);
-                }}>
+                }}
+              >
                 <Text style={styles.textStyle}>X</Text>
               </TouchableHighlight>
             </View>

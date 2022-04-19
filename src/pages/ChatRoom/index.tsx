@@ -100,19 +100,19 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
       onStartShouldSetResponder={() => {
         closePopup();
         return true;
-      }}>
+      }}
+    >
       <View
         style={
           [chatRoomStyle.chatContent, {height: ContentHeight || '90%'}] //根据输入框内容动态赋给聊天区域高度
-        }>
+        }
+      >
         <FlatList
           onRefresh={fetchPreMsgRecord}
           refreshing={false}
           extraData={msgState.msgList}
           data={msgState.msgList}
-          renderItem={({item}) => (
-            <ChatBubble {...item} dispatchMsg={dispatchMsg} closePopup={closePopup} cRef={childRef} />
-          )}
+          renderItem={({item}) => <ChatBubble {...item} dispatchMsg={dispatchMsg} closePopup={closePopup} cRef={childRef} />}
           initialNumToRender={msgState.msgList.length}
           keyExtractor={msgItem => msgItem.msgid}
           ref={scrollContainer}

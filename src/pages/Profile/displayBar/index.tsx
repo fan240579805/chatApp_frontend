@@ -9,12 +9,7 @@ interface Props {
   subNum: number;
 }
 // 路由跳转所开启的新页面
-const displayBar: React.FC<Props> = ({
-  friendNum,
-  blackListNum,
-  unDisturbNum,
-  subNum,
-}) => {
+const displayBar: React.FC<Props> = ({friendNum, blackListNum, unDisturbNum, subNum}) => {
   return (
     <View style={barStyle.container}>
       <View style={barStyle.baseItem}>

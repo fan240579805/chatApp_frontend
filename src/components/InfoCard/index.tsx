@@ -8,12 +8,7 @@ interface Props {
   userName: string;
 }
 // 路由跳转所开启的新页面
-const IconBtn: React.FC<Props> = ({
-  nickname,
-  avatarUrl,
-  userName,
-  children,
-}) => {
+const IconBtn: React.FC<Props> = ({nickname, avatarUrl, userName, children}) => {
   return (
     <View style={cardStyle.container}>
       <View style={cardStyle.FlexContainer}>
@@ -21,9 +16,7 @@ const IconBtn: React.FC<Props> = ({
           <Image source={{uri: avatarUrl}} style={cardStyle.imgStyle} />
         </View>
         <View style={cardStyle.contentWrap}>
-          <Text style={{marginBottom: 5, fontSize: 20, color: '#000'}}>
-            {nickname}
-          </Text>
+          <Text style={{marginBottom: 5, fontSize: 20, color: '#000'}}>{nickname}</Text>
           <Text style={cardStyle.textArea}>账号：{userName}</Text>
         </View>
       </View>

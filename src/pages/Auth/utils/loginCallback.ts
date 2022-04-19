@@ -18,11 +18,5 @@ export function successLogin(res: any, dispatch?: any) {
 }
 
 export function failedLogin() {
-  ToastAndroid.showWithGravityAndOffset(
-    '登录失败，请检查网络',
-    ToastAndroid.SHORT,
-    ToastAndroid.BOTTOM,
-    10,
-    100,
-  );
+  ToastAndroid.showWithGravityAndOffset('登录失败，请检查网络', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 10, 100);
 }

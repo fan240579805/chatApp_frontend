@@ -1,9 +1,7 @@
 import {friendItemType} from '../type/state_type';
 
 // 将请求到的好友列表处理一下
-export const formatList = (
-  datalist: Array<friendItemType>,
-): Array<friendItemType> => {
+export const formatList = (datalist: Array<friendItemType>): Array<friendItemType> => {
   // willexecFriendlist 待处理的好友请求列表
   let willexecFriendlist = datalist.filter(friend => {
     return friend.Status === -1;

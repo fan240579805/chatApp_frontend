@@ -1,5 +1,5 @@
 import {API_PATH, BASE_URL} from '../const';
-import eventBus from '../utils/eventBus'
+import eventBus from '../utils/eventBus';
 const url = `${BASE_URL}${API_PATH.WS}`;
 let that = null;
 

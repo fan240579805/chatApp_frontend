@@ -2,10 +2,7 @@ import axios from 'axios';
 export const fileOptions = params => {
   let formData = new FormData();
   for (var key in params) {
-    key !== 'file' &&
-      key !== 'fileName' &&
-      key !== 'token' &&
-      formData.append(key, params[key]);
+    key !== 'file' && key !== 'fileName' && key !== 'token' && formData.append(key, params[key]);
   }
   let file = {
     uri: params.file,
@@ -25,7 +22,7 @@ export const fileOptions = params => {
     return {
       method: 'POST',
       body: formData,
-    }
+    };
   }
 };
 

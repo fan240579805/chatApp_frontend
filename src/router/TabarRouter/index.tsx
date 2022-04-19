@@ -43,7 +43,8 @@ const TabarRouter: React.FC<any> = () => {
         },
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
-      })}>
+      })}
+    >
       <Tab.Screen
         name="ChatList"
         component={ChatListPage}
@@ -52,21 +53,9 @@ const TabarRouter: React.FC<any> = () => {
           headerShown: false,
         }}
       />
-      <Tab.Screen
-        name="FriendsList"
-        component={FriendsListPage}
-        options={{headerShown: false}}
-      />
-      <Tab.Screen
-        name="Search"
-        component={SearchPage}
-        options={{headerShown: false}}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={ProfilePage}
-        options={{headerShown: false}}
-      />
+      <Tab.Screen name="FriendsList" component={FriendsListPage} options={{headerShown: false}} />
+      <Tab.Screen name="Search" component={SearchPage} options={{headerShown: false}} />
+      <Tab.Screen name="Profile" component={ProfilePage} options={{headerShown: false}} />
     </Tab.Navigator>
   );
 };

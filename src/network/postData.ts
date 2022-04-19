@@ -26,11 +26,7 @@ const defaultFetchOptions: any = (params: any) => {
   };
 };
 
-export async function postData(
-  url: string = '',
-  params: object = {},
-  options?: any,
-) {
+export async function postData(url: string = '', params: object = {}, options?: any) {
   let response;
   if (options) {
     response = await fetch(url, options(params));

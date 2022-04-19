@@ -20,16 +20,7 @@ interface infoProps {
 
 const FriendInofo: React.FC<infoProps> = ({route, navigation}) => {
   // 接收路由跳转携带过来的user数据
-  const {
-    UserID,
-    Username,
-    Avatar,
-    Email,
-    NickName,
-    addtime,
-    friendFlag,
-    firendStatus,
-  } = route.params;
+  const {UserID, Username, Avatar, Email, NickName, addtime, friendFlag, firendStatus} = route.params;
 
   const [isBlacked, setBlack] = useState(false);
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
@@ -128,24 +119,17 @@ const FriendInofo: React.FC<infoProps> = ({route, navigation}) => {
         <View style={InfoStyle.TextWrap}>
           <Text style={InfoStyle.nameText}>{NickName}</Text>
           <Text style={InfoStyle.otherText}>账号:{Username}</Text>
-          <Text style={InfoStyle.otherText}>
-            添加日期:{dateFormat(addtime, FormatsEnums._YMD)}
-          </Text>
+          <Text style={InfoStyle.otherText}>添加日期:{dateFormat(addtime, FormatsEnums._YMD)}</Text>
           <Text style={InfoStyle.otherText}>邮箱:{Email}</Text>
         </View>
       </View>
       {!friendFlag ? (
         <TouchableOpacity disabled={true}>
-          <Text style={[InfoStyle.msgBtn, {fontSize: 16, color: 'grey'}]}>
-            你们还不是好友哦
-          </Text>
+          <Text style={[InfoStyle.msgBtn, {fontSize: 16, color: 'grey'}]}>你们还不是好友哦</Text>
         </TouchableOpacity>
       ) : (
         <>
-          <LongBtn
-            showContent="加入黑名单"
-            style={{marginTop: 10, matginBottom: 10}}
-            disabled={true}>
+          <LongBtn showContent="加入黑名单" style={{marginTop: 10, matginBottom: 10}} disabled={true}>
             <Switch value={isBlacked} onChange={toggleBlacked} />
           </LongBtn>
           <View style={InfoStyle.BtnWrap}>

@@ -29,12 +29,7 @@ const ChatListItem: React.FC<itemProps> = ({
   //   RecentMsg.recipient === state.userInfo.userID,
   // );
   return (
-    <View
-      style={
-        isTop
-          ? [listStyle.container, {backgroundColor: '#e9e9e9'}]
-          : listStyle.container
-      }>
+    <View style={isTop ? [listStyle.container, {backgroundColor: '#e9e9e9'}] : listStyle.container}>
       <View style={listStyle.avatarWrap}>
         <Image source={{uri: ChatToUserAvatar}} style={listStyle.imgStyle} />
         {UnRead > 0 && isMineUnread && <Text style={listStyle.unReadStyle}>{UnRead}</Text>}
@@ -49,9 +44,7 @@ const ChatListItem: React.FC<itemProps> = ({
       </View>
 
       <View style={listStyle.timeWrap}>
-        <Text style={{fontSize: 12}}>
-          {dateFormat(RecentTime, FormatsEnums._MD)}
-        </Text>
+        <Text style={{fontSize: 12}}>{dateFormat(RecentTime, FormatsEnums._MD)}</Text>
       </View>
     </View>
   );

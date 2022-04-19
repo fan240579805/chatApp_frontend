@@ -1,11 +1,7 @@
 import {useState} from 'react';
 import {validateEmail} from './tool';
 
-export type validateType = [
-  (text: string, type?: string) => void,
-  string,
-  boolean,
-];
+export type validateType = [(text: string, type?: string) => void, string, boolean];
 
 export function useInputValidate(): validateType {
   const [WrongText, setWrongText] = useState('');

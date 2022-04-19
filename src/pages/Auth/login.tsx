@@ -1,12 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useContext, useState} from 'react';
-import {
-  Text,
-  TouchableHighlight,
-  View,
-  TextInput,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import {Text, TouchableHighlight, View, TextInput, TouchableWithoutFeedback} from 'react-native';
 import Toast from '../../components/Toast';
 import usePostData, {PostdataType} from '../../network/postDataHook';
 import {useInputValidate, validateType} from './utils/validtaeHook';
@@ -26,13 +20,12 @@ const LoginPage: React.FC<Props> = ({navigation}) => {
   const [inputValidate, WronText, isWrong]: validateType = useInputValidate();
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
 
-  const [submitData, setURL, {isError, isFetching, data}]: PostdataType =
-    usePostData({
-      initUrl: `${BASE_URL}${API_PATH.LOGIN}`,
-      initData: {},
-      successCbFunc: res => successLogin(res, dispatch),
-      failedCbFunc: () => failedLogin(),
-    });
+  const [submitData, setURL, {isError, isFetching, data}]: PostdataType = usePostData({
+    initUrl: `${BASE_URL}${API_PATH.LOGIN}`,
+    initData: {},
+    successCbFunc: res => successLogin(res, dispatch),
+    failedCbFunc: () => failedLogin(),
+  });
 
   const btnPress = () => {
     // 提交用户名密码
@@ -68,21 +61,15 @@ const LoginPage: React.FC<Props> = ({navigation}) => {
           <Text style={formStyle.WrongText}>{WronText}</Text>
         </View>
       )}
-      <TouchableHighlight
-        style={formStyle.subBtn}
-        activeOpacity={0.5}
-        underlayColor="#2292DD"
-        onPress={btnPress}>
+      <TouchableHighlight style={formStyle.subBtn} activeOpacity={0.5} underlayColor="#2292DD" onPress={btnPress}>
         <Text style={formStyle.btnText}>登录</Text>
       </TouchableHighlight>
       <View style={formStyle.moreInfoWrap}>
-        <TouchableWithoutFeedback
-          onPress={() => navigation.navigate('ChangePwdPage')}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('ChangePwdPage')}>
           <Text style={{fontSize: 13}}>忘记密码</Text>
         </TouchableWithoutFeedback>
 
-        <TouchableWithoutFeedback
-          onPress={() => navigation.navigate('SignPage')}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('SignPage')}>
           <View style={{flexDirection: 'row'}}>
             <Text style={{fontSize: 13, marginRight: 8}}>没有账号?</Text>
             <Text style={{color: 'rgb(0, 170, 255)', fontSize: 13}}>注册</Text>

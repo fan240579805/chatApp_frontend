@@ -24,5 +24,5 @@ export const chatRoomStyle = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 10,
     margin: 20,
-  }
+  },
 });

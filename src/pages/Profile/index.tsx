@@ -39,11 +39,7 @@ const Profile: React.FC<Props> = () => {
   });
 
   // 点击长按钮拉起模态框
-  const pressHandle = (
-    isInput: boolean,
-    inputName?: string,
-    inputType?: string,
-  ) => {
+  const pressHandle = (isInput: boolean, inputName?: string, inputType?: string) => {
     setModalVisable(!modalVisable);
     setInputVisable(isInput);
     isInput && inputName && setPropInputName(inputName);
@@ -56,21 +52,9 @@ const Profile: React.FC<Props> = () => {
     });
     const resp: RESP_TYPE = await res.json();
     if (resp.code === 200) {
-      ToastAndroid.showWithGravityAndOffset(
-        '成功登出',
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-        10,
-        100,
-      );
+      ToastAndroid.showWithGravityAndOffset('成功登出', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 10, 100);
     } else {
-      ToastAndroid.showWithGravityAndOffset(
-        '登陆态清除失败',
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-        10,
-        100,
-      );
+      ToastAndroid.showWithGravityAndOffset('登陆态清除失败', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 10, 100);
     }
   };
   const exitLogin = () => {
@@ -85,10 +69,7 @@ const Profile: React.FC<Props> = () => {
   return (
     <View>
       {data && (
-        <InfoCard
-          nickname={data.NickName}
-          userName={data.Username}
-          avatarUrl={data.Avatar}>
+        <InfoCard nickname={data.NickName} userName={data.Username} avatarUrl={data.Avatar}>
           <DisplayBar
             friendNum={state.friendList.length}
             blackListNum={state.otherData?.BlackNum || 0}
@@ -99,12 +80,7 @@ const Profile: React.FC<Props> = () => {
       )}
       <View style={profileStyle.Bwrap}>
         <View style={profileStyle.BtnContainer}>
-          <LongBtn
-            FrontIcon="image-outline"
-            showContent="更换头像"
-            EndIcon="chevron-forward"
-            onPress={() => pressHandle(false)}
-          />
+          <LongBtn FrontIcon="image-outline" showContent="更换头像" EndIcon="chevron-forward" onPress={() => pressHandle(false)} />
           <LongBtn
             FrontIcon="clipboard-outline"
             showContent="更改昵称"
@@ -126,29 +102,15 @@ const Profile: React.FC<Props> = () => {
         </View>
       </View>
 
-      <TouchableHighlight
-        style={profileStyle.exitBtn}
-        activeOpacity={0.5}
-        underlayColor="#CDD2D4"
-        onPress={() => exitLogin()}>
+      <TouchableHighlight style={profileStyle.exitBtn} activeOpacity={0.5} underlayColor="#CDD2D4" onPress={() => exitLogin()}>
         <Text style={profileStyle.btnText}>退出登录</Text>
       </TouchableHighlight>
 
       <ModalCMP modalVisible={modalVisable} setModalVisible={setModalVisable}>
         {inputVisable ? (
-          <InfoInput
-            inputName={propInputName}
-            setModalVisable={setModalVisable}
-            InputType={InputType}
-            dispatchNewData={dispatchNewData}
-          />
+          <InfoInput inputName={propInputName} setModalVisable={setModalVisable} InputType={InputType} dispatchNewData={dispatchNewData} />
         ) : (
-          <UploadImageBtn
-            hasBtn={true}
-            cRef={null}
-            dispatchNewData={dispatchNewData}
-            setModalVisable={setModalVisable}
-          />
+          <UploadImageBtn hasBtn={true} cRef={null} dispatchNewData={dispatchNewData} setModalVisable={setModalVisable} />
         )}
       </ModalCMP>
     </View>

@@ -33,6 +33,6 @@ export const itemStyle = StyleSheet.create({
     borderRadius: 5,
     paddingLeft: 10,
     paddingRight: 10,
-    backgroundColor:"rgb(97, 196, 85)"
+    backgroundColor: 'rgb(97, 196, 85)',
   },
 });

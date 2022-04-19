@@ -15,24 +15,12 @@ export const validateToken = async (token: string): Promise<[number, any]> => {
     res = await resp.json();
     tip = res.msg;
     if (res.code !== 200) {
-      ToastAndroid.showWithGravityAndOffset(
-        tip,
-        ToastAndroid.LONG,
-        ToastAndroid.BOTTOM,
-        10,
-        100,
-      );
+      ToastAndroid.showWithGravityAndOffset(tip, ToastAndroid.LONG, ToastAndroid.BOTTOM, 10, 100);
     }
     return [res.code === 200 ? 2 : 1, res.data];
   } catch (error) {
     console.log('token验证失败，请重新登录', error);
-    ToastAndroid.showWithGravityAndOffset(
-      '网络连接失败，请重试',
-      ToastAndroid.LONG,
-      ToastAndroid.BOTTOM,
-      10,
-      100,
-    );
+    ToastAndroid.showWithGravityAndOffset('网络连接失败，请重试', ToastAndroid.LONG, ToastAndroid.BOTTOM, 10, 100);
     return [1, {msg: '登陆失败'}];
   }
 };

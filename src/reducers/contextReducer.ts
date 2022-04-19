@@ -2,10 +2,7 @@ import {stateStatus} from '../const';
 import {ctxActionType} from '../type/actions_type';
 import {chatListItemType, stateType} from '../type/state_type';
 
-export function contextReducer(
-  state: stateType,
-  action: ctxActionType,
-): stateType {
+export function contextReducer(state: stateType, action: ctxActionType): stateType {
   switch (action.type) {
     case stateStatus.GET_LOGIN:
       return Object.assign({}, state);
@@ -65,9 +62,7 @@ export function contextReducer(
         prevChatList.push(chatItem);
       } else {
         preTopList.push(chatItem);
-        prevChatList = prevChatList.filter(
-          item => item.ChatID !== chatItem.ChatID,
-        );
+        prevChatList = prevChatList.filter(item => item.ChatID !== chatItem.ChatID);
       }
       return {
         ...state,
@@ -80,12 +75,8 @@ export function contextReducer(
       const newTopList: chatListItemType[] = state.TopChatList;
       const newChatItem: chatListItemType = action.playloads;
 
-      const preChatItemIndex = newChatList.findIndex(
-        chatItem => chatItem.ChatID === newChatItem.ChatID,
-      );
-      const preTopItemIndex = newTopList.findIndex(
-        chatItem => chatItem.ChatID === newChatItem.ChatID,
-      );
+      const preChatItemIndex = newChatList.findIndex(chatItem => chatItem.ChatID === newChatItem.ChatID);
+      const preTopItemIndex = newTopList.findIndex(chatItem => chatItem.ChatID === newChatItem.ChatID);
 
       if (preChatItemIndex !== -1) {
         newChatList[preChatItemIndex] = newChatItem;
@@ -109,15 +100,11 @@ export function contextReducer(
       const tempTopList: chatListItemType[] = state.TopChatList;
       const newChat: chatListItemType = action.playloads;
 
-      const index = tempTopList.findIndex(
-        chatItem => chatItem.ChatID === newChat.ChatID,
-      );
+      const index = tempTopList.findIndex(chatItem => chatItem.ChatID === newChat.ChatID);
 
       if (index === -1) {
         // 说明要更新的chatItem不再置顶list中，更新正常chatList
-        const tmpChatList = preChatList.filter(
-          chat => chat.ChatID !== newChat.ChatID,
-        );
+        const tmpChatList = preChatList.filter(chat => chat.ChatID !== newChat.ChatID);
         tmpChatList.unshift(newChat);
         return {
           ...state,
@@ -135,12 +122,8 @@ export function contextReducer(
     case stateStatus.REMOVE_CUR_CHAT:
       const curChatItem: chatListItemType = action.playloads;
 
-      const filterTops = state.TopChatList.filter(
-        citem => citem.ChatID !== curChatItem.ChatID,
-      );
-      const filterNormals = state.chatList.filter(
-        citem => citem.ChatID !== curChatItem.ChatID,
-      );
+      const filterTops = state.TopChatList.filter(citem => citem.ChatID !== curChatItem.ChatID);
+      const filterNormals = state.chatList.filter(citem => citem.ChatID !== curChatItem.ChatID);
       return {
         ...state,
         TopChatList: [...filterTops],
@@ -150,21 +133,14 @@ export function contextReducer(
     case stateStatus.UPDATE_RECENT_MSG:
       const {curChatID, RecentMsg} = action.playloads;
 
-      const curChatIndex = state.chatList.findIndex(
-        chatItem => chatItem.ChatID === curChatID,
-      );
+      const curChatIndex = state.chatList.findIndex(chatItem => chatItem.ChatID === curChatID);
       // 当前要更新最近消息的会话是置顶列表
-      const curTopChatIndex = state.TopChatList.findIndex(
-        chatItem => chatItem.ChatID === curChatID,
-      );
+      const curTopChatIndex = state.TopChatList.findIndex(chatItem => chatItem.ChatID === curChatID);
 
       if (curChatIndex !== -1) {
         const willUpdateChatList = [...state.chatList];
         willUpdateChatList[curChatIndex].RecentMsg = RecentMsg;
-        console.log(
-          'mmmmmmmmmmmmmmmmmmm:',
-          willUpdateChatList[curChatIndex].RecentMsg,
-        );
+        console.log('mmmmmmmmmmmmmmmmmmm:', willUpdateChatList[curChatIndex].RecentMsg);
         return {
           ...state,
           chatList: [...willUpdateChatList],

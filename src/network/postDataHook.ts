@@ -7,12 +7,7 @@ import {postData} from './postData';
 import {ToastAndroid} from 'react-native';
 import {fetchActionType} from '../type/actions_type';
 
-export type PostdataType = [
-  (value: any) => void,
-  (value: string) => void,
-  API_DATA_TYPE,
-  (value: fetchActionType) => void,
-];
+export type PostdataType = [(value: any) => void, (value: string) => void, API_DATA_TYPE, (value: fetchActionType) => void];
 
 interface optionsType {
   initUrl: string;
@@ -24,11 +19,8 @@ interface optionsType {
 }
 
 // 封装好的请求data hook
-export default function usePostData(
-  postHookOptions: optionsType,
-): PostdataType {
-  const {initUrl, initData, successCbFunc, failedCbFunc, initReqData, options} =
-    postHookOptions;
+export default function usePostData(postHookOptions: optionsType): PostdataType {
+  const {initUrl, initData, successCbFunc, failedCbFunc, initReqData, options} = postHookOptions;
 
   const [reqData, setReqData] = useState(initReqData);
   const [URL, setURL] = useState(initUrl);
@@ -77,11 +69,5 @@ export default function usePostData(
 }
 
 export const showTips = (msg: string) => {
-  ToastAndroid.showWithGravityAndOffset(
-    msg,
-    ToastAndroid.SHORT,
-    ToastAndroid.BOTTOM,
-    10,
-    100,
-  );
+  ToastAndroid.showWithGravityAndOffset(msg, ToastAndroid.SHORT, ToastAndroid.BOTTOM, 10, 100);
 };

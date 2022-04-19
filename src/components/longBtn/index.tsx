@@ -13,15 +13,7 @@ interface itemProps {
   disabled?: boolean;
 }
 
-const longBtn: React.FC<itemProps> = ({
-  FrontIcon,
-  showContent,
-  EndIcon,
-  onPress,
-  style,
-  disabled,
-  children,
-}) => {
+const longBtn: React.FC<itemProps> = ({FrontIcon, showContent, EndIcon, onPress, style, disabled, children}) => {
   return (
     <TouchableOpacity onPress={onPress} disabled={disabled}>
       <View style={[BtnStyle.container, style]}>

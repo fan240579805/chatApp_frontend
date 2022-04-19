@@ -5,12 +5,7 @@ import {useCtxHook} from '../state/stateContext';
 import {stateStatus} from '../const';
 import {ctxPassThroughType} from '../type/state_type';
 
-type loginStatusType = [
-  number,
-  (value: number) => void,
-  any,
-  React.Context<ctxPassThroughType>,
-];
+type loginStatusType = [number, (value: number) => void, any, React.Context<ctxPassThroughType>];
 
 export default function useLoginStatus(): loginStatusType {
   /**

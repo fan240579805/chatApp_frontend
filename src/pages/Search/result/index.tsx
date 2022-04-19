@@ -13,15 +13,7 @@ interface Props extends userProfileType {
   dispatchNewData: (value: fetchActionType) => void; // 请求成功后dispatch更新父组件展示的数据
 }
 
-const Result: React.FC<Props> = ({
-  UserID,
-  Username,
-  NickName,
-  Avatar,
-  Status,
-  isMaster,
-  dispatchNewData,
-}) => {
+const Result: React.FC<Props> = ({UserID, Username, NickName, Avatar, Status, isMaster, dispatchNewData}) => {
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
   const [submitData]: PostdataType = usePostData({
     initUrl: `${BASE_URL}${API_PATH.ADD_FRIEND}`,
@@ -56,19 +48,12 @@ const Result: React.FC<Props> = ({
           onPress={() => {
             addFriend();
           }}
-          disabled={Status !== 0 && Status !== 2 && Status !== 3}>
-          {UserID === state.userInfo.userID && (
-            <Text style={{color: '#fff'}}>自己</Text>
-          )}
-          {Status === -1 && UserID === state.userInfo.userID && (
-            <Text style={{color: '#fff'}}>已发送</Text>
-          )}
-          {Status === -1 && UserID !== state.userInfo.userID && (
-            <Text style={{color: '#fff'}}>待处理</Text>
-          )}
-          {Status === 1 && (
-            <Ionicons name="checkmark-outline" size={20} color="#fff" />
-          )}
+          disabled={Status !== 0 && Status !== 2 && Status !== 3}
+        >
+          {UserID === state.userInfo.userID && <Text style={{color: '#fff'}}>自己</Text>}
+          {Status === -1 && UserID === state.userInfo.userID && <Text style={{color: '#fff'}}>已发送</Text>}
+          {Status === -1 && UserID !== state.userInfo.userID && <Text style={{color: '#fff'}}>待处理</Text>}
+          {Status === 1 && <Ionicons name="checkmark-outline" size={20} color="#fff" />}
           {Status === 2 && isMaster && (
             // 已删除对方
             <Ionicons name="add" size={20} color="#fff" />
@@ -86,19 +71,11 @@ const Result: React.FC<Props> = ({
             <Ionicons name="add" size={20} color="#fff" />
           )}
 
-          {Status === 4 && isMaster && (
-            <Text style={{color: '#fff'}}>已拉黑</Text>
-          )}
-          {Status === 4 && !isMaster && (
-            <Text style={{color: '#fff'}}>被对方拉黑</Text>
-          )}
+          {Status === 4 && isMaster && <Text style={{color: '#fff'}}>已拉黑</Text>}
+          {Status === 4 && !isMaster && <Text style={{color: '#fff'}}>被对方拉黑</Text>}
 
-          {Status === 5 && isMaster && (
-            <Text style={{color: '#fff'}}>被对方拉黑</Text>
-          )}
-          {Status === 5 && !isMaster && (
-            <Text style={{color: '#fff'}}>已拉黑</Text>
-          )}
+          {Status === 5 && isMaster && <Text style={{color: '#fff'}}>被对方拉黑</Text>}
+          {Status === 5 && !isMaster && <Text style={{color: '#fff'}}>已拉黑</Text>}
 
           {Status === 0 && <Ionicons name="add" size={20} color="#fff" />}
         </TouchableOpacity>

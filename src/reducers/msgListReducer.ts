@@ -1,11 +1,6 @@
 import {stateStatus} from '../const';
 import {ctxActionType} from '../type/actions_type';
-import {
-  chatListItemType,
-  message,
-  msgType,
-  stateType,
-} from '../type/state_type';
+import {chatListItemType, message, msgType, stateType} from '../type/state_type';
 
 export interface msgListStateType {
   msgList: Array<msgType>;
@@ -23,10 +18,7 @@ export enum MsgStatus {
   REMOVE_CUR_MSG = 'REMOVE_CUR_MSG',
 }
 
-export function msgReducer(
-  state: msgListStateType,
-  action: ActionType,
-): msgListStateType {
+export function msgReducer(state: msgListStateType, action: ActionType): msgListStateType {
   switch (action.type) {
     case MsgStatus.SET_CUR_MSG_LIST:
       return {
@@ -46,11 +38,11 @@ export function msgReducer(
         ...state,
       };
     case MsgStatus.REMOVE_CUR_MSG:
-      const willRealDelMsgID = action.playloads
+      const willRealDelMsgID = action.playloads;
       return {
         ...state,
-        msgList:state.msgList.filter(mItem => mItem.msgid !== willRealDelMsgID)
-      }
+        msgList: state.msgList.filter(mItem => mItem.msgid !== willRealDelMsgID),
+      };
     default:
       return {
         ...state,

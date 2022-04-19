@@ -19,10 +19,7 @@ export const useVoiceAction = (): returnType => {
     };
     let askForGrant = false;
     // Android 检查权限，ios没有适配（懒得写）
-    const status = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-      rationale,
-    );
+    const status = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO, rationale);
     if (status !== 'granted') {
       askForGrant = true;
     } else {
@@ -66,12 +63,11 @@ export const useVoiceAction = (): returnType => {
 
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
 
-  const [setReqParams, setURL, {isError, isFetching, data}]: PostdataType =
-    usePostData({
-      initUrl: `${BASE_URL}${API_PATH.UPLOAD_AUDIO}`,
-      initData: {},
-      options: fileOptions,
-    });
+  const [setReqParams, setURL, {isError, isFetching, data}]: PostdataType = usePostData({
+    initUrl: `${BASE_URL}${API_PATH.UPLOAD_AUDIO}`,
+    initData: {},
+    options: fileOptions,
+  });
 
   // 转化录音格式
   const prepareRecordingPath = (audioPath: string) => {
@@ -104,9 +100,7 @@ export const useVoiceAction = (): returnType => {
 
     setRecording(true);
 
-    const audioPath =
-      AudioUtils.DocumentDirectoryPath +
-      `/${state.userInfo.userID}_${new Date().getTime()}.aac`;
+    const audioPath = AudioUtils.DocumentDirectoryPath + `/${state.userInfo.userID}_${new Date().getTime()}.aac`;
     prepareRecordingPath(audioPath);
     try {
       const filePath = await AudioRecorder.startRecording();

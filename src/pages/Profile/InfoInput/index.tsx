@@ -12,16 +12,11 @@ import Toast from '../../../components/Toast';
 interface Props {
   inputName: string;
   InputType: string;
-  dispatchNewData: (value: fetchActionType) => void;// 请求成功后dispatch更新父组件展示的数据
+  dispatchNewData: (value: fetchActionType) => void; // 请求成功后dispatch更新父组件展示的数据
   setModalVisable: (value: boolean) => void;
 }
 
-const InfoInput: React.FC<Props> = ({
-  inputName,
-  setModalVisable,
-  dispatchNewData,
-  InputType,
-}) => {
+const InfoInput: React.FC<Props> = ({inputName, setModalVisable, dispatchNewData, InputType}) => {
   const [inputValue, setInputValue] = useState('');
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
   // 提交成功回调函数
@@ -30,12 +25,11 @@ const InfoInput: React.FC<Props> = ({
     dispatchNewData({type: fetchStatus.SUCCESS, playload: res});
     setModalVisable(false);
   };
-  const [submitData, setURL, {isError, isFetching, data}]: PostdataType =
-    usePostData({
-      initUrl: `${BASE_URL}${API_PATH.UPDATE_USERINFO}`,
-      initData: {},
-      successCbFunc,
-    });
+  const [submitData, setURL, {isError, isFetching, data}]: PostdataType = usePostData({
+    initUrl: `${BASE_URL}${API_PATH.UPDATE_USERINFO}`,
+    initData: {},
+    successCbFunc,
+  });
 
   // 提交事件
   const submitHandle = () => {
@@ -47,12 +41,7 @@ const InfoInput: React.FC<Props> = ({
   };
   return (
     <View>
-      <TextInput
-        placeholder={inputName}
-        value={inputValue}
-        onChangeText={text => setInputValue(text)}
-        style={inputStyle.textInput}
-      />
+      <TextInput placeholder={inputName} value={inputValue} onChangeText={text => setInputValue(text)} style={inputStyle.textInput} />
       <View style={{width: '100%', flexDirection: 'row-reverse'}}>
         <View style={inputStyle.subBtn}>
           <Button title="提交" onPress={submitHandle} />

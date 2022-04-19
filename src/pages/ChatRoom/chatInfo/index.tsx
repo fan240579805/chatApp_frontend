@@ -18,8 +18,7 @@ const ChatInfo: React.FC<Props> = ({navigation}) => {
 
   const {CurChatItem} = state;
 
-  const [isTop, setTop, removeChatId, appendToChatIds] =
-    useTopFromStorage(CurChatItem);
+  const [isTop, setTop, removeChatId, appendToChatIds] = useTopFromStorage(CurChatItem);
 
   const [isUnTip, setUnTip] = useState(false);
 
@@ -95,18 +94,8 @@ const ChatInfo: React.FC<Props> = ({navigation}) => {
         <LongBtn showContent="拉黑对方" onPress={() => console.log(123)}>
           <Switch value={isBlacked} onChange={toggleBlack} />
         </LongBtn>
-        <LongBtn
-          showContent="删除聊天"
-          onPress={removeCurChat}
-          EndIcon="chevron-forward"
-          style={{marginTop: 10}}
-        />
-        <LongBtn
-          showContent="清空聊天记录"
-          onPress={() => console.log(123)}
-          EndIcon="chevron-forward"
-          style={{marginTop: 10}}
-        />
+        <LongBtn showContent="删除聊天" onPress={removeCurChat} EndIcon="chevron-forward" style={{marginTop: 10}} />
+        <LongBtn showContent="清空聊天记录" onPress={() => console.log(123)} EndIcon="chevron-forward" style={{marginTop: 10}} />
       </View>
     </View>
   );

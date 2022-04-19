@@ -64,7 +64,7 @@ export const formStyle = StyleSheet.create({
     marginTop: 10,
     height: 40,
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
     backgroundColor: 'rgb(0, 170, 255)',
     borderRadius: 8,
     padding: 8,

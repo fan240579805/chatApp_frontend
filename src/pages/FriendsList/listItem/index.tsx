@@ -15,15 +15,7 @@ interface itemProps extends userProfileType {
   dispatchNewData: React.Dispatch<ctxActionType>; // 请求成功后dispatch更新全局共享的friendlist展示的数据
 }
 
-const FriendListItem: React.FC<itemProps> = ({
-  NickName,
-  Avatar,
-  UserID,
-  Username,
-  Status,
-  isMaster,
-  dispatchNewData,
-}) => {
+const FriendListItem: React.FC<itemProps> = ({NickName, Avatar, UserID, Username, Status, isMaster, dispatchNewData}) => {
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
   const [submitData, setURL]: PostdataType = usePostData({
     initUrl: ``,
@@ -60,7 +52,8 @@ const FriendListItem: React.FC<itemProps> = ({
           justifyContent: 'center',
           flexDirection: 'row',
           alignItems: 'center',
-        }}>
+        }}
+      >
         {/* UserID === state.userInfo.userID 当前展示的好友是自己，即自己需要处理接受/拒绝 */}
         {Status === -1 && !isMaster && (
           <TouchableOpacity style={itemStyle.acceptBtn} onPress={acceptFriend}>
@@ -68,9 +61,7 @@ const FriendListItem: React.FC<itemProps> = ({
           </TouchableOpacity>
         )}
         {Status === -1 && !isMaster && (
-          <TouchableOpacity
-            onPress={rejectFriend}
-            style={[itemStyle.acceptBtn, {backgroundColor: 'red'}]}>
+          <TouchableOpacity onPress={rejectFriend} style={[itemStyle.acceptBtn, {backgroundColor: 'red'}]}>
             <Text style={{color: '#fff'}}>拒绝</Text>
           </TouchableOpacity>
         )}

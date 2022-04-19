@@ -14,12 +14,7 @@ interface searchProps {}
 const Search: React.FC<searchProps> = () => {
   const [inputValue, setInputValue] = useState('');
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
-  const [
-    submitData,
-    setURL,
-    {isError, isFetching, data},
-    dispatchNewData,
-  ]: PostdataType = usePostData({
+  const [submitData, setURL, {isError, isFetching, data}, dispatchNewData]: PostdataType = usePostData({
     initUrl: `${BASE_URL}${API_PATH.SEARCH_USER}/${inputValue}`,
     initData: {},
   });
@@ -30,19 +25,14 @@ const Search: React.FC<searchProps> = () => {
   return (
     <View>
       <View style={searchStyle.inputWrap}>
-        <TextInput
-          style={searchStyle.input}
-          maxLength={100}
-          placeholder="输入..."
-          value={inputValue}
-          onChangeText={text => setInputValue(text)}
-        />
+        <TextInput style={searchStyle.input} maxLength={100} placeholder="输入..." value={inputValue} onChangeText={text => setInputValue(text)} />
         {inputValue.length > 0 && (
           <TouchableOpacity
             onPress={() => {
               setInputValue('');
             }}
-            style={searchStyle.cancelBtn}>
+            style={searchStyle.cancelBtn}
+          >
             <MaterialIcons name="cancel" size={21} />
           </TouchableOpacity>
         )}
@@ -50,18 +40,12 @@ const Search: React.FC<searchProps> = () => {
           onPress={() => {
             search();
           }}
-          style={searchStyle.searchBtn}>
+          style={searchStyle.searchBtn}
+        >
           <Text style={{fontSize: 16}}>搜索</Text>
         </TouchableOpacity>
       </View>
-      {data.userInfo && (
-        <SearchResult
-          {...data.userInfo}
-          Status={data.Status}
-          dispatchNewData={dispatchNewData}
-          isMaster={data.isMaster}
-        />
-      )}
+      {data.userInfo && <SearchResult {...data.userInfo} Status={data.Status} dispatchNewData={dispatchNewData} isMaster={data.isMaster} />}
       <Text style={searchStyle.tip}>搜索唯一账号添加...</Text>
     </View>
   );

@@ -3,16 +3,9 @@ import {Dimensions, Image} from 'react-native';
 import {chatListItemType} from '../type/state_type';
 import storage, {getValueFromStorage, StorageHasValue} from '../utils/storage';
 
-type returnType = [
-  boolean,
-  React.Dispatch<React.SetStateAction<boolean>>,
-  () => Promise<void>,
-  () => Promise<void>,
-];
+type returnType = [boolean, React.Dispatch<React.SetStateAction<boolean>>, () => Promise<void>, () => Promise<void>];
 // 获取置顶 chatList 钩子🪝
-export default function useTopFromStorage(
-  CurChatItem: chatListItemType,
-): returnType {
+export default function useTopFromStorage(CurChatItem: chatListItemType): returnType {
   const [isTop, setTop] = useState(false); // 该chat是否置顶
 
   const removeChatId = async () => {

@@ -2,10 +2,7 @@ import {fetchActionType} from '../type/actions_type';
 import {API_DATA_TYPE} from '../type/api_types';
 import {fetchStatus} from '../const';
 
-export function fetchReducer(
-  state: API_DATA_TYPE,
-  action: fetchActionType,
-): API_DATA_TYPE {
+export function fetchReducer(state: API_DATA_TYPE, action: fetchActionType): API_DATA_TYPE {
   switch (action.type) {
     case fetchStatus.INIT:
       return {

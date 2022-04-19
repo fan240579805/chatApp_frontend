@@ -7,10 +7,7 @@ export enum FormatsEnums {
   _MD = 'm月d日',
 }
 
-export const dateFormat = function (
-  timestamp: number,
-  formats: FormatsEnums,
-): string {
+export const dateFormat = function (timestamp: number, formats: FormatsEnums): string {
   // formats格式包括
   // 1. Y-m-d
   // 2. Y-m-d H:i:s
