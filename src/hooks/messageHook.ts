@@ -2,6 +2,7 @@ import {useCallback, useContext, useEffect, useReducer, useState} from 'react';
 import {API_PATH, BASE_URL} from '../const';
 import usePostData from '../network/postDataHook';
 import {
+  ActionType,
   msgListStateType,
   msgReducer,
   MsgStatus,
@@ -15,7 +16,12 @@ import {
 } from '../type/state_type';
 import eventBus from '../utils/eventBus';
 
-type returnType = [msgListStateType, () => void, boolean];
+type returnType = [
+  msgListStateType,
+  React.Dispatch<ActionType>,
+  () => void,
+  boolean,
+];
 
 /**
  * 处理消息逻辑hook
@@ -46,6 +52,7 @@ export const useHandleMessage = (scrollEnd: any): returnType => {
     successCbFunc: res => {
       const messageList: Array<msgType> = res.map((mItem: message) => {
         const isSender = mItem.sender === state.userInfo.userID;
+        console.log("mItem",mItem)
         return {
           msgid: mItem.MsgID,
           content: mItem.content,
@@ -113,5 +120,5 @@ export const useHandleMessage = (scrollEnd: any): returnType => {
     };
   }, [receiveMsgAction]);
 
-  return [msgState, fetchPreMsgRecord, isFetchRecord];
+  return [msgState, dispatchMsg, fetchPreMsgRecord, isFetchRecord];
 };

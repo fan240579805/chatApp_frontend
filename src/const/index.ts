@@ -22,6 +22,8 @@ export enum stateStatus {
   NEW_MSG_CHATITEM = 'NEW_MSG_CHATITEM',
   REMOVE_CUR_CHAT = 'REMOVE_CUR_CHAT',
 
+  UPDATE_RECENT_MSG = 'UPDATE_RECENT_MSG',
+
   SET_OTHER_DATA = 'SET_OTHER_DATA',
   SET_BLACK_NUM = 'SET_BLACK_NUM',
 
@@ -75,6 +77,7 @@ export enum API_PATH {
 
   // msg相关api
   GET_MSG_LIST = 'api/getMsgList',
+  BOTH_DEL_MSG = 'api/bothDelMsg',
 
   SEND_MAIL_CODE = 'api/sendEmailVcode',
   CHECK_VCODE = 'api/checkVcode',

@@ -147,6 +147,37 @@ export function contextReducer(
         chatList: [...filterNormals],
       };
 
+    case stateStatus.UPDATE_RECENT_MSG:
+      const {curChatID, RecentMsg} = action.playloads;
+
+      const curChatIndex = state.chatList.findIndex(
+        chatItem => chatItem.ChatID === curChatID,
+      );
+      // 当前要更新最近消息的会话是置顶列表
+      const curTopChatIndex = state.TopChatList.findIndex(
+        chatItem => chatItem.ChatID === curChatID,
+      );
+
+      if (curChatIndex !== -1) {
+        const willUpdateChatList = [...state.chatList];
+        willUpdateChatList[curChatIndex].RecentMsg = RecentMsg;
+        console.log(
+          'mmmmmmmmmmmmmmmmmmm:',
+          willUpdateChatList[curChatIndex].RecentMsg,
+        );
+        return {
+          ...state,
+          chatList: [...willUpdateChatList],
+        };
+      } else if (curTopChatIndex !== -1) {
+        const willUpdateTopList = [...state.TopChatList];
+        willUpdateTopList[curTopChatIndex].RecentMsg = RecentMsg;
+        return {
+          ...state,
+          TopChatList: [...willUpdateTopList],
+        };
+      }
+
     // 设置拉黑数量
     case stateStatus.SET_BLACK_NUM:
       const preBlackNum = state?.otherData?.BlackNum || 0;

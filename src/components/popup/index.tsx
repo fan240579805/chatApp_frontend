@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, TouchableHighlight} from 'react-native';
-import {operateType} from '../../../../type/props_type';
+import {operateType} from '../../type/props_type';
 import {popupStyle} from './popupStyle';
 
 interface PopupProps {

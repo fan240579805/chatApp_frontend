@@ -1,17 +1,22 @@
-import React, {useState, useImperativeHandle} from 'react';
+import React, {useState, useImperativeHandle, useContext} from 'react';
 import {View, Image, Text, TouchableOpacity} from 'react-native';
 import Popup from '../../../components/popup';
 import {bubbleStyle} from './bubbleStyle';
 import {operateType} from '../../../type/props_type';
-import {msgType} from '../../../type/state_type';
+import {ctxPassThroughType, msgType} from '../../../type/state_type';
 import useResizeImg from '../../../hooks/resizeImgHook';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {usePlaySound} from '../../../hooks/playSoundHook';
+import {postData} from '../../../network/postData';
+import {API_PATH, BASE_URL, stateStatus} from '../../../const';
+import {Context} from '../../../state/stateContext';
+import {ActionType, MsgStatus} from '../../../reducers/msgListReducer';
+import {showTips} from '../../../network/postDataHook';
 
 interface bubbleProps extends msgType {
   cRef: any;
   closePopup: () => void;
-  navigation: any;
+  dispatchMsg: React.Dispatch<ActionType>;
 }
 
 const ChatBubble: React.FC<bubbleProps> = ({
@@ -21,12 +26,12 @@ const ChatBubble: React.FC<bubbleProps> = ({
   time,
   isSender,
   avatarUrl,
-  ownerid,
-  otherid,
   closePopup,
   cRef,
-  navigation,
+  dispatchMsg,
 }) => {
+  const {dispatch, state}: ctxPassThroughType = useContext(Context);
+
   const [isShow, setShow] = useState(false);
 
   // 将子组件内部状态方法暴露给父组件的ref以便调用
@@ -51,9 +56,33 @@ const ChatBubble: React.FC<bubbleProps> = ({
     setisPlay,
   ] = usePlaySound(type, content);
 
+  const bothDelMsg = async () => {
+    try {
+      const resp = await postData(`${BASE_URL}${API_PATH.BOTH_DEL_MSG}`, {
+        token: state.userInfo.token,
+        MsgID: msgid,
+        ChatID: state.CurChatItem.ChatID,
+        Myself: state.userInfo.userID,
+        Other: state.CurChatItem.ChatToUserID,
+      });
+      const res = await resp.json();
+      if (res.code === 200) {
+        dispatchMsg({type: MsgStatus.REMOVE_CUR_MSG, playloads: msgid});
+        dispatch({
+          type: stateStatus.UPDATE_RECENT_MSG,
+          playloads: {curChatID: state.CurChatItem.ChatID, RecentMsg: res.data},
+        });
+        showTips('撤回成功');
+      }
+    } catch (error) {
+      console.log('撤回失败');
+      showTips('撤回失败');
+    }
+  };
+
   const operations: Array<operateType> = [
-    {title: '删除', execfunc: () => console.log('del')},
-    {title: '撤回', execfunc: () => console.log('che')},
+    {title: '删除', isSender, execfunc: () => console.log('del')},
+    {title: '撤回', isSender, execfunc: bothDelMsg},
   ];
   return (
     <View
@@ -124,7 +153,12 @@ const ChatBubble: React.FC<bubbleProps> = ({
           <Icon name="mic-outline" color="#666" size={22} />
         </TouchableOpacity>
       )}
-      {isShow && <Popup operations={operations} />}
+      {isShow && isSender && (
+        <Popup operations={[{title: '撤回', execfunc: bothDelMsg}]} />
+      )}
+      {isShow && !isSender && (
+        <Popup operations={[{title: '删除', execfunc: ()=>{console.log("del")}}]} />
+      )}
     </View>
   );
 };

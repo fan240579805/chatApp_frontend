@@ -20,6 +20,7 @@ export enum MsgStatus {
   UN_SHIFT_LIST = 'UN_SHIFT_LIST',
   SET_CUR_MSG_LIST = 'SET_CUR_MSG_LIST',
   APPEND_MSG_LIST = 'APPEND_MSG_LIST',
+  REMOVE_CUR_MSG = 'REMOVE_CUR_MSG',
 }
 
 export function msgReducer(
@@ -44,6 +45,12 @@ export function msgReducer(
       return {
         ...state,
       };
+    case MsgStatus.REMOVE_CUR_MSG:
+      const willRealDelMsgID = action.playloads
+      return {
+        ...state,
+        msgList:state.msgList.filter(mItem => mItem.msgid !== willRealDelMsgID)
+      }
     default:
       return {
         ...state,

@@ -33,8 +33,7 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
   const scrollEnd = () => {
     scrollContainer!.current.scrollToEnd({animated: true});
   };
-  const [msgState, fetchPreMsgRecord, isFetchRecord] =
-    useHandleMessage(scrollEnd); // 处理消息钩子
+  const [msgState, dispatchMsg, fetchPreMsgRecord, isFetchRecord] = useHandleMessage(scrollEnd); // 处理消息钩子
 
   const [setReqData, setURL] = usePostData({
     initUrl: '',
@@ -69,9 +68,7 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
 
   // 模拟react组件销毁
   useEffect(() => {
-    setURL(
-      `${BASE_URL}${API_PATH.CAN_I_CHAT}?from=${state.userInfo.userID}&to=${state.CurChatItem.ChatToUserID}`,
-    );
+    setURL(`${BASE_URL}${API_PATH.CAN_I_CHAT}?from=${state.userInfo.userID}&to=${state.CurChatItem.ChatToUserID}`);
     // 进页面滚动到底部
     setTimeout(() => {
       scrollContainer!.current.scrollToEnd({animated: false});
@@ -114,12 +111,7 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
           extraData={msgState.msgList}
           data={msgState.msgList}
           renderItem={({item}) => (
-            <ChatBubble
-              {...item}
-              closePopup={closePopup}
-              cRef={childRef}
-              navigation={navigation}
-            />
+            <ChatBubble {...item} dispatchMsg={dispatchMsg} closePopup={closePopup} cRef={childRef} />
           )}
           initialNumToRender={msgState.msgList.length}
           keyExtractor={msgItem => msgItem.msgid}
@@ -158,8 +150,7 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
       />
 
       {bottomStatus === 2 && (
-        <View
-          style={[chatRoomStyle.bottomToolBody, {height: ToolHeight || '40%'}]}>
+        <View style={[chatRoomStyle.bottomToolBody, {height: ToolHeight || '40%'}]}>
           <EmojiSelector
             category={Categories.emotion}
             showSectionTitles={false}
@@ -170,14 +161,8 @@ const ChatRoom: React.FC<Props> = ({route, navigation}) => {
         </View>
       )}
       {bottomStatus === 3 && (
-        <View
-          style={[
-            chatRoomStyle.bottomToolBody,
-            {height: ToolHeight || '40%', backgroundColor: '#e9e9e9'},
-          ]}>
-          <TouchableOpacity
-            style={chatRoomStyle.toolBtn}
-            onPress={() => setModalVisable(true)}>
+        <View style={[chatRoomStyle.bottomToolBody, {height: ToolHeight || '40%', backgroundColor: '#e9e9e9'}]}>
+          <TouchableOpacity style={chatRoomStyle.toolBtn} onPress={() => setModalVisable(true)}>
             <Icon name="image-outline" color="#aaa" size={50} />
           </TouchableOpacity>
         </View>
