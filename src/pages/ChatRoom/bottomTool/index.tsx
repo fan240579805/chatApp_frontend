@@ -104,7 +104,9 @@ const BottomTool: React.FC<bottomProps> = ({
       <View
         ref={inputContainerRef}
         style={
-          bottomStatus !== 1 && bottomStatus !== 0 ? [bottomStyle.activeBottomToolHead, {bottom: ToolHeight || '40%'}] : bottomStyle.bottomToolHead
+          bottomStatus !== 1 && bottomStatus !== 0
+            ? [bottomStyle.activeBottomToolHead, {bottom: ToolHeight || '40%'}]
+            : bottomStyle.bottomToolHead
         }
         onLayout={() => {
           _resetChatHeight();

@@ -25,7 +25,13 @@ const Search: React.FC<searchProps> = () => {
   return (
     <View>
       <View style={searchStyle.inputWrap}>
-        <TextInput style={searchStyle.input} maxLength={100} placeholder="输入..." value={inputValue} onChangeText={text => setInputValue(text)} />
+        <TextInput
+          style={searchStyle.input}
+          maxLength={100}
+          placeholder="输入..."
+          value={inputValue}
+          onChangeText={text => setInputValue(text)}
+        />
         {inputValue.length > 0 && (
           <TouchableOpacity
             onPress={() => {
