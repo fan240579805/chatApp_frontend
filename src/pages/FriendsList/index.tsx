@@ -18,7 +18,7 @@ const render = (navigation: any, item: friendItemType, dispatchNewData: any) => 
     friendFlag = false;
   } else if (item.Status === 3 && item.IsMaster) {
     friendFlag = false;
-  } else if (item.Status === -1) {
+  } else if (item.Status === -1 || item.Status === -2) {
     friendFlag = false;
   }
   return (
