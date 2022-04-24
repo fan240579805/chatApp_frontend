@@ -11,6 +11,7 @@ import UploadImageBtn from '../../components/uploadImage';
 import {formStyle} from './formStyle';
 import {ctxPassThroughType} from '../../type/state_type';
 import {Context} from '../../state/stateContext';
+import {useCheckSubmit} from '../../hooks/checkCanSubmit';
 
 interface Props {
   navigation: any;
@@ -21,6 +22,9 @@ const SignPage: React.FC<Props> = ({navigation}) => {
   const [Email, setEmail] = useState('');
   const [PassWord, setPassWord] = useState('');
   const [NickName, setNickName] = useState('');
+
+  const [canSubmit] = useCheckSubmit([UserName, Email, PassWord, NickName]);
+
   const childRef = useRef(null);
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
 
@@ -39,8 +43,8 @@ const SignPage: React.FC<Props> = ({navigation}) => {
       PassWord,
       NickName,
       Email,
-      file: childRef.current.imgUrl,
-      fileName: childRef.current.fileName,
+      file: childRef?.current?.imgUrl,
+      fileName: childRef?.current?.fileName,
     });
   };
   return (
@@ -66,7 +70,7 @@ const SignPage: React.FC<Props> = ({navigation}) => {
         value={Email}
         onChangeText={text => {
           setEmail(text);
-          inputValidate(text);
+          inputValidate(text, 'email');
         }}
       />
       <TextInput
@@ -97,7 +101,12 @@ const SignPage: React.FC<Props> = ({navigation}) => {
           <Text style={formStyle.WrongText}>{WronText}</Text>
         </View>
       )}
-      <TouchableHighlight style={formStyle.subBtn} activeOpacity={0.5} underlayColor="#2292DD" onPress={btnPress}>
+      <TouchableHighlight
+        style={[formStyle.subBtn, {backgroundColor: canSubmit ? 'rgb(0,170,255)' : '#D4DADC'}]}
+        disabled={!canSubmit}
+        activeOpacity={0.5}
+        underlayColor="#2292DD"
+        onPress={btnPress}>
         <Text style={formStyle.btnText}>注册</Text>
       </TouchableHighlight>
       <View style={[formStyle.moreInfoWrap, {flexDirection: 'row-reverse'}]}>

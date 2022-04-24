@@ -1,14 +1,16 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Text, TouchableHighlight, View, TextInput, Button, TouchableOpacity} from 'react-native';
 import Toast from '../../components/Toast';
-import usePostData, {PostdataType} from '../../network/postDataHook';
+import usePostData, {PostdataType, showTips} from '../../network/postDataHook';
 import {useInputValidate, validateType} from './utils/validtaeHook';
 import {successLogin, failedLogin} from './utils/loginCallback';
 import {formStyle} from './formStyle';
 import {API_PATH, BASE_URL} from '../../const';
 import {postData} from '../../network/postData';
+import {useCheckSubmit} from '../../hooks/checkCanSubmit';
+import {RESP_TYPE} from '../../type/api_types';
 
 interface Props {
   navigation: any;
@@ -22,24 +24,16 @@ const ChangePwdPage: React.FC<Props> = ({navigation}) => {
   const [Password1, setPassword1] = useState('');
   const [Password2, setPassword2] = useState('');
 
-  const [canSubmit, setCanSubmit] = useState(false);
+  const [canSubmit] = useCheckSubmit([Email, Username, Vcode, Password1, Password2]);
 
-  const checkCanSubmit = () => {
-    return [Email, Username, Vcode, Password1, Password2].every(str => str !== '');
-  };
-
-  useEffect(() => {
-    if (checkCanSubmit()) {
-      setCanSubmit(true);
-    } else {
-      setCanSubmit(false);
-    }
-  }, [Email, Username, Vcode, Password1, Password2]);
+  const [hasSendCode, setHasSendCode] = useState(false);
+  const [emailTime, setEmailTime] = useState(0);
+  const [Intervaler, setIntervaler] = useState(null);
 
   const [submitData, setURL, {isError, isFetching, data}]: PostdataType = usePostData({
     initUrl: `${BASE_URL}${API_PATH.RESET_PWD}`,
     initData: {},
-    // successCbFunc: res => successLogin(res),
+    successCbFunc: res => clearTimeout(timeRef.current),
     // failedCbFunc: () => failedLogin(),
   });
   const [inputValidate, WronText, isWrong]: validateType = useInputValidate();
@@ -48,11 +42,38 @@ const ChangePwdPage: React.FC<Props> = ({navigation}) => {
     submitData({UserName: Username, EmailCode: Vcode, PassWord: Password1});
   };
 
-  const sendEmailCode = () => {
-    postData(`${BASE_URL}${API_PATH.SEND_MAIL_CODE}`, {
-      Email,
-      UserName: Username,
-    });
+  const timeRef = useRef<any>(); //设置延时器
+  //倒计时
+  useEffect(() => {
+    //如果设置倒计时且倒计时不为0
+    if (emailTime && emailTime !== 0)
+      timeRef.current = setTimeout(() => {
+        setEmailTime(t => t - 1);
+      }, 1000);
+    //清楚延时器
+    return () => {
+      clearTimeout(timeRef.current);
+    };
+  }, [emailTime]);
+
+  const sendEmailCode = async () => {
+    try {
+      const res = await postData(`${BASE_URL}${API_PATH.SEND_MAIL_CODE}`, {
+        Email,
+        UserName: Username,
+      });
+      if (res.ok) {
+        const resp: RESP_TYPE = await res.json();
+        if (resp.code === 200) {
+          setHasSendCode(true);
+          setEmailTime(60);
+        }
+      } else {
+        showTips('发送失败，稍后重试');
+      }
+    } catch (error) {
+      showTips('发送失败，服务器出错');
+    }
   };
   return (
     <View style={formStyle.container}>
@@ -91,8 +112,12 @@ const ChangePwdPage: React.FC<Props> = ({navigation}) => {
             inputValidate(newText);
           }}
         />
-        <TouchableOpacity style={formStyle.sendCodeBtn} onPress={sendEmailCode} disabled={Email === ''}>
-          <Text style={{color: '#fff'}}>发送验证码</Text>
+        <TouchableOpacity
+          style={[formStyle.sendCodeBtn, {backgroundColor: Email !== '' && !hasSendCode ? 'rgb(0,170,255)' : '#D4DADC'}]}
+          onPress={sendEmailCode}
+          disabled={Email === '' || hasSendCode}>
+          {hasSendCode && <Text style={{color: '#fff'}}>{`已发送,${emailTime}s`}</Text>}
+          {!hasSendCode && <Text style={{color: '#fff'}}>发送验证码</Text>}
         </TouchableOpacity>
       </View>
       <TextInput
@@ -125,12 +150,11 @@ const ChangePwdPage: React.FC<Props> = ({navigation}) => {
         </View>
       )}
       <TouchableHighlight
-        style={[formStyle.subBtn, {backgroundColor: canSubmit ? 'rgb(0,170,255)' : 'grey'}]}
+        style={[formStyle.subBtn, {backgroundColor: canSubmit ? 'rgb(0,170,255)' : '#D4DADC'}]}
         activeOpacity={0.5}
         underlayColor="#2292DD"
         onPress={btnPress}
-        disabled={!canSubmit}
-      >
+        disabled={!canSubmit}>
         <Text style={formStyle.btnText}>提交</Text>
       </TouchableHighlight>
       {isFetching && <Toast showContent="加载中" Icon="reload-outline" />}

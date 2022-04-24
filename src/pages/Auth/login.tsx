@@ -9,6 +9,7 @@ import {formStyle} from './formStyle';
 import {API_PATH, BASE_URL, stateStatus} from '../../const';
 import {Context} from '../../state/stateContext';
 import {ctxPassThroughType} from '../../type/state_type';
+import {useCheckSubmit} from '../../hooks/checkCanSubmit';
 
 interface Props {
   navigation: any;
@@ -19,6 +20,8 @@ const LoginPage: React.FC<Props> = ({navigation}) => {
   const [Password, setPassword] = useState('');
   const [inputValidate, WronText, isWrong]: validateType = useInputValidate();
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
+
+  const [canSubmit] = useCheckSubmit([Username, Password]);
 
   const [submitData, setURL, {isError, isFetching, data}]: PostdataType = usePostData({
     initUrl: `${BASE_URL}${API_PATH.LOGIN}`,
@@ -61,7 +64,12 @@ const LoginPage: React.FC<Props> = ({navigation}) => {
           <Text style={formStyle.WrongText}>{WronText}</Text>
         </View>
       )}
-      <TouchableHighlight style={formStyle.subBtn} activeOpacity={0.5} underlayColor="#2292DD" onPress={btnPress}>
+      <TouchableHighlight
+        style={[formStyle.subBtn, {backgroundColor: canSubmit ? 'rgb(0,170,255)' : '#D4DADC'}]}
+        disabled={!canSubmit}
+        activeOpacity={0.5}
+        underlayColor="#2292DD"
+        onPress={btnPress}>
         <Text style={formStyle.btnText}>登录</Text>
       </TouchableHighlight>
       <View style={formStyle.moreInfoWrap}>
