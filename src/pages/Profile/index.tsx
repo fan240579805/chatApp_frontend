@@ -57,9 +57,10 @@ const Profile: React.FC<Props> = () => {
       ToastAndroid.showWithGravityAndOffset('登陆态清除失败', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 10, 100);
     }
   };
-  const exitLogin = () => {
-    exitServerLogin();
-    dispatch({type: stateStatus.LOG_OUT});
+  const exitLogin = async () => {
+    await exitServerLogin();
+    dispatch({type: stateStatus.LOG_OUT, playloads: null});
+    console.log('xxxxxxxxxxxxxxxxxxxxxxx', state);
     // 清除本地缓存所有key
     ['username', 'token', 'userID'].forEach(key => {
       storage.remove({key});

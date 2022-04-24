@@ -17,13 +17,23 @@ export function contextReducer(state: stateType, action: ctxActionType): stateTy
         userInfo: {...action.playloads.user},
       };
     case stateStatus.LOG_OUT:
+      console.log('exit');
       return {
         ...state,
         isLogin: false,
-        chatList: [],
-        friendList: [],
+        chatList: new Array(),
+        friendList: new Array(),
         TopChatList: [],
         otherData: null,
+        CurChatItem: {
+          ChatID: '',
+          UnRead: 0,
+          RecentMsg: null,
+          RecentTime: 0,
+          ChatToNickName: '',
+          ChatToUserAvatar: '',
+          ChatToUserID: '',
+        },
         userInfo: {
           userID: '',
           username: '',
@@ -140,7 +150,6 @@ export function contextReducer(state: stateType, action: ctxActionType): stateTy
       if (curChatIndex !== -1) {
         const willUpdateChatList = [...state.chatList];
         willUpdateChatList[curChatIndex].RecentMsg = RecentMsg;
-        console.log('mmmmmmmmmmmmmmmmmmm:', willUpdateChatList[curChatIndex].RecentMsg);
         return {
           ...state,
           chatList: [...willUpdateChatList],

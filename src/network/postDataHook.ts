@@ -30,7 +30,6 @@ export default function usePostData(postHookOptions: optionsType): PostdataType 
     isError: false,
   });
   useEffect(() => {
-    console.log("asdddddddddddd")
     if (reqData && URL) {
       dispatchData({type: fetchStatus.INIT});
       const post = async () => {

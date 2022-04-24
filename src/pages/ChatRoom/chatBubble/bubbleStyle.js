@@ -4,13 +4,13 @@ export const bubbleStyle = StyleSheet.create({
   LeftContainer: {
     width: '100%',
     marginLeft: 10,
-    marginTop: 10,
+    marginTop: 20,
     flexDirection: 'row',
   },
   RightContainer: {
     width: '100%',
     marginRight: -10,
-    marginTop: 10,
+    marginTop: 20,
     flexDirection: 'row-reverse',
   },
   LeftBubbleWrap: {
@@ -55,5 +55,11 @@ export const bubbleStyle = StyleSheet.create({
     height: 40,
     borderRadius: 10,
   },
-  contentImage: {},
+  timeWrap: {
+    position: 'absolute',
+    top: -16,
+    left: 50,
+    fontSize: 12,
+    color: '#999',
+  },
 });

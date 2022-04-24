@@ -1,6 +1,8 @@
 export enum FormatsEnums {
   YMD = 'Y-m-d',
   YMDHIS = 'Y-m-d H:i:s',
+  YMDHI = 'Y-m-d H:i',
+  MDHI = 'm-d H:i',
   _YMD = 'Y年m月d日',
   _YMDHIS = 'Y年m月d日 H时i分',
   _MDHIS = 'm.d H:i:s',
@@ -16,16 +18,16 @@ export const dateFormat = function (timestamp: number, formats: FormatsEnums): s
   formats = formats || 'Y-m-d';
 
   const zero = function (value: number): string | number {
-    // if (value < 10) {
-    //   return '0' + value;
-    // }
+    if (value < 10 && formats === FormatsEnums.MDHI) {
+      return '0' + value;
+    }
     return value;
   };
 
   const myDate = timestamp ? new Date(timestamp) : new Date();
 
   const year = myDate.getFullYear();
-  const month = zero(myDate.getMonth() + 1);
+  const month = myDate.getMonth() + 1;
   const day = zero(myDate.getDate());
 
   const hour = zero(myDate.getHours());

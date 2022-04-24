@@ -12,6 +12,7 @@ import {API_PATH, BASE_URL, stateStatus} from '../../../const';
 import {Context} from '../../../state/stateContext';
 import {ActionType, MsgStatus} from '../../../reducers/msgListReducer';
 import {showTips} from '../../../network/postDataHook';
+import {dateFormat, FormatsEnums} from '../../../utils/common/time';
 
 interface bubbleProps extends msgType {
   cRef: any;
@@ -72,8 +73,7 @@ const ChatBubble: React.FC<bubbleProps> = ({msgid, type, content, time, isSender
           //   isChangeTitle: true,
           //   avatarUrl:avatarUrl,
           // });
-        }}
-      >
+        }}>
         <Image source={{uri: avatarUrl}} style={bubbleStyle.avatar} />
       </TouchableOpacity>
       {type === 'text' && (
@@ -83,8 +83,7 @@ const ChatBubble: React.FC<bubbleProps> = ({msgid, type, content, time, isSender
             closePopup();
             setShow(true);
           }}
-          style={isSender ? bubbleStyle.RightBubbleWrap : bubbleStyle.LeftBubbleWrap}
-        >
+          style={isSender ? bubbleStyle.RightBubbleWrap : bubbleStyle.LeftBubbleWrap}>
           <Text style={bubbleStyle.textContent} selectable={true}>
             {content}
           </Text>
@@ -96,8 +95,7 @@ const ChatBubble: React.FC<bubbleProps> = ({msgid, type, content, time, isSender
           onLongPress={() => {
             closePopup();
             setShow(true);
-          }}
-        >
+          }}>
           <Image
             width={img_width}
             height={img_height}
@@ -126,12 +124,12 @@ const ChatBubble: React.FC<bubbleProps> = ({msgid, type, content, time, isSender
           style={[
             isSender ? bubbleStyle.RightBubbleWrap : bubbleStyle.LeftBubbleWrap,
             isSender ? bubbleStyle.rightVoiceFlex : bubbleStyle.leftvoiceFlex,
-          ]}
-        >
+          ]}>
           <Text style={bubbleStyle.voiceSecond}>{showTime + '"'}</Text>
           <Icon name="mic-outline" color="#666" size={22} />
         </TouchableOpacity>
       )}
+      <Text style={bubbleStyle.timeWrap}>{dateFormat(time, FormatsEnums.MDHI)}</Text>
       {isShow && isSender && <Popup operations={[{title: '撤回', execfunc: bothDelMsg}]} />}
       {isShow && !isSender && (
         <Popup
