@@ -2,6 +2,15 @@ import {stateStatus} from '../const';
 import {ctxActionType} from '../type/actions_type';
 import {chatListItemType, friendItemType, stateType} from '../type/state_type';
 
+const getTotalUnRead = (map: any): number => {
+  let totalNum = 0;
+  for (const key in map) {
+    const element = map[key];
+    totalNum += element;
+  }
+  return totalNum;
+};
+
 export function contextReducer(state: stateType, action: ctxActionType): stateType {
   switch (action.type) {
     case stateStatus.GET_LOGIN:
@@ -188,13 +197,34 @@ export function contextReducer(state: stateType, action: ctxActionType): stateTy
         },
       };
 
-    case stateStatus.SET_UNREAD_NUM:
-      const preUnReadNum = state?.otherData?.totalUnReadNum || 0;
+    case stateStatus.SUB_UNREAD_NUM:
+      const _ChatItem: chatListItemType = action.playloads;
+      const _map: Record<string, number> = state?.otherData?.unReadMap || {};
+
+      if (_map[_ChatItem.ChatID]) {
+        _map[_ChatItem.ChatID] -= _ChatItem.UnRead;
+      } else {
+        _map[_ChatItem.ChatID] = 0;
+      }
       return {
         ...state,
         otherData: {
           ...state.otherData,
-          totalUnReadNum: preUnReadNum + action.playloads,
+          unReadMap: _map,
+          totalUnRead: getTotalUnRead(_map),
+        },
+      };
+
+    case stateStatus.ADD_UNREAD_NUM:
+      const _newChatItem: chatListItemType = action.playloads;
+      const map: Record<string, number> = state?.otherData?.unReadMap || {};
+      map[_newChatItem.ChatID] = _newChatItem.UnRead;
+      return {
+        ...state,
+        otherData: {
+          ...state.otherData,
+          unReadMap: map,
+          totalUnRead: getTotalUnRead(map),
         },
       };
 

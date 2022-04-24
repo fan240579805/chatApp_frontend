@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {getHeaderTitle} from '../../utils/route';
 
 import TabarRouter from '../TabarRouter';

@@ -95,6 +95,7 @@ const BottomTool: React.FC<bottomProps> = ({
           },
         }),
       );
+      setInputValue('');
     } else {
       showTips('你们的好友关系拉黑或删除，无法聊天');
     }
@@ -110,8 +111,7 @@ const BottomTool: React.FC<bottomProps> = ({
         }
         onLayout={() => {
           _resetChatHeight();
-        }}
-      >
+        }}>
         <TouchableOpacity style={bottomStyle.iconWrap} onPress={() => setIsSound(!isSound)}>
           <MaterialIcons name="contactless" size={35} />
         </TouchableOpacity>
@@ -123,8 +123,7 @@ const BottomTool: React.FC<bottomProps> = ({
             }}
             onPressOut={() => {
               _stopRecognizing();
-            }}
-          >
+            }}>
             <Text>长按开始录音</Text>
           </TouchableOpacity>
         )}
@@ -151,8 +150,7 @@ const BottomTool: React.FC<bottomProps> = ({
                 _resetChatHeight();
               }, 10);
             }}
-            activeOpacity={1}
-          >
+            activeOpacity={1}>
             <MaterialIcons name="emoji-emotions" size={35} />
           </TouchableOpacity>
         )}
@@ -166,8 +164,7 @@ const BottomTool: React.FC<bottomProps> = ({
               inputRef.current.focus();
               // }, 2);
             }}
-            activeOpacity={1}
-          >
+            activeOpacity={1}>
             <MaterialIcons name="keyboard" size={35} />
           </TouchableOpacity>
         )}
@@ -184,8 +181,7 @@ const BottomTool: React.FC<bottomProps> = ({
                 _resetChatHeight();
               }, 10);
             }}
-            activeOpacity={1}
-          >
+            activeOpacity={1}>
             <View style={bottomStyle.iconWrap}>
               <MaterialIcons name="add" size={35} />
             </View>

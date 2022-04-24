@@ -43,13 +43,12 @@ const TabarRouter: React.FC<any> = () => {
         },
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
-      })}
-    >
+      })}>
       <Tab.Screen
         name="ChatList"
         component={ChatListPage}
         options={{
-          tabBarBadge: state?.otherData?.totalUnReadNum || undefined,
+          tabBarBadge: state.otherData?.totalUnRead || undefined,
           headerShown: false,
         }}
       />

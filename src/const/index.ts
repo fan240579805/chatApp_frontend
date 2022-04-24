@@ -28,7 +28,8 @@ export enum stateStatus {
   SET_OTHER_DATA = 'SET_OTHER_DATA',
   SET_BLACK_NUM = 'SET_BLACK_NUM',
 
-  SET_UNREAD_NUM = 'SET_UNREAD_NUM',
+  SUB_UNREAD_NUM = 'SUB_UNREAD_NUM',
+  ADD_UNREAD_NUM = 'ADD_UNREAD_NUM',
 }
 
 // export const BASE_URL = 'http://127.0.0.1:9998/';

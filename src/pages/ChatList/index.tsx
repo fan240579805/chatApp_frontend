@@ -41,8 +41,8 @@ const render = (
         // 同时还把当前全局的未读数量 减掉
         isMineUnread &&
           dispatch({
-            type: stateStatus.SET_UNREAD_NUM,
-            playloads: -ChatItem.UnRead,
+            type: stateStatus.SUB_UNREAD_NUM,
+            playloads: ChatItem,
           });
 
         navigation.navigate('ChatRoomPage', {
@@ -51,8 +51,7 @@ const render = (
           chatID: ChatItem.ChatID,
           recipient: ChatItem.ChatToUserID,
         });
-      }}
-    >
+      }}>
       <ChatListItem {...ChatItem} isTop={isTop} isMineUnread={isMineUnread} />
     </TouchableOpacity>
   );
@@ -74,17 +73,16 @@ const ChatList: React.FC<Props> = ({navigation}) => {
       const chatList: chatListItemType[] = res;
 
       // 整个chatList的未读数量
-      let totalUnread = 0;
+      // let totalUnread = 0;
       chatList.forEach(cItem => {
         const isMineUnread = cItem.RecentMsg!.recipient === state.userInfo.userID;
         if (isMineUnread) {
-          totalUnread += cItem.UnRead;
+          // 将所有的 chatList 的正确未读数量设置到全局中
+          dispatch({
+            type: stateStatus.ADD_UNREAD_NUM,
+            playloads: cItem,
+          });
         }
-      });
-      // 将所有的 chatList 的正确未读数量设置到全局中
-      dispatch({
-        type: stateStatus.SET_UNREAD_NUM,
-        playloads: totalUnread,
       });
 
       // 1. 缓存中看看是否有置顶chatIds, 有的话处理，无的话直接set
@@ -151,8 +149,8 @@ const ChatList: React.FC<Props> = ({navigation}) => {
       dispatch({type: stateStatus.NEW_MSG_CHATITEM, playloads: chatItem});
       isMineUnread &&
         dispatch({
-          type: stateStatus.SET_UNREAD_NUM,
-          playloads: chatItem.UnRead,
+          type: stateStatus.ADD_UNREAD_NUM,
+          playloads: chatItem,
         });
     });
     return () => {
