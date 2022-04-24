@@ -1,8 +1,10 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {TouchableOpacity, FlatList, View, Text} from 'react-native';
+import {stateStatus} from '../../const';
 import {Context} from '../../state/stateContext';
 
-import {ctxPassThroughType, friendItemType} from '../../type/state_type';
+import {bePushedFriendType, ctxPassThroughType, friendItemType} from '../../type/state_type';
+import eventBus from '../../utils/eventBus';
 import {fpageStyle} from './friendPageStyle';
 import FriendListItem from './listItem';
 interface Props {
@@ -36,8 +38,7 @@ const render = (navigation: any, item: friendItemType, dispatchNewData: any) => 
               friendFlag,
               firendStatus: item.Status,
             });
-          }}
-        >
+          }}>
           <FriendListItem {...FriendProfile} Status={item.Status} dispatchNewData={dispatchNewData} isMaster={item.IsMaster} />
         </TouchableOpacity>
       )}
@@ -52,6 +53,19 @@ const render = (navigation: any, item: friendItemType, dispatchNewData: any) => 
 
 const FriendList: React.FC<Props> = ({navigation}) => {
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
+
+  useEffect(() => {
+    const listener = eventBus.addListener('pushFriend', (bePushedObj: bePushedFriendType) => {
+      const {Friend} = bePushedObj;
+      const friendItem: friendItemType = {
+        ...Friend,
+      };
+      dispatch({type: stateStatus.PUSH_FRIEND_ITEM, playloads: friendItem});
+    });
+    return () => {
+      listener.remove();
+    };
+  }, [state.friendList]);
 
   return (
     <FlatList

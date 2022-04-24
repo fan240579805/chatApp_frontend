@@ -37,7 +37,6 @@ export const useHandleMessage = (scrollEnd: any): returnType => {
     successCbFunc: res => {
       const messageList: Array<msgType> = res.map((mItem: message) => {
         const isSender = mItem.sender === state.userInfo.userID;
-        console.log('mItem', mItem);
         return {
           msgid: mItem.MsgID,
           content: mItem.content,

@@ -1,6 +1,6 @@
 import {stateStatus} from '../const';
 import {ctxActionType} from '../type/actions_type';
-import {chatListItemType, stateType} from '../type/state_type';
+import {chatListItemType, friendItemType, stateType} from '../type/state_type';
 
 export function contextReducer(state: stateType, action: ctxActionType): stateType {
   switch (action.type) {
@@ -51,6 +51,20 @@ export function contextReducer(state: stateType, action: ctxActionType): stateTy
       return {
         ...state,
         friendList: [...action.playloads],
+      };
+
+    case stateStatus.PUSH_FRIEND_ITEM:
+      const tmpFriendList = [...state.friendList];
+      const newFriendItem: friendItemType = action.playloads;
+      const hasIndex = tmpFriendList.findIndex(fitem => fitem.FriendProfile?.UserID === newFriendItem.FriendProfile?.UserID);
+      if (hasIndex !== -1) {
+        tmpFriendList[hasIndex] = {...newFriendItem};
+      } else {
+        tmpFriendList.unshift(action.playloads);
+      }
+      return {
+        ...state,
+        friendList: [...tmpFriendList],
       };
     case stateStatus.SET_CHATLIST:
       return {
