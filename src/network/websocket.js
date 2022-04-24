@@ -1,6 +1,6 @@
-import {API_PATH, BASE_URL} from '../const';
+import {API_PATH, WS_BASE_URL} from '../const';
 import eventBus from '../utils/eventBus';
-const url = `${BASE_URL}${API_PATH.WS}`;
+const url = `${WS_BASE_URL}${API_PATH.WS}`;
 let that = null;
 
 export default class WebSocketClient {
@@ -63,6 +63,7 @@ export default class WebSocketClient {
     //连接错误
     this.ws.onerror = function (err) {
       console.log('WebSocket:', 'connect to server error');
+      console.log(err)
       //重连
       that.reconnect();
     };

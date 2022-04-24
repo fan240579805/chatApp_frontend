@@ -31,7 +31,11 @@ export enum stateStatus {
 }
 
 // export const BASE_URL = 'http://127.0.0.1:9998/';
-export const BASE_URL = 'http://192.168.43.142:9998/';
+// export const BASE_URL = 'http://192.168.43.142:9998/';
+export const BASE_URL = 'http://8.134.102.237/';
+export const WS_BASE_URL = 'ws://8.134.102.237:9998/';
+
+
 // export const BASE_URL = 'http://192.168.43.216:9998/';
 // export const BASE_URL = 'http://10.43.15.107:9998/';
 
