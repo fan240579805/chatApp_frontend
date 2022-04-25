@@ -8,6 +8,7 @@
     "start": "react-native start",
     "link": "react-native link",
     "unlink": "react-native unlink",
+    "build_android": "cd android && ./gradlew assembleRelease",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },

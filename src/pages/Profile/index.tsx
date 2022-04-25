@@ -60,7 +60,6 @@ const Profile: React.FC<Props> = () => {
   const exitLogin = async () => {
     await exitServerLogin();
     dispatch({type: stateStatus.LOG_OUT, playloads: null});
-    console.log('xxxxxxxxxxxxxxxxxxxxxxx', state);
     // 清除本地缓存所有key
     ['username', 'token', 'userID'].forEach(key => {
       storage.remove({key});
@@ -72,7 +71,7 @@ const Profile: React.FC<Props> = () => {
       {data && (
         <InfoCard nickname={data.NickName} userName={data.Username} avatarUrl={data.Avatar}>
           <DisplayBar
-            friendNum={state.friendList.length}
+            friendNum={state.friendList.filter(fitem => fitem.Status !== -100 && fitem.Status !== -404).length}
             blackListNum={state.otherData?.BlackNum || 0}
             unDisturbNum={state.otherData?.unDisturbNum || 0}
             subNum={state.TopChatList.length}
