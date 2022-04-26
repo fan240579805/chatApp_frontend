@@ -32,7 +32,6 @@ export function useGetData(HookOptions: optionsType): dataType {
         let res = null;
         res = await fetch(url, fetchOptions);
         const resp = await res.json();
-        console.log('get:', resp);
         dispatch({type: fetchStatus.SUCCESS, playload: resp.data});
         successCbFunc && successCbFunc(resp.data);
       } catch (error) {

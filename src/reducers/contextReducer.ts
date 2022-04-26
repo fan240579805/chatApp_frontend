@@ -4,7 +4,6 @@ import {chatListItemType, friendItemType, stateType} from '../type/state_type';
 
 const getTotalUnRead = (unreadMap: Record<string, number>, disturbMap: Record<string, boolean>): number => {
   let totalNum = 0;
-  console.log('disturbMap', disturbMap);
   for (const key in unreadMap) {
     if (!disturbMap[key]) {
       const element = unreadMap[key];
@@ -251,7 +250,6 @@ export function contextReducer(state: stateType, action: ctxActionType): stateTy
     case stateStatus.APPEND_DISTURB_STATUS:
       const _Map = action.playloads;
       const curSessionID = state.CurChatItem.ChatID;
-      console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', _Map);
       let totalNum = state.otherData?.totalUnDisturbNum || 0;
 
       if (_Map[curSessionID]) {

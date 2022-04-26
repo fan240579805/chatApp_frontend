@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext} from 'react';
 import {Text, View, Image} from 'react-native';
 import {listStyle} from './listItemStyle';
 import {chatListItemType, ctxPassThroughType} from '../../../type/state_type';
@@ -23,11 +23,6 @@ const ChatListItem: React.FC<itemProps> = ({
   isMineUnread,
 }) => {
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
-
-  const [isUnTip, setUnTip] = useState(false);
-  useEffect(() => {
-    console.log(state.disturbMap[ChatID]);
-  }, [ChatID]);
 
   // 当前最新消息的recipient是当前登录用户的话，说明未读消息是自己的
   // const [isMineUnread, setMineUnreadFlag] = useState(

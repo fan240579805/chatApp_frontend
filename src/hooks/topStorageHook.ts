@@ -52,7 +52,7 @@ export default function useTopFromStorage(CurChatItem: chatListItemType): return
       }
     };
     checkChatIDisTop();
-  }, [isTop]);
+  }, [CurChatItem.ChatID]);
 
   return [isTop, setTop, removeChatId, appendToChatIds];
 }

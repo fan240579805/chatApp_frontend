@@ -62,7 +62,7 @@ export default function useToggleDisturb(CurChatItem: chatListItemType): returnT
       }
     };
     checkisDisturb();
-  }, []);
+  }, [CurChatItem.ChatID]);
 
   return [isDisturb, setDisturbStatus, CancelUnDisturb, appendToDisturb];
 }
