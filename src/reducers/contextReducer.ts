@@ -233,20 +233,51 @@ export function contextReducer(state: stateType, action: ctxActionType): stateTy
 
     case stateStatus.TOOGLE_DISTURB_STATUS:
       const disturbMap = action.playloads;
-      let totalNum = 0;
+      let totalSum = state.otherData?.totalUnDisturbNum || 0;
+
       for (const key in disturbMap) {
-        const isDisturb = disturbMap[key];
-        if (isDisturb) {
-          totalNum += 1;
-        } else {
-          totalNum -= 1;
+        if (disturbMap[key]) {
+          totalSum++;
         }
       }
       return {
         ...state,
         disturbMap: {...disturbMap},
         otherData: {
+          totalUnDisturbNum: totalSum,
+        },
+      };
+
+    case stateStatus.APPEND_DISTURB_STATUS:
+      const _Map = action.playloads;
+      const curSessionID = state.CurChatItem.ChatID;
+      console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', _Map);
+      let totalNum = state.otherData?.totalUnDisturbNum || 0;
+
+      if (_Map[curSessionID]) {
+        totalNum += 1;
+      }
+
+      return {
+        ...state,
+        disturbMap: {..._Map},
+        otherData: {
           totalUnDisturbNum: totalNum,
+        },
+      };
+
+    case stateStatus.REMOVE_DISTURB_STATUS:
+      const _dMap = action.playloads;
+      const _curSessionID = state.CurChatItem.ChatID;
+      let tNum = state.otherData?.totalUnDisturbNum || 0;
+      if (!_dMap[_curSessionID]) {
+        tNum -= 1;
+      }
+      return {
+        ...state,
+        disturbMap: {...disturbMap},
+        otherData: {
+          totalUnDisturbNum: tNum,
         },
       };
 

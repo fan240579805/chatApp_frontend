@@ -62,29 +62,34 @@ const ChatInfo: React.FC<Props> = ({navigation}) => {
         playloads: {operFlag: false, chatItem: CurChatItem},
       });
       removeChatId();
+      setTop(false);
     } else {
       dispatch({
         type: stateStatus.TOGGLE_TOP_LIST,
         playloads: {operFlag: true, chatItem: CurChatItem},
       });
       appendToChatIds();
+      setTop(true);
     }
-
-    setTop(!isTop);
   };
 
   const toggleDisturbStatus = async () => {
     let _dMap;
     if (isDisturb) {
+      setDisturbStatus(false);
       _dMap = await CancelUnDisturb();
+      dispatch({
+        type: stateStatus.REMOVE_DISTURB_STATUS,
+        playloads: _dMap,
+      });
     } else {
+      setDisturbStatus(true);
       _dMap = await appendToDisturb();
+      dispatch({
+        type: stateStatus.APPEND_DISTURB_STATUS,
+        playloads: _dMap,
+      });
     }
-    dispatch({
-      type: stateStatus.TOOGLE_DISTURB_STATUS,
-      playloads: _dMap,
-    });
-    setDisturbStatus(!isDisturb);
   };
 
   const toggleBlack = throttle(() => {
@@ -101,14 +106,14 @@ const ChatInfo: React.FC<Props> = ({navigation}) => {
     <View style={infoStyle.container}>
       <View style={infoStyle.userWrap}></View>
       <View style={infoStyle.BtnWrap}>
-        <LongBtn showContent="置顶聊天">
-          <Switch value={isTop} onChange={toggleTop} />
+        <LongBtn showContent="置顶聊天" onPress={toggleTop}>
+          <Switch value={isTop} />
         </LongBtn>
-        <LongBtn showContent="消息免打扰" onPress={() => console.log(123)}>
-          <Switch value={isDisturb} onChange={toggleDisturbStatus} />
+        <LongBtn showContent="消息免打扰" onPress={toggleDisturbStatus}>
+          <Switch value={isDisturb} />
         </LongBtn>
-        <LongBtn showContent="拉黑对方" onPress={() => console.log(123)}>
-          <Switch value={isBlacked} onChange={toggleBlack} />
+        <LongBtn showContent="拉黑对方" onPress={toggleBlack}>
+          <Switch value={isBlacked} />
         </LongBtn>
         <LongBtn showContent="删除聊天" onPress={removeCurChat} EndIcon="chevron-forward" style={{marginTop: 10}} />
         <LongBtn showContent="清空聊天记录" onPress={() => console.log(123)} EndIcon="chevron-forward" style={{marginTop: 10}} />

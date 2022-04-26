@@ -73,7 +73,7 @@ const Profile: React.FC<Props> = () => {
           <DisplayBar
             friendNum={state.friendList.filter(fitem => fitem.Status !== -100 && fitem.Status !== -404).length}
             blackListNum={state.otherData?.BlackNum || 0}
-            unDisturbNum={state.otherData?.unDisturbNum || 0}
+            unDisturbNum={state.otherData?.totalUnDisturbNum || 0}
             subNum={state.TopChatList.length}
           />
         </InfoCard>

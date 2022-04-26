@@ -51,7 +51,7 @@ export default function useToggleDisturb(CurChatItem: chatListItemType): returnT
 
   useEffect(() => {
     const checkisDisturb = async () => {
-      // 缓存添加chatIDs
+      // 缓存添加map
       const hasMap = await StorageHasValue('disturbMap');
       if (hasMap) {
         const disturbMapJSON = await getValueFromStorage('disturbMap');
@@ -62,7 +62,7 @@ export default function useToggleDisturb(CurChatItem: chatListItemType): returnT
       }
     };
     checkisDisturb();
-  }, [isDisturb]);
+  }, []);
 
   return [isDisturb, setDisturbStatus, CancelUnDisturb, appendToDisturb];
 }

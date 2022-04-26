@@ -30,7 +30,7 @@ export const formatList = (datalist: Array<friendItemType>): Array<friendItemTyp
 
 export function throttle(fn: Function, delay: number) {
   let valid = true;
-  return function (evt: any) {
+  return function () {
     if (!valid) {
       //休息时间 暂不接客
       return;
