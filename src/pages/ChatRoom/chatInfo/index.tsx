@@ -3,6 +3,7 @@ import {Switch, View} from 'react-native';
 import LongBtn from '../../../components/longBtn';
 import {API_PATH, BASE_URL, stateStatus} from '../../../const';
 import useTopFromStorage from '../../../hooks/topStorageHook';
+import useToggleDisturb from '../../../hooks/useDisturb';
 import {useGetData} from '../../../network/getDataHook';
 import usePostData, {PostdataType} from '../../../network/postDataHook';
 import {Context} from '../../../state/stateContext';
@@ -19,8 +20,9 @@ const ChatInfo: React.FC<Props> = ({navigation}) => {
   const {CurChatItem} = state;
 
   const [isTop, setTop, removeChatId, appendToChatIds] = useTopFromStorage(CurChatItem);
+  const [isDisturb, setDisturbStatus, CancelUnDisturb, appendToDisturb] = useToggleDisturb(CurChatItem);
 
-  const [isUnTip, setUnTip] = useState(false);
+  // const [isUnTip, setUnTip] = useState(false);
 
   const [isBlacked, setBlack] = useState(false);
 
@@ -71,6 +73,20 @@ const ChatInfo: React.FC<Props> = ({navigation}) => {
     setTop(!isTop);
   };
 
+  const toggleDisturbStatus = async () => {
+    let _dMap;
+    if (isDisturb) {
+      _dMap = await CancelUnDisturb();
+    } else {
+      _dMap = await appendToDisturb();
+    }
+    dispatch({
+      type: stateStatus.TOOGLE_DISTURB_STATUS,
+      playloads: _dMap,
+    });
+    setDisturbStatus(!isDisturb);
+  };
+
   const toggleBlack = throttle(() => {
     isBlacked && setBlackURL(`${BASE_URL}${API_PATH.CANCEL_BLACK}`);
     !isBlacked && setBlackURL(`${BASE_URL}${API_PATH.TAKE_BLACK}`);
@@ -89,7 +105,7 @@ const ChatInfo: React.FC<Props> = ({navigation}) => {
           <Switch value={isTop} onChange={toggleTop} />
         </LongBtn>
         <LongBtn showContent="消息免打扰" onPress={() => console.log(123)}>
-          <Switch value={isUnTip} onChange={() => setUnTip(!isUnTip)} />
+          <Switch value={isDisturb} onChange={toggleDisturbStatus} />
         </LongBtn>
         <LongBtn showContent="拉黑对方" onPress={() => console.log(123)}>
           <Switch value={isBlacked} onChange={toggleBlack} />

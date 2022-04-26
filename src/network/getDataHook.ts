@@ -46,7 +46,7 @@ export function useGetData(HookOptions: optionsType): dataType {
   return [setUrl, dispatch, state];
 }
 
-const defaultGetOptions: any = params => {
+const defaultGetOptions: any = (params: any) => {
   return {
     method: 'GET',
     headers: {

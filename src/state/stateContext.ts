@@ -27,6 +27,7 @@ const state: stateType = {
     ChatToUserAvatar: '',
     RecentTime: 0,
   },
+  disturbMap:{},
   otherData: null,
 };
 

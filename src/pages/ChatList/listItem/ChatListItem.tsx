@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Text, View, Image} from 'react-native';
 import {listStyle} from './listItemStyle';
 import {chatListItemType, ctxPassThroughType} from '../../../type/state_type';
@@ -24,15 +24,21 @@ const ChatListItem: React.FC<itemProps> = ({
 }) => {
   const {dispatch, state}: ctxPassThroughType = useContext(Context);
 
+  const [isUnTip, setUnTip] = useState(false);
+  useEffect(() => {
+    console.log(state.disturbMap[ChatID]);
+  }, [ChatID]);
+
   // 当前最新消息的recipient是当前登录用户的话，说明未读消息是自己的
   // const [isMineUnread, setMineUnreadFlag] = useState(
   //   RecentMsg.recipient === state.userInfo.userID,
   // );
   return (
     <View style={isTop ? [listStyle.container, {backgroundColor: '#e9e9e9'}] : listStyle.container}>
-      <View style={listStyle.avatarWrap}>
+      <View>
         <Image source={{uri: ChatToUserAvatar}} style={listStyle.imgStyle} />
-        {UnRead > 0 && isMineUnread && <Text style={listStyle.unReadStyle}>{UnRead}</Text>}
+        {state.disturbMap[ChatID] && UnRead > 0 && isMineUnread && <View style={listStyle.unReadCircle} />}
+        {!state.disturbMap[ChatID] && UnRead > 0 && isMineUnread && <Text style={listStyle.unReadStyle}>{UnRead}</Text>}
       </View>
       <View style={listStyle.contentWrap}>
         <Text style={{fontSize: 18}}>{ChatToNickName}</Text>

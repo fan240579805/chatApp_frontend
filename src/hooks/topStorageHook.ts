@@ -1,5 +1,4 @@
 import {useEffect, useState} from 'react';
-import {Dimensions, Image} from 'react-native';
 import {chatListItemType} from '../type/state_type';
 import storage, {getValueFromStorage, StorageHasValue} from '../utils/storage';
 

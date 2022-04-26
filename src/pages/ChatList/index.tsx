@@ -72,8 +72,27 @@ const ChatList: React.FC<Props> = ({navigation}) => {
       // 请求成功处理一下data
       const chatList: chatListItemType[] = res;
 
-      // 整个chatList的未读数量
-      // let totalUnread = 0;
+      // 1. 缓存中看看是否有置顶disturbap, 有的话处理，无的话直接set
+      StorageHasValue('disturbMap').then(hasValue => {
+        if (hasValue) {
+          getValueFromStorage('disturbMap').then(value => {
+            const map: Record<string, boolean> = JSON.parse(value);
+            for (const cid in map) {
+              chatList.forEach((citem: chatListItemType) => {
+                if (cid !== citem.ChatID) map[citem.ChatID] = false;
+              });
+            }
+            dispatch({type: stateStatus.TOOGLE_DISTURB_STATUS, playloads: map});
+          });
+        } else {
+          let _tempMap: Record<string, boolean> = {};
+          chatList.forEach(c => {
+            _tempMap[c.ChatID] = false;
+          });
+          dispatch({type: stateStatus.TOOGLE_DISTURB_STATUS, playloads: _tempMap});
+        }
+      });
+      // 2. 根据免打扰计算整个chatList的未读数量
       chatList.forEach(cItem => {
         const isMineUnread = cItem.RecentMsg!.recipient === state.userInfo.userID;
         if (isMineUnread) {
@@ -84,8 +103,7 @@ const ChatList: React.FC<Props> = ({navigation}) => {
           });
         }
       });
-
-      // 1. 缓存中看看是否有置顶chatIds, 有的话处理，无的话直接set
+      // 3. 缓存中看看是否有置顶chatIds, 有的话处理，无的话直接set
       StorageHasValue('topChatIds').then(hasValue => {
         if (hasValue) {
           getValueFromStorage('topChatIds').then(value => {

@@ -86,7 +86,7 @@ const UploadImageBtn: React.FC<uploadProps> = ({
   );
   // 拉起相册方法
   const showImagePicker = async () => {
-    const result = await launchImageLibrary({mediaType: 'photo'});
+    const result = await launchImageLibrary({mediaType: 'photo', quality: 0.4});
     if (result.didCancel) {
       console.log('User cancelled image picker');
       return;
