@@ -13,8 +13,8 @@ export default function useTopFromStorage(CurChatItem: chatListItemType): return
       const ChatIdsJSON = await getValueFromStorage('topChatIds');
       let ChatIds: string[] = JSON.parse(ChatIdsJSON);
       ChatIds = ChatIds.filter(chatid => chatid !== CurChatItem.ChatID);
-      storage.remove({key: 'topChatIds'});
-      storage.save({key: 'topChatIds', data: JSON.stringify(ChatIds)});
+      await storage.remove({key: 'topChatIds'});
+      await storage.save({key: 'topChatIds', data: JSON.stringify(ChatIds)});
     } catch (error) {
       console.log('本地移除置顶id出错');
     }
@@ -27,13 +27,13 @@ export default function useTopFromStorage(CurChatItem: chatListItemType): return
       let topChatIds = new Array<string>();
       if (hasChatIDs) {
         const topChatIdsJSON = await getValueFromStorage('topChatIds');
+        await storage.remove({key: 'topChatIds'});
         topChatIds = JSON.parse(topChatIdsJSON);
         topChatIds.push(CurChatItem.ChatID);
-        storage.remove({key: 'topChatIds'});
       } else {
         topChatIds = [CurChatItem.ChatID];
       }
-      storage.save({key: 'topChatIds', data: JSON.stringify(topChatIds)});
+      storage.save({key: 'topChatIds', data: JSON.stringify([...topChatIds])});
     } catch (error) {
       console.log('本地存储置顶id出错');
     }
@@ -46,7 +46,7 @@ export default function useTopFromStorage(CurChatItem: chatListItemType): return
       if (hasChatIDs) {
         const topChatIdsJSON = await getValueFromStorage('topChatIds');
         const topChatIds: string[] = JSON.parse(topChatIdsJSON);
-        setTop(topChatIds.every(chatID => chatID === CurChatItem.ChatID));
+        setTop(topChatIds.findIndex(chatID => chatID === CurChatItem.ChatID) !== -1);
       } else {
         setTop(false);
       }

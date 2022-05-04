@@ -107,13 +107,13 @@ const ChatInfo: React.FC<Props> = ({navigation}) => {
       <View style={infoStyle.userWrap}></View>
       <View style={infoStyle.BtnWrap}>
         <LongBtn showContent="置顶聊天" onPress={toggleTop}>
-          <Switch value={isTop} />
+          <Switch value={isTop} disabled={true} />
         </LongBtn>
         <LongBtn showContent="消息免打扰" onPress={toggleDisturbStatus}>
-          <Switch value={isDisturb} />
+          <Switch value={isDisturb} disabled={true} />
         </LongBtn>
         <LongBtn showContent="拉黑对方" onPress={toggleBlack}>
-          <Switch value={isBlacked} />
+          <Switch value={isBlacked} disabled={true} />
         </LongBtn>
         <LongBtn showContent="删除聊天" onPress={removeCurChat} EndIcon="chevron-forward" style={{marginTop: 10}} />
         <LongBtn showContent="清空聊天记录" onPress={() => console.log(123)} EndIcon="chevron-forward" style={{marginTop: 10}} />

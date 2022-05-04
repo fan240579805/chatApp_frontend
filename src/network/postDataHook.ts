@@ -37,7 +37,7 @@ export default function usePostData(postHookOptions: optionsType): PostdataType 
           let res = await postData(URL, reqData, options);
           if (res.ok) {
             const resp: RESP_TYPE = await res.json();
-            console.log('post', resp);
+            // console.log('post', resp);
             if (resp.code === 200) {
               dispatchData({
                 type: fetchStatus.SUCCESS,

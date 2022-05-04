@@ -233,9 +233,10 @@ export function contextReducer(state: stateType, action: ctxActionType): stateTy
     case stateStatus.TOOGLE_DISTURB_STATUS:
       const disturbMap = action.playloads;
       let totalSum = state.otherData?.totalUnDisturbNum || 0;
-
+      // console.log('toooooooooooooooo', disturbMap);
       for (const key in disturbMap) {
         if (disturbMap[key]) {
+          // console.log(totalSum)
           totalSum++;
         }
       }

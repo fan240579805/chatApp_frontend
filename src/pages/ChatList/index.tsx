@@ -77,12 +77,18 @@ const ChatList: React.FC<Props> = ({navigation}) => {
         if (hasValue) {
           getValueFromStorage('disturbMap').then(value => {
             const map: Record<string, boolean> = JSON.parse(value);
+            const _tempMap = {...map};
+            const _cidArr: string[] = [];
             for (const cid in map) {
-              chatList.forEach((citem: chatListItemType) => {
-                if (cid !== citem.ChatID) map[citem.ChatID] = false;
-              });
+              _tempMap[cid] = true;
+              _cidArr.push(cid);
             }
-            dispatch({type: stateStatus.TOOGLE_DISTURB_STATUS, playloads: map});
+            chatList.forEach((citem: chatListItemType) => {
+              if (!_cidArr.includes(citem.ChatID)) {
+                _tempMap[citem.ChatID] = false;
+              }
+            });
+            dispatch({type: stateStatus.TOOGLE_DISTURB_STATUS, playloads: _tempMap});
           });
         } else {
           let _tempMap: Record<string, boolean> = {};
@@ -90,17 +96,6 @@ const ChatList: React.FC<Props> = ({navigation}) => {
             _tempMap[c.ChatID] = false;
           });
           dispatch({type: stateStatus.TOOGLE_DISTURB_STATUS, playloads: _tempMap});
-        }
-      });
-      // 2. 根据免打扰计算整个chatList的未读数量
-      chatList.forEach(cItem => {
-        const isMineUnread = cItem.RecentMsg!.recipient === state.userInfo.userID;
-        if (isMineUnread) {
-          // 将所有的 chatList 的正确未读数量设置到全局中
-          dispatch({
-            type: stateStatus.ADD_UNREAD_NUM,
-            playloads: cItem,
-          });
         }
       });
       // 3. 缓存中看看是否有置顶chatIds, 有的话处理，无的话直接set
@@ -122,6 +117,17 @@ const ChatList: React.FC<Props> = ({navigation}) => {
           });
         } else {
           dispatch({type: stateStatus.SET_CHATLIST, playloads: chatList});
+        }
+      });
+      // 2. 根据免打扰计算整个chatList的未读数量
+      chatList.forEach(cItem => {
+        const isMineUnread = cItem.RecentMsg!.recipient === state.userInfo.userID;
+        if (isMineUnread) {
+          // 将所有的 chatList 的正确未读数量设置到全局中
+          dispatch({
+            type: stateStatus.ADD_UNREAD_NUM,
+            playloads: cItem,
+          });
         }
       });
     },
